@@ -1,0 +1,5 @@
+<IfModule mod_dtimeout.c>
+<Files ~ ".php">
+SetEnvIf Request_URI "contact.php" DynamicTimeout=300
+</Files>
+</IfModule>

@@ -1,0 +1,357 @@
+.pointer {
+  cursor: pointer;
+}
+
+.golden-width {
+	width: 61.8%;
+}
+
+.no-padding {
+	padding: 0 !important;
+}
+
+.s-title .breadcrumbs{
+	margin:0;
+}
+
+.s-title .breadcrumbs ul {
+	border:0;
+	box-shadow:none;
+	-webkit-box-shadow:none;
+	padding: 0 0 60px 15px;
+}
+
+.s-title > h1{
+	padding-bottom: 15px;
+}
+
+.child-recipe-title {
+	font-size: 15px;
+	padding: 7px 10px;
+	height: auto;
+	line-height: 20px;
+	margin-bottom: 8px;
+	font-weight: 600;
+	background: #FF8E88;
+	color: #fff;
+}
+
+.child-instructions-title {
+	font-size: 18px;
+	font-style: italic;
+	padding-left: 12px;
+}
+
+.ingredients dt{
+	width:28%;
+	max-height: 34px;
+}
+
+.ingredients dd{
+	width:72%;
+}
+
+.ingredients dt.no-amount{
+	background:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.ingredients dt.no-amount:before {
+	content: &nbsp;
+}
+
+.click-behave {
+	opacity: 0.75;
+}
+.click-behave:hover,
+.click-behave:active,
+.click-behave:focus {
+	opacity: 1;
+}
+
+.facebook-background {
+	background-color: #4267B2 !important;
+}
+
+.pinterest-background {
+	background-color: #BD081C !important;
+}
+
+.btn-facebook {
+    color: #fff;
+    background-color: #4267B2;
+    border: 0;
+}
+.btn-facebook:hover, 
+.btn-facebook:focus {
+	-webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.2);
+	-moz-box-shadow: inset 0 0 30px rgba(0,0,0,.2);
+	box-shadow: inset 0 0 30px rgba(0,0,0,.2);
+}
+.btn-theme {
+	background-color: #FF8E88;
+}
+.btn-disabled {
+    color: #fff;
+    background-color: #a0a0a0;
+    border-color: transparent;
+}
+.btn-theme + .btn-theme.dropdown-toggle {
+	border-left: 1px solid #FFBBB7;
+}
+
+.dl-horizontal dt {
+    clear: left !important;
+}
+
+dl.basic > dd input,
+.ctable td input {
+	border: 0;
+	width: auto !important;
+	font-size: 16px;
+	padding: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+
+	background: transparent;
+	border-bottom: 2px solid white;
+	height: 25px;
+}
+
+dl.basic > dd select,
+.ctable td select {
+	height: 2em;
+}
+
+dl.basic > dd input:focus,
+.ctable td input:focus {
+	border-color: inherit;
+}
+
+/* tables */
+.bootstrap-reset th {
+	border: 0;
+	background: none;
+	color: #333;
+}
+.bootstrap-reset td {
+	border-right: 0;
+	border-bottom: 0;
+	border-left: 0;
+}
+
+.column-entries-four {
+	-webkit-column-count: 1;
+	-webkit-column-gap: 30px;
+	-webkit-column-fill: auto;
+	-moz-column-count: 1;
+	-moz-column-gap: 30px;
+	-moz-column-fill: auto;
+	column-count: 1;
+	column-gap: 30px;
+	column-fill: auto;
+}
+.column-entries-three {
+	-webkit-column-count: 1;
+	-webkit-column-gap: 30px;
+	-webkit-column-fill: auto;
+	-moz-column-count: 1;
+	-moz-column-gap: 30px;
+	-moz-column-fill: auto;
+	column-count: 1;
+	column-gap: 30px;
+	column-fill: auto;
+}
+.column-entry {
+	display: inline-block;
+	margin: 0 2px 30px;
+	-webkit-column-break-inside: avoid;
+	-moz-column-break-inside: avoid;
+	column-break-inside: avoid;
+	width: 100%;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 480px) { 
+	.column-entries-four,.column-entries-three {
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+}
+
+@media (min-width: 768px) { 
+	.column-entries-four {
+		-webkit-column-count: 3;
+		-moz-column-count: 3;
+		column-count: 3;
+	}
+	.column-entries-three {
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media screen and (min-width: 1024px) { 
+	.column-entries-four {
+		-webkit-column-count: 4;
+		-moz-column-count: 4;
+		column-count: 4;
+	}
+	.column-entries-three {
+		-webkit-column-count: 3;
+		-moz-column-count: 3;
+		column-count: 3;
+	}
+}
+
+/* profile actions */
+.my_account .container {
+	padding: 17px 20px;
+}
+.liSaveToFavorites.favorite-recipe a {
+	background-color: #F4716A;
+}
+.liSaveToFavorites.favorite-recipe a i {
+	color: #DBBC94;
+}
+.divSaveToFavorites {
+	cursor: pointer;
+}
+.divSaveToFavorites.favorite-recipe i {
+	color: #F4716A;
+}
+
+/* PRINTER FRIENDLY */
+#printerFriendly {
+	background-color:#FFFFFF;
+	background-image:none;
+	color:#000000;
+	font-size: 12px;
+	font-family: 'Open Sans', sans-serif;
+}
+#printerFriendly h1 {
+	font-family: 'Alex Brush', cursive;
+	margin-bottom: 30px;
+}
+#printerFriendly h1 u,
+#printerFriendly p u {
+	text-decoration: none;
+	padding-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+#printerFriendly .fixed-width {
+	display: inline-block;
+	width: 20%;
+}
+#printerFriendly .foot {
+	padding-top: 0;
+}
+#printerFriendly .foot .bottom {
+	padding-top: 16px;
+	border: 0;
+}
+#printerFriendly dl {
+	border: 0;
+	margin: 0;
+	padding: 0
+}
+#printerFriendly dt {
+	margin: 0;
+	padding: 0;
+	height: auto;
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: normal;
+	background: #fff;
+	color: #000;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	width: 20%;
+	text-align: left;
+}
+#printerFriendly dd {
+	margin: 0;
+	padding: 0;
+	height: auto;
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: normal;
+	background: #fff;
+	color: #000;
+	max-width: 80%;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+#printerFriendly .child-recipe-title {
+	font-family: 'Alex Brush', cursive;
+	font-size: 24px;
+	line-height: inherit;
+	font-weight: normal;
+	background: none;
+	color: inherit;
+	padding: 0;
+}
+#printerFriendly .child-instructions-title {
+	font-size: inherit;
+	font-style: italic;
+	padding: 8px 0px 8px 12px;
+}
+
+/* MEAL PLANNING PORTAL */
+.meal-weeks-banner a.week-page,
+.meal-weeks-banner a.week-page:hover,
+.meal-weeks-banner a.week-page:focus {
+	color: white;
+}
+
+.meal-weeks-banner a.week-page:active {
+	color: #F4716A;
+}
+
+.meal-weeks-banner a.week-page.disabled {
+	color: #b4b4b4;
+}
+
+
+/* ADV SEARCH MENU */
+.adv-search-menu li.active > .treeview-menu {
+  display: block;
+}
+.adv-search-menu .treeview-menu {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-left: 5px;
+}
+.adv-search-menu .treeview-menu .treeview-menu {
+  padding-left: 20px;
+}
+.adv-search-menu .treeview-menu > li {
+  margin: 0;
+}
+.adv-search-menu .treeview-menu > li > a {
+  padding: 5px 5px 5px 15px;
+  display: block;
+	font-weight: normal;
+  font-size: 14px;
+}
+.adv-search-menu .treeview-menu > li > a > .fa,
+.adv-search-menu .treeview-menu > li > a > .glyphicon,
+.adv-search-menu .treeview-menu > li > a > .ion {
+  width: 20px;
+}
+.adv-search-menu .treeview-menu > li > a > .pull-right-container > .fa-angle-left,
+.adv-search-menu .treeview-menu > li > a > .pull-right-container > .fa-angle-down,
+.adv-search-menu .treeview-menu > li > a > .fa-angle-left,
+.adv-search-menu .treeview-menu > li > a > .fa-angle-down {
+  width: auto;
+}

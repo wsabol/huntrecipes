@@ -1,0 +1,7 @@
+User-agent: *
+Crawl-delay: 10
+
+Disallow: /API/*
+Disallow: /assets/*
+Disallow: /google1b346ebe3e276386.html
+Disallow: /.htaccess

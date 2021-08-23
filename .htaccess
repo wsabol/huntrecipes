@@ -1,0 +1,2 @@
+AddHandler application/x-httpd-php56 .php .php5 .php4 .php3 .html
+AddHandler application/x-httpd-php56 .php .php5 .php4 .php3

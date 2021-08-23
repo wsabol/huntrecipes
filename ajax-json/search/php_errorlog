@@ -1,0 +1,4 @@
+[05-May-2021 22:23:59 America/Chicago] PHP Notice:  Undefined index: page_num in /home/customer/www/huntrecipes.willsabol.com/public_html/ajax-json/search/spRecipeSearchResults.json.php on line 22
+[14-Jun-2021 17:45:11 America/Chicago] PHP Notice:  Undefined index: result_limit in /home/customer/www/huntrecipes.willsabol.com/public_html/ajax-json/search/ingredient_suggestions.json.php on line 62
+[14-Jun-2021 17:51:54 America/Chicago] PHP Notice:  Undefined index: result_limit in /home/customer/www/huntrecipes.willsabol.com/public_html/ajax-json/search/ingredient_suggestions.json.php on line 62
+[14-Jun-2021 17:55:21 America/Chicago] PHP Notice:  Undefined index: page_num in /home/customer/www/huntrecipes.willsabol.com/public_html/ajax-json/search/spRecipeSearchResults.json.php on line 22
