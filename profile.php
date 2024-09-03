@@ -187,7 +187,7 @@ require_once('_head.php');
 							//console.log(response);
 							/* handle the result */
 							$.ajax({
-								url: '/API/facebook/facebook_link_callback.json.php',
+								url: '/API/v0/facebook/facebook_link_callback.json.php',
 								type: 'GET',
 								data: {
 									facebook_user_id: user_id,
@@ -225,7 +225,7 @@ require_once('_head.php');
 	
 	function fb_unlink() {
 		$.ajax({
-			url: '/API/facebook/facebook_unlink_callback.json.php',
+			url: '/API/v0/facebook/facebook_unlink_callback.json.php',
 			type: 'GET',
 			success: function( response ) {
 				console.log(response);

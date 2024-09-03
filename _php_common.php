@@ -13,7 +13,7 @@ require_once RECIPES_ROOT . "/vendor/autoload.php";
 
 // app includes
 require_once("assets/Application.php");
-require_once("API/fraction/fraction.php");
+require_once("API/v0/fraction/fraction.php");
 
 /* load environment vars */
 $dotenv = Dotenv\Dotenv::createImmutable(RECIPES_ROOT);
@@ -32,20 +32,19 @@ if (empty(@$skip_session_create)) {
     //echo 'session_start';
     @session_start();
 }
-//echo getcwd();
 
 $App = new Application();
 
 $guestAccessPages = array(
 	"/login.php",
-	"/API/login/std_login.json.php",
-	"/API/facebook/facebook_login_callback.json.php",
+	"/API/v0/login/std_login.json.php",
+	"/API/v0/facebook/facebook_login_callback.json.php",
 	"/forgot_password.php",
 	"/register.php",
 	"/contact.php",
-	"/API/contact/contact_callback.php",
+	"/API/v0/contact/contact_callback.php",
 	"/errorPage.php",
-	"/API/facebook/facebook_registration_callback.json.php",
+	"/API/v0/facebook/facebook_registration_callback.json.php",
 	"/",
 	"/index.php",
 	"/recipe.php",

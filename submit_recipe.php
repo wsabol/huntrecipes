@@ -550,7 +550,7 @@ require_once('_head.php');
 					// Set up the request.
 					var xhr = new XMLHttpRequest();
 					// Open the connection.
-					xhr.open('POST', '/API/recipe_process/ajax-json/recipe_image_upload.json.php', true);
+					xhr.open('POST', '/API/v0/recipe_process/ajax-json/recipe_image_upload.json.php', true);
 					// Set up a handler for when the request finishes.
 					xhr.onload = function ( ) {
 						console.log(xhr);

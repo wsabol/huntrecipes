@@ -17,7 +17,7 @@ require_once('_head.php');
 		<!--content-->
 		<section class="content center full-width">
 			<div class="modal container">
-				<form method="post" action="/API/contact/contact_callback.php" name="contactform" id="contactform">
+				<form method="post" action="/API/v0/contact/contact_callback.php" name="contactform" id="contactform">
 					<h3>Contact us</h3>
 					<div id="message" class="alert alert-danger"></div>
 					<div class="f-row">

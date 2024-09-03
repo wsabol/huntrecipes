@@ -53,7 +53,7 @@ header("Accept-Encoding: gzip;q=0, deflate;q=0, sdch;q=0");
 		<script src="/assets/datatables/dataTables.bootstrap.min.js"></script>
 		<!-- iCheck -->
     <script type="text/javascript" src="/assets/iCheck/icheck.min.js"></script>
-		<script type="text/javascript" src='/API/fraction/fraction.js'></script>
+		<script type="text/javascript" src='/API/v0/fraction/fraction.js'></script>
 		<script type="text/javascript" src='/assets/js/_js_common.js'></script>
 		<script type="text/javascript" src="/assets/js/recipes_init.js"></script>
 		

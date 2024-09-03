@@ -113,7 +113,7 @@ require_once('_head.php');
 			$('#imgLoader').removeClass('hidden');
 			$('#cmdLogin').addClass('hidden');
 			
-			$.post('/API/login/std_login.json.php', {
+			$.post('/API/v0/login/std_login.json.php', {
 				'elogin': elogin,
 				'rememberme': ( $('input[name=rememberme]').is(':checked') ? 1 : 0 )
 			},

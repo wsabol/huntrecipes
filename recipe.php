@@ -330,7 +330,7 @@ require_once('_head.php');
 							<?php
 							if ( $_SESSION['Login']['account_type_id'] == 4 ) { // developers
 								?>
-								<a class="button btn-block" href="/API/recipe_process/recipe_edit.php?recipe_id=<?=$App->R['recipe_id']?>" >Dev Edit Recipe</a>
+								<a class="button btn-block" href="/API/v0/recipe_process/recipe_edit.php?recipe_id=<?=$App->R['recipe_id']?>" >Dev Edit Recipe</a>
 								<?php
 							}
 							?>

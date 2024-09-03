@@ -230,7 +230,7 @@ require_once("_head.php");
 							//console.log(response);
 							/* handle the result */
 							$.ajax({
-								url: '/API/facebook/facebook_registration_callback.json.php',
+								url: '/API/v0/facebook/facebook_registration_callback.json.php',
 								type: 'GET',
 								data: {
 									name: fb_name,
