@@ -1,0 +1,21 @@
+{
+    "esnext": true,
+    "browser": true,
+    "bitwise": true,
+    "indent": 4,
+    "latedef": true,
+    "noarg": true,
+    "undef": true,
+    "globals": {
+        "$": true,
+        "jQuery": true,
+        "console": true,
+        "window": true,
+        "alert": true,
+        "confirm": true,
+        "LoadDivContent": true,
+        "LoadTableContent": true,
+        "moment": true,
+        "JRSPay": true
+    }
+}

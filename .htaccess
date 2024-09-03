@@ -1,2 +1,27 @@
-AddHandler application/x-httpd-php56 .php .php5 .php4 .php3 .html
-AddHandler application/x-httpd-php56 .php .php5 .php4 .php3
+Header set Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net code.jquery.com cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com"
+
+AddHandler application/x-httpd-php74 .php .php5 .php4 .php3 .html
+
+# git expoit fix
+RedirectMatch 403 ^/.git/.*$
+
+#############
+# TYPES FIX #
+#############
+AddType text/css .css
+AddType text/javascript .js
+
+RewriteEngine on
+RewriteRule ^(.*)\.[\d]{10}\.(css|js)$ $1.$2 [L]
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
