@@ -42,7 +42,5 @@ while ( !feof($fObj) ) {
 }
 fclose($fObj);
 
-wl("Lines imported: ".$line_number);
+echo ("Lines imported: ".$line_number);
 
-$App = "";
-?>

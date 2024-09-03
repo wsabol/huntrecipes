@@ -59,6 +59,10 @@ class clsDB {
         return $results[0];
     }
 
+    public function execute(string $sql_query_string) {
+        return $this->query($sql_query_string);
+    }
+
     public function __destruct() {
         if (gettype($this->db) === 'resource') {
             $this->db->close();
