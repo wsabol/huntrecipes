@@ -30,8 +30,8 @@ if ( @$App->R['submit'] == "Submit" ) {
     $updI = "
       Call spIngredientUpdate(
         0,
-        '".$App->oDBMY->prepstring(trim($dbWrite[$i]['name']))."',
-        '".$App->oDBMY->prepstring(trim($dbWrite[$i]['name_plural']))."'
+        '".$App->oDBMY->escape_string(trim($dbWrite[$i]['name']))."',
+        '".$App->oDBMY->escape_string(trim($dbWrite[$i]['name_plural']))."'
       );
     ";
     $result = $App->oDBMY->query($updI);
@@ -46,8 +46,8 @@ if ( @$App->R['submit'] == "Submit" ) {
         WHERE id = ".$dbWrite[$i]['id']."
         OR (
           (
-            (CASE WHEN locate(',',name) = 0 THEN name ELSE SUBSTRING(name, 1, locate(',',name) - 1) END) = '".$App->oDBMY->prepstring(trim($dbWrite[$i]['name']))."'
-            OR (CASE WHEN locate(',',name) = 0 THEN name ELSE SUBSTRING(name, 1, locate(',',name) - 1) END) = '".$App->oDBMY->prepstring(trim($dbWrite[$i]['name_plural']))."'
+            (CASE WHEN locate(',',name) = 0 THEN name ELSE SUBSTRING(name, 1, locate(',',name) - 1) END) = '".$App->oDBMY->escape_string(trim($dbWrite[$i]['name']))."'
+            OR (CASE WHEN locate(',',name) = 0 THEN name ELSE SUBSTRING(name, 1, locate(',',name) - 1) END) = '".$App->oDBMY->escape_string(trim($dbWrite[$i]['name_plural']))."'
           )
           AND new_id = 0
         );

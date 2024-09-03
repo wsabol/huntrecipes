@@ -47,7 +47,7 @@ $guestAccessPages = array(
 	"/errorPage.php",
 	"/API/facebook/facebook_registration_callback.json.php",
 	"/",
-	"/index.html",
+	"/index.php",
 	"/recipe.php",
 	"/recipe_print.php",
 	"/browse.php",
@@ -522,4 +522,76 @@ function getDaysOfWeekArray() {
 	return $week_day;
 }
 
-?>
+function SendEmail( $from_address, $to_name, $to_address, $cc_recipients, $bcc_recipients, $replyto_name, $replyto_address, $subject, $html_body, $attachment_count = 0, $aryAttachments = null ){
+    //dbpc(" -> Sending email to [" . $to_name . "]");
+
+    //Create a new PHPMailer instance
+    $mail = new PHPMailer\PHPMailer\PHPMailer();
+    //Tell PHPMailer to use SMTP
+    $mail->isSMTP( );
+
+    //Enable SMTP debugging
+    // 0 = off (for production use)
+    // 1 = client messages
+    // 2 = client and server messages
+    $mail->SMTPDebug = 0;
+    //Ask for HTML-friendly debug output
+    $mail->Debugoutput = 'html';
+    //Set the hostname of the mail server
+    $mail->Host = $_ENV['MAIL_HOST'];
+    //Set the SMTP port number - likely to be 25, 465 or 587
+    $mail->Port = 465;
+    //Whether to use SMTP authentication
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'ssl';
+    //Username to use for SMTP authentication
+    $mail->Username = $_ENV['MAIL_USERNAME'];;
+    //Password to use for SMTP authentication
+    $mail->Password = $_ENV['MAIL_PASSWORD'];
+    //Set reply-to address
+    if ( $replyto_address != "" ) {
+        $mail->addReplyTo($replyto_address, $replyto_name);
+    }
+    //Set who the message is to be sent to
+    $mail->addAddress($to_address, $to_name);
+    //loop cc's
+    for ( $cci = 0; $cci < count($cc_recipients); $cci++ ) {
+        if ( isset($cc_recipients[$cci]['address']) && isset($cc_recipients[$cci]['name']) ) {
+            $mail->addCC($cc_recipients[$cci]['address'], $cc_recipients[$cci]['name']);
+        } elseif ( isset($cc_recipients[$cci]['address']) ) {
+            $mail->addCC($cc_recipients[$cci]['address'], '');
+        }
+    }
+    //loopb cc's
+    for ( $bcci = 0; $bcci < count($bcc_recipients); $bcci++ ) {
+        if ( isset($bcc_recipients[$bcci]['address']) && isset($bcc_recipients[$bcci]['name']) ) {
+            $mail->addBCC($bcc_recipients[$bcci]['address'], $bcc_recipients[$bcci]['name']);
+        } elseif ( isset($bcc_recipients[$bcci]['address']) ) {
+            $mail->addBCC($bcc_recipients[$bcci]['address'], '');
+        }
+    }
+    //Set the subject line
+    $mail->Subject = $subject;
+    // html body
+    $mail->IsHTML(true);
+    $mail->msgHTML($html_body);
+
+    //Attach an image file
+    if( $attachment_count > 0 ) {
+        $attachment_counter = 0;
+        while( $attachment_counter < $attachment_count ) {
+            $mail->addAttachment( $aryAttachments[$attachment_counter]);
+            $attachment_counter++;
+        }
+    }
+
+    //send the message, check for errors
+    if (!$mail->send()) {
+        echo "\nMailer Error: " . $mail->ErrorInfo;
+        return false;
+    } else {
+        //echo "\nMessage sent!";
+        return true;
+    }
+
+}

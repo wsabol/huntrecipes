@@ -13,7 +13,7 @@ $json_results['success'] = 0;
 
 $upd_query = "
   UPDATE Chef
-  SET ".$App->R['field']." = '".$App->oDBMY->prepstring($App->R['value'])."'
+  SET ".$App->R['field']." = '".$App->oDBMY->escape_string($App->R['value'])."'
   WHERE login_id = ".$_SESSION['Login']['id'].";
 ";
 #wl($sel_query);

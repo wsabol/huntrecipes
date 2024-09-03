@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 
 $json_results = array();
 $json_results['results'] = array();
-$App->R['q'] = $App->oDBMY->prepstring(@$App->R['q']);
+$App->R['q'] = $App->oDBMY->escape_string(@$App->R['q']);
 
 $ingr_query = "
   select

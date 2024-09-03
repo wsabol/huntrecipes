@@ -41,7 +41,7 @@ $r->free();
 
 $search_query = "
 	Call spRecipeSearchResultParams(
-		'".$App->oDBMY->prepstring(@$App->R['q'])."',
+		'".$App->oDBMY->escape_string(@$App->R['q'])."',
 		".(@$App->R['type_id']*1).",
 		".(@$App->R['course_id']*1).",
 		".(@$App->R['cuisine_id']*1).",

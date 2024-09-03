@@ -23,7 +23,7 @@ if ( @$App->R['action'] == "register" ) {
   // check username
   $selUser = "
     SELECT count(1) icount FROM Login
-    WHERE username = '".$App->oDBMY->prepstring($App->R['username'])."'
+    WHERE username = '".$App->oDBMY->escape_string($App->R['username'])."'
 		AND account_status_id = 2;
   ";
   $result = $App->oDBMY->query($selUser);
@@ -38,7 +38,7 @@ if ( @$App->R['action'] == "register" ) {
   // check email
   $selUser = "
     SELECT count(1) icount FROM Login
-    WHERE email = '".$App->oDBMY->prepstring($App->R['email'])."'
+    WHERE email = '".$App->oDBMY->escape_string($App->R['email'])."'
 		AND account_status_id = 2;
   ";
   $result = $App->oDBMY->query($selUser);
@@ -62,9 +62,9 @@ if ( @$App->R['action'] == "register" ) {
         password,
 				login_hash
       ) VALUES (
-        '".$App->oDBMY->prepstring($App->R['name'])."',
-        '".$App->oDBMY->prepstring($App->R['email'])."',
-        '".$App->oDBMY->prepstring($App->R['username'])."',
+        '".$App->oDBMY->escape_string($App->R['name'])."',
+        '".$App->oDBMY->escape_string($App->R['email'])."',
+        '".$App->oDBMY->escape_string($App->R['username'])."',
         '".sha1($App->R['password'].$login_hash)."',
 				'".$login_hash."'
       );

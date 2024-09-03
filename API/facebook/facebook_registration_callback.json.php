@@ -52,10 +52,10 @@ if ( isset($App->R['email']) && isset($App->R['name']) ) {
 					facebook_access_token,
 					profile_picture
 				) VALUES (
-					'".$App->oDBMY->prepstring($App->R['name'])."',
-					'".$App->oDBMY->prepstring($App->R['email'])."',
-					'".$App->oDBMY->prepstring($username)."',
-					'".$App->oDBMY->prepstring(md5($App->R['facebook_user_id']))."',
+					'".$App->oDBMY->escape_string($App->R['name'])."',
+					'".$App->oDBMY->escape_string($App->R['email'])."',
+					'".$App->oDBMY->escape_string($username)."',
+					'".$App->oDBMY->escape_string(md5($App->R['facebook_user_id']))."',
 					2,
 					'".$App->R['facebook_user_id']."',
 					'".$App->R['facebook_access_token']."',

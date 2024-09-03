@@ -1,4 +1,4 @@
-<?
+<?php
 $App = "";
 require_once('_php_common.php');
 error_reporting(E_ALL);

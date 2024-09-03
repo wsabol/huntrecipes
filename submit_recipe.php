@@ -24,8 +24,8 @@ function recipeIngredientRecurse( &$App, $recipe_id, &$dbOutput, $oIngr, $i = 0 
       " . $oIngr[$i]->recipe_ingredient_id . ",
       " . $recipe_id . ",
       " . @$oIngr[$i]->unit_id * 1 . ",
-      '" . $App->oDBMY->prepstring($oIngr[$i]->ingredient_name) . "',
-      '" . $App->oDBMY->prepstring($oIngr[$i]->ingredient_prep) . "',
+      '" . $App->oDBMY->escape_string($oIngr[$i]->ingredient_name) . "',
+      '" . $App->oDBMY->escape_string($oIngr[$i]->ingredient_prep) . "',
       " . $oIngr[$i]->amount * 1 . ",
       " . @$oIngr[$i]->optional_flag * 1 . "
     );
@@ -128,13 +128,13 @@ require_once('_head.php');
 				$update_query = "
 					CALL spRecipeUpdate(
 						" . @$App->R['recipe_id'] * 1 . ",
-						'" . $App->oDBMY->prepstring($App->R['title']) . "',
-						'" . $App->oDBMY->prepstring($App->R['chef_name']) . "',
-						'" . $App->oDBMY->prepstring($App->R['recipe_type_name']) . "',
+						'" . $App->oDBMY->escape_string($App->R['title']) . "',
+						'" . $App->oDBMY->escape_string($App->R['chef_name']) . "',
+						'" . $App->oDBMY->escape_string($App->R['recipe_type_name']) . "',
 						" . $App->R['course_id'] . ",
 						" . $App->R['cuisine_id'] . ",
-						'" . $App->oDBMY->prepstring($App->R['instructions']) . "',
-						'" . $App->oDBMY->prepstring("assets/images/recipes/".$App->R['image_filename']) . "',
+						'" . $App->oDBMY->escape_string($App->R['instructions']) . "',
+						'" . $App->oDBMY->escape_string("assets/images/recipes/".$App->R['image_filename']) . "',
 						" . $App->R['serving_count']*1 . ",
 						" . $App->R['serving_measure_id'] . ",
 						" . @$App->R['parent_recipe_id']*1 . ",

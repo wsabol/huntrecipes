@@ -1,6 +1,3 @@
-<?php
-header("Accept-Encoding: gzip;q=0, deflate;q=0, sdch;q=0");
-?>
 <!DOCTYPE html>
 <html>
 	<head>

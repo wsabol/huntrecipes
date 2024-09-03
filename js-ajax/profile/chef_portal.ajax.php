@@ -2,9 +2,6 @@
 $App = "";
 require_once('../../_php_common.php');
 error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
-require_once('../../API/PHPMailer/sendemail.function.php');
 
 if ( $_SESSION['Login']['chef_id']*1 === 0 ) {
   if ( @$App->R['action'] == "chef-apply" ) {

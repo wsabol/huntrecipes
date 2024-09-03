@@ -26,8 +26,8 @@ if ( @$App->R['action'] == 'combine' ) {
   
   $upd_query = "
     UPDATE RecipeType
-    SET name = '".$App->oDBMY->prepstring($App->R['name'])."',
-    icon = '".$App->oDBMY->prepstring($App->R['icon'])."'
+    SET name = '".$App->oDBMY->escape_string($App->R['name'])."',
+    icon = '".$App->oDBMY->escape_string($App->R['icon'])."'
     WHERE id = ".$new_id."
   ";
   $App->oDBMY->execute($upd_query);

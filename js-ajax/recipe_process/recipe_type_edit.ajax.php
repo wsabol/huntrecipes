@@ -8,8 +8,8 @@ ini_set('display_errors', '1');
 if ( @$App->R['action'] == 'edit' ) {
   $upd_query = "
     UPDATE RecipeType
-    SET name = '".$App->oDBMY->prepstring($App->R['name'])."',
-    icon = '".$App->oDBMY->prepstring($App->R['icon'])."'
+    SET name = '".$App->oDBMY->escape_string($App->R['name'])."',
+    icon = '".$App->oDBMY->escape_string($App->R['icon'])."'
     WHERE id = ".$App->R['id']."
   ";
   $App->oDBMY->execute($upd_query);

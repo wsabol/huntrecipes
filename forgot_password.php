@@ -22,7 +22,7 @@ if ( @$App->R['action'] == "recover" ) {
   // check username
   $selUser = "
     SELECT count(1) icount FROM Login
-    WHERE username = '".$App->oDBMY->prepstring($App->R['username'])."';
+    WHERE username = '".$App->oDBMY->escape_string($App->R['username'])."';
   ";
   $result = $App->oDBMY->query($selUser);
   if ( !!$result ) {
@@ -36,7 +36,7 @@ if ( @$App->R['action'] == "recover" ) {
   // check email
   $selUser = "
     SELECT count(1) icount FROM Login
-    WHERE email = '".$App->oDBMY->prepstring($App->R['email'])."';
+    WHERE email = '".$App->oDBMY->escape_string($App->R['email'])."';
   ";
   $result = $App->oDBMY->query($selUser);
   if ( !!$result ) {
@@ -53,8 +53,8 @@ if ( @$App->R['action'] == "recover" ) {
     // add user to do
     $lookup_query = "
       SELECT * FROM Login
-      WHERE username = '".$App->oDBMY->prepstring($App->R['username'])."'
-      AND email = '".$App->oDBMY->prepstring($App->R['email'])."';
+      WHERE username = '".$App->oDBMY->escape_string($App->R['username'])."'
+      AND email = '".$App->oDBMY->escape_string($App->R['email'])."';
     ";
     $result = $App->oDBMY->query($lookup_query);
     if ( !!$result ) {

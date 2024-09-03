@@ -8,8 +8,8 @@ ini_set('display_errors', '1');
 if ( @$App->R['action'] == 'edit' ) {
   $upd_query = "
     UPDATE Ingredient
-    SET name = '".$App->oDBMY->prepstring($App->R['name'])."',
-    name_plural = '".$App->oDBMY->prepstring($App->R['name_plural'])."'
+    SET name = '".$App->oDBMY->escape_string($App->R['name'])."',
+    name_plural = '".$App->oDBMY->escape_string($App->R['name_plural'])."'
     WHERE id = ".$App->R['id']."
   ";
   $App->oDBMY->execute($upd_query);

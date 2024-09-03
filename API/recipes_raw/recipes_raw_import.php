@@ -31,7 +31,7 @@ while ( !feof($fObj) ) {
         line_text
       ) VALUES (
         ".$line_number.",
-        '".$App->oDBMY->prepstring($line)."'
+        '".$App->oDBMY->escape_string($line)."'
       );
     ";
     $App->oDBMY->execute( $pushSQL );

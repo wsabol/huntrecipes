@@ -1,5 +1,6 @@
 <?php
-require_once('../PHPMailer/sendemail.function.php');
+
+require_once "../../_php_common.php";
 
 $mailSuccess = SendEmail( "contact@willsabol.com", "Will Sabol", "wsabol39@gmail.com", array(), array(), "", "", "HuntRecipes - Account Confirmation", print_r($_POST, true));
 if ( $mailSuccess ) {
@@ -7,4 +8,4 @@ if ( $mailSuccess ) {
 } else {
   echo "Something terrible has happened.";
 }
-?>
+

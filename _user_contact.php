@@ -1,7 +1,5 @@
 <?php
 
-require_once('API/PHPMailer/sendemail.function.php');
-
 function cntRegistrationAuth( $email, $username, $name ) {
   $registration_hash = md5(sha1($username.$_SERVER['REMOTE_ADDR']));
       
@@ -73,5 +71,3 @@ function cntResetPassword( &$App, $email, $login_id, $username, $name ) {
   
   return $mailSuccess;
 }
-
-?>

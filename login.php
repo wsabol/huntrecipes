@@ -8,10 +8,10 @@ ini_set('display_errors', '1');
 
 require_once('_user_contact.php');
 
-if ( @$_SESSION['Login']['id'] > 0 ) {
-	header('Location: /');
-	exit;
-}
+// if ( @$_SESSION['Login']['id'] > 0 ) {
+// 	header('Location: /');
+// 	exit;
+// }
 
 $regSuccess = -1;
 if ( isset($App->R['registration_auth']) && isset($App->R['uname']) ) {
@@ -38,8 +38,7 @@ if ( isset($App->R['registration_auth']) && isset($App->R['uname']) ) {
 	}
 }
 
-?>
-<?php
+
 $bodyClass = "";
 require_once('_head.php');
 ?>
