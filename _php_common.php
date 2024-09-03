@@ -1,18 +1,40 @@
 <?php
-$App = "";
-if( @$skip_session_create * 1 == 0 ) {
-	//echo 'session_start';
-	@session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
+if (!defined('RECIPES_ROOT')) {
+    /** @var string $RECIPES_ROOT Absolute Path to Project Root */
+    define('RECIPES_ROOT', __DIR__);
+}
+
+// require composer
+require_once RECIPES_ROOT . "/vendor/autoload.php";
+
+// app includes
+require_once("assets/Application.php");
+require_once("API/fraction/fraction.php");
+
+/* load environment vars */
+$dotenv = Dotenv\Dotenv::createImmutable(RECIPES_ROOT);
+$dotenv->load();
+$dotenv->required(['DB_HOST', 'DB_USERNAME', 'DB_PASSWORD']);
+unset($dotenv);
+
+if (!defined('IS_PRODUCTION')) {
+    /** @var bool $IS_PRODUCTION Whether on production server */
+    define("IS_PRODUCTION", filter_var($_ENV['PRODUCTION'], FILTER_VALIDATE_BOOL));
+}
+
+ini_set("display_errors", IS_PRODUCTION ? 0 : 1);
+
+if (empty(@$skip_session_create)) {
+    //echo 'session_start';
+    @session_start();
 }
 //echo getcwd();
 
-require_once("assets/_Application_1.0_class.php");
-require_once("API/fraction/fraction.php");
-
-$Log = ""; $Log["name"] = "App:Create Start";$Log["time"] = time();$Log["page_at_time"] = $Log["time"] - @$_SESSION["Page"]["start_time"];@$_SESSION["Page"]["BuildLog"][] = $Log;
-$App = new Application( "web" ) ;
-$Log = ""; $Log["name"] = "App:Create Done";$Log["time"] = time();$Log["page_at_time"] = $Log["time"] - @$_SESSION["Page"]["start_time"];@$_SESSION["Page"]["BuildLog"][] = $Log;
-//print_r( $_SESSION["Login"] );
+$App = new Application();
 
 $guestAccessPages = array(
 	"/login.php",
