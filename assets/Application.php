@@ -2,14 +2,9 @@
 
 date_default_timezone_set('America/Chicago');
 
-require_once('common/html.class.php');
-require_once('common/db_classes.class.php');
-require_once('common/io.class.php');
-require_once('common/ui.class.php');
+require_once(__DIR__ . '/common/clsDB.php');
 
 class Application {
-	public clsUI $ui;
-    public clsIO $io;
 	public clsDB $oDBMY;
 	public array $R = [];
 	public bool $is_mobile;
@@ -19,8 +14,6 @@ class Application {
 		
 	}
 	function __construct () {
-		$this->ui = new clsUI();
-		$this->io = new clsIO($this->ui);
 		$this->ConnectToDBMain();
 		$this->R = $_REQUEST;
 
