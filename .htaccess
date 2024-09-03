@@ -5,6 +5,20 @@ AddHandler application/x-httpd-php74 .php .php5 .php4 .php3 .html
 # git expoit fix
 RedirectMatch 403 ^/.git/.*$
 
+####################
+# MAINTENANCE MODE
+####################
+ErrorDocument 503 /maintenance.html
+<If "-e '%{DOCUMENT_ROOT}/site_maintenance_on'">
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_URI} !/maintenance [NC]
+	RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg) [NC]
+
+	# serve default 503 response
+	RewriteRule .* /maintenance.html [R=503,L]
+</If>
+
 #############
 # TYPES FIX #
 #############

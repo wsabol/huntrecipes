@@ -1,6 +1,10 @@
 # environment file
 .env
 
+# maintenance
+site_maintenance_off
+site_maintenance_on
+
 # os/plugin cache files
 .DS_Store
 .php-cs-fixer.cache
