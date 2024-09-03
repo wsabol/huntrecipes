@@ -286,22 +286,6 @@ dl.basic > dd input:focus,
 	padding: 8px 0px 8px 12px;
 }
 
-/* MEAL PLANNING PORTAL */
-.meal-weeks-banner a.week-page,
-.meal-weeks-banner a.week-page:hover,
-.meal-weeks-banner a.week-page:focus {
-	color: white;
-}
-
-.meal-weeks-banner a.week-page:active {
-	color: #F4716A;
-}
-
-.meal-weeks-banner a.week-page.disabled {
-	color: #b4b4b4;
-}
-
-
 /* ADV SEARCH MENU */
 .adv-search-menu li.active > .treeview-menu {
   display: block;

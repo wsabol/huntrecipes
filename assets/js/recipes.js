@@ -86,13 +86,7 @@ $(function(){
             
             if ( $btn.closest('#favorites').length > 0 ) {
               LoadDivContent( 'profile/chef_portal', '', 'chef-portal', {} );
-              LoadDivContent( 'profile/meal_planning', '', 'meal-planning', {} );
 
-            } else if ( $btn.closest('#chef-portal').length > 0 ) {
-              LoadDivContent( 'profile/meal_planning', '', 'meal-planning', {} );
-
-            } else if ( $btn.closest('#meal-planning').length > 0 ) {
-              LoadDivContent( 'profile/chef_portal', '', 'chef-portal', {} );
             }
             LoadDivContent( 'profile/my_favorites', '', 'favorites', {} );
           }
@@ -106,70 +100,6 @@ $(function(){
     });
 
     return false;
-  });
-  
-  /* MEAL PLANNING */
-  $('main').on('click', '.btnSaveToMealsMain, .btnSaveToMealsSpecific', function(e){
-    var recipe_id = 0;
-    var week_of = '';
-    //console.log(recipe_id);
-    //console.log(week_of);
-    
-    var $btn = $(this);
-    var remove = 0;
-    if ( $(this).hasClass('btnSaveToMealsSpecific') ) {
-      recipe_id = $(this).parent().parent().parent().parent().parent().data('recipe-id');
-      week_of = $(this).data('week-of');
-      remove = ( $(this).find('i.fa-check').length > 0 ? 1 : 0 );
-      $btn = $(this).parent().parent().parent().find('.btnSaveToMealsMain');
-    } else {
-      recipe_id = $(this).parent().parent().parent().data('recipe-id');
-      remove = ( $(this).hasClass('btn-info') ? 1 : 0 );
-    }
-    
-    $.ajax({
-      url: '/ajax-json/meal_planning/spAddRecipeToMealPlan.json.php',
-      type: 'GET',
-      data: {
-        recipe_id: recipe_id,
-        week_of: week_of,
-        remove: remove
-      },
-      success: function( response ){
-        console.log(response);
-        if ( response === null ) {
-          console.log('btnSaveToMealsMain null response');
-        } else if ( response.success === 0 ) {
-          console.log('btnSaveToMealsMain sql error: ' + response.query);
-        } else {
-          
-          // success
-          if ( window.location.href.includes('/profile.php') ) {
-            if ( response.input_data.this_week_flag == 1 ) {
-              if ( $btn.closest('#favorites').length > 0 ) {
-                LoadDivContent( 'profile/chef_portal', '', 'chef-portal', {} );
-
-              } else if ( $btn.closest('#chef-portal').length > 0 ) {
-                LoadDivContent( 'profile/my_favorites', '', 'favorites', {} );
-
-              } else if ( $btn.closest('#meal-planning').length > 0 ) {
-                LoadDivContent( 'profile/chef_portal', '', 'chef-portal', {} );
-                LoadDivContent( 'profile/my_favorites', '', 'favorites', {} );
-              }
-            }
-            LoadDivContent( 'profile/meal_planning', '', 'meal-planning', {} );
-          }
-          if ( response.input_data.this_week_flag == 1 ) {
-            $btn.toggleClass('btn-info');
-            $btn.toggleClass('btn-theme');
-            $btn.find('i').toggleClass('fa-check');
-            $btn.find('i').toggleClass('fa-plus');
-            $btn.next().toggleClass('btn-info');
-            $btn.next().toggleClass('btn-theme');
-          }
-        }
-      }
-    });
   });
   
 });

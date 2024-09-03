@@ -138,21 +138,6 @@ if ( !!$result ) {
 									<h2><a href="recipe.php?recipe_id=<?=$TopRecipes[$i]['id']?>"><?=$TopRecipes[$i]['title']?></a></h2> 
 									<div class="actions">
 										<div data-recipe-id="<?=$TopRecipes[$i]['id']?>" >
-											<div class="meal-plan">
-												<? if ( @$_SESSION['Login']['id']*1 > 0 ) { ?>
-													<span class="btnSaveToMealsGroup btn-group">
-														<span class="btn btnSaveToMealsMain btn-sm btn-<?=( $TopRecipes[$i]['in_meal_plan_flag'] == 1 ? "info" : "theme" )?>">
-															<i class="fa fa-<?=( $TopRecipes[$i]['in_meal_plan_flag'] == 1 ? "check" : "plus" )?>"></i> my meals
-														</span>
-														<span class="btn btn-sm btn-<?=( $TopRecipes[$i]['in_meal_plan_flag'] == 1 ? "info" : "theme" )?> dropdown-toggle btnSaveToMealsWeeksMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-															<span class="caret"></span>
-															<span class="sr-only">Toggle Dropdown</span>
-														</span>
-														<ul id="r<?=$TopRecipes[$i]['id']?>WeekMenu" class="dropdown-menu">
-														</ul>
-													</span>
-												<? } ?>
-											</div>
 											<div class="likes divSaveToFavorites <?=( $TopRecipes[$i]['favorite_flag'] == 1 ? "favorite-recipe" : "" )?>"><i class="fa fa-heart"></i><span class="favorite-count"><?=$TopRecipes[$i]['favorite_count']?></span></div>
 										</div>
 									</div>
@@ -214,8 +199,6 @@ if ( !!$result ) {
 											<h2><a href="recipe.php?recipe_id=<?=$MPResults[$i]['id']?>"><?=htmlspecialchars($MPResults[$i]['title'])?></a></h2> 
 											<div class="actions">
 												<div data-recipe-id="<?=$MPResults[$i]['id']?>" data-week-of="<?=$week_of?>" >
-													<div class="meal-plan">
-													</div>
 													<div class="likes divSaveToFavorites <?=( $MPResults[$i]['favorite_flag'] == 1 ? "favorite-recipe" : "" )?>"><i class="fa fa-heart"></i><span class="favorite-count"><?=$MPResults[$i]['favorite_count']?></span></div>
 												</div>
 											</div>

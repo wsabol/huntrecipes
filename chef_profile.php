@@ -121,19 +121,6 @@ require_once('_head.php');
 											<h2><a href="recipe.php?recipe_id=<?=$ChefFavorites[$i]['id']?>"><?=htmlspecialchars($ChefFavorites[$i]['title'])?></a></h2> 
 											<div class="actions">
 												<div data-recipe-id="<?=$ChefFavorites[$i]['id']?>" >
-													<div class="meal-plan">
-														<span class="btnSaveToMealsGroup btn-group">
-															<span class="btn btnSaveToMealsMain btn-sm btn-<?=( $ChefFavorites[$i]['in_meal_plan_flag'] == 1 ? "info" : "theme" )?>">
-																<i class="fa fa-<?=( $ChefFavorites[$i]['in_meal_plan_flag'] == 1 ? "check" : "plus" )?>"></i> my meals
-															</span>
-															<span class="btn btn-sm btn-<?=( $ChefFavorites[$i]['in_meal_plan_flag'] == 1 ? "info" : "theme" )?> dropdown-toggle btnSaveToMealsWeeksMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																<span class="caret"></span>
-																<span class="sr-only">Toggle Dropdown</span>
-															</span>
-															<ul id="r<?=$ChefFavorites[$i]['id']?>WeekMenu" class="dropdown-menu">
-															</ul>
-														</span>
-													</div>
 													<div class="likes divSaveToFavorites <?=( $ChefFavorites[$i]['favorite_flag'] == 1 ? "favorite-recipe" : "" )?>"><i class="fa fa-heart"></i><span class="favorite-count"><?=$ChefFavorites[$i]['favorite_count']?></span></div>
 												</div>
 											</div>

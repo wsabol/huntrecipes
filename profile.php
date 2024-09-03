@@ -11,7 +11,7 @@ wla($week_days);
 wl($week_days[$_SESSION['Login']['week_start_day_of_week']]['name']);
 exit;*/
 
-$Tabs = array("favorites", "meal-planning", "chef-portal", "settings");
+$Tabs = array("favorites", "chef-portal", "settings");
 if ( !in_array(@$App->R['tabid'], $Tabs) ) {
 	$App->R['tabid'] = "favorites";
 }
@@ -49,7 +49,6 @@ require_once('_head.php');
 				<nav class="tabs">
 					<ul>
 						<li class="<?=( $App->R['tabid'] == "favorites" ? "active" : "" )?>"><a href="#favorites" title="My favorites">My favorites</a></li>
-						<li class="<?=( $App->R['tabid'] == "meal-planning" ? "active" : "" )?>"><a href="#meal-planning" title="Meal Planning">Meal planning</a></li>
 						<li class="<?=( $App->R['tabid'] == "chef-portal" ? "active" : "" )?>"><a href="#chef-portal" title="Chef Portal">Chef portal</a></li>
 						<li class="<?=( $App->R['tabid'] == "settings" ? "active" : "" )?>"><a href="#settings" title="Settings">Settings</a></li>
 					</ul>
@@ -60,11 +59,6 @@ require_once('_head.php');
 					
 				</div>
 				<!--//my favorites-->
-				
-				<!--meal-planning-->
-				<div class="tab-content" id="meal-planning">
-				</div>
-				<!--//meal-planning-->
 
 				<!--chef-portal-->
 				<div class="tab-content" id="chef-portal">
@@ -162,7 +156,6 @@ require_once('_head.php');
 		// load content
 		LoadDivContent( 'profile/my_favorites', '', 'favorites', {} );
 		LoadDivContent( 'profile/chef_portal', '', 'chef-portal', {} );
-		LoadDivContent( 'profile/meal_planning', '', 'meal-planning', {} );
 		
 		$('#settings .read-setting').click(function(){
 			$(this).parent().find('.write-setting').removeClass('hidden');

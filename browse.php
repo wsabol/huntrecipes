@@ -375,26 +375,6 @@ require_once('_head.php');
 												.append(
 													$('<div>').attr('data-recipe-id', results[i].id)
 														.append(
-															$('<div>').addClass('meal-plan')
-																.append(
-																	( <?=( @$_SESSION['Login']['id']*1 === 0 ? 1 : 0 )?> == 1 ? '' : 
-																		$('<span>').addClass('btn-group')
-																			.append(
-																				$('<span>').addClass('btn btn-sm btn-'+(results[i].in_meal_plan_flag == 1 ? 'info' : 'theme')+' btnSaveToMealsMain')
-																					.html('<i class="fa fa-'+(results[i].in_meal_plan_flag == 1 ? 'check' : 'plus')+'"></i> my meals')
-																			)
-																			.append(
-																				$('<span>').addClass('btn btn-sm btn-'+(results[i].in_meal_plan_flag == 1 ? 'info' : 'theme')+' dropdown-toggle btnSaveToMealsWeeksMenu')
-																					.attr('data-toggle', 'dropdown')
-																					.attr('aria-haspopup', 'true')
-																					.attr('aria-expanded', 'false')
-																					.html('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>')
-																			)
-																			.append( $('<ul>').addClass('dropdown-menu').attr('id', 'r'+results[i].id+'WeekMenu') )
-																	)
-																)
-														)
-														.append(
 															$('<div>').addClass('likes divSaveToFavorites'+( results[i].favorite_flag == 1 ? ' favorite-recipe' : '' ))
 																.html('<i class="fa fa-heart"></i><span class="favorite-count">'+results[i].favorite_count+'</span>')
 														)

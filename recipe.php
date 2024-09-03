@@ -259,12 +259,6 @@ require_once('_head.php');
 								<span><?=( $Recipe['favorite_flag'] == 1 ? "Favorited" : "Save to Favorites" )?></span>
 							</a>
 						</li>
-						<li class="<?=( $Recipe['in_meal_plan_flag'] == 1 ? "btn-info" : "light" )?>">
-							<a id="btnAddToMealPlan<?=( @$_SESSION['Login']['id']*1 == 0 ? "NoLogin" : "" )?>" href="<?=( @$_SESSION['Login']['id']*1 == 0 ? "/login.php?ref=".urlencode("/recipe.php?recipe_id=".$App->R['recipe_id']) : "#" )?>" title="Meal Planning">
-								<i class="fa fa-calendar"></i>
-								<span><?=( $Recipe['in_meal_plan_flag'] == 1 ? "In Meal Plan" : "Add to Meal Plan" )?></span>
-							</a>
-						</li>
 						<li class="medium">
 							<a href="/recipe_print.php?recipe_id=<?=$App->R['recipe_id']?>" target="_blank" title="Printer Friendly">
 								<i class="fa fa-print"></i>
@@ -527,62 +521,7 @@ require_once('_head.php');
 			
 			return false;
 		});
-		
-		$('#btnAddToMealPlan').click(function(e){
-			e.preventDefault();
-			var $btn = $(this);
-			
-			var serving_count = 0;
-			if ( $('#input-serving').length > 0 ) {
-				var sCnt = new Fraction( $('#input-serving').val() );
-				serving_count = sCnt.decimal;
-			}
-			
-			var refresh_flag = 0;
-			if ( serving_count > 0 && $(this).parent().hasClass('btn-info') ) {
-				refresh_flag = 1;
-			}
-			
-			var remove = 0;
-			if ( serving_count === 0 && $(this).parent().hasClass('btn-info') ) {
-				// already saved remove from table
-				remove = 1;
-			}
-			
-			$(this).find('i').addClass('fa-spin fa-fw');
-			$.ajax({
-				url: '/ajax-json/meal_planning/spAddRecipeToMealPlan.json.php',
-				type: 'GET',
-				data: {
-					recipe_id: <?=$App->R['recipe_id']?>,
-					serving_count: serving_count,
-					remove: remove
-				},
-				success: function( response ) {
-					//console.log(response);
-					
-					if ( response.success == 1 && remove == 0 ) {
-						$btn.parent().removeClass('light');
-						$btn.parent().addClass('btn-info');
-						$btn.find('span').text('In Meal Plan');
-					} else if ( response.success == 1 && remove == 1 ) {
-						$btn.parent().addClass('light');
-						$btn.parent().removeClass('btn-info');
-						$btn.find('span').text('Add to Meal Plan');
-					} else {
-						console.log(response.query);
-					}
-					
-					$btn.find('i').removeClass('fa-spin fa-fw');
-					if ( refresh_flag ) {
-						window.location.reload();
-					}
-				}
-			});
-			
-			return false;
-		});
-		
+
 		$('#input-serving').blur(function(){
 			updateIngredientAmounts( $(this) );
 		});

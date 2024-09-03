@@ -1382,41 +1382,6 @@ blockquote span {
     margin-right: 8px;
 }
 
-.actions .meal-plan {
-    width: 72%;
-}
-
-.actions .meal-plan .btn {
-    color: white;
-    padding: 2px 8px;
-}
-
-.actions .meal-plan .btn i {
-    color: white;
-    margin: 0;
-    font-size: inherit !important;
-}
-
-.actions .meal-plan .dropdown-menu li:before {
-    content: none;
-}
-
-.actions .meal-plan .dropdown-menu li {
-    padding-left: 0px;
-}
-
-.actions .meal-plan .dropdown-menu li:last-child {
-    padding-bottom: 0;
-}
-
-.actions .meal-plan .dropdown-menu li a {
-    content: none;
-}
-
-.actions .meal-plan .dropdown-menu li a i {
-    margin: 0;
-}
-
 .main .quicklinks {
     float: left;
     display: block;
@@ -3457,10 +3422,6 @@ div.uploader.disabled.active span.action 		{}*/
 
     .boxed li span {
         padding-bottom: 10px;
-    }
-
-    .actions .meal-plan {
-        width: 70%;
     }
 
     .entries .two-third {

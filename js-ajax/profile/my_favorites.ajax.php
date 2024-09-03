@@ -38,19 +38,6 @@ if ( count($results) === 0 ) {
             <h2><a href="recipe.php?recipe_id=<?=$results[$i]['id']?>"><?=htmlspecialchars($results[$i]['title'])?></a></h2> 
             <div class="actions">
               <div data-recipe-id="<?=$results[$i]['id']?>" >
-                <div class="meal-plan">
-                  <span class="btnSaveToMealsGroup btn-group">
-                    <span class="btn btnSaveToMealsMain btn-sm btn-<?=( $results[$i]['in_meal_plan_flag'] == 1 ? "info" : "theme" )?>">
-                      <i class="fa fa-<?=( $results[$i]['in_meal_plan_flag'] == 1 ? "check" : "plus" )?>"></i> my meals
-                    </span>
-                    <span class="btn btn-sm btn-<?=( $results[$i]['in_meal_plan_flag'] == 1 ? "info" : "theme" )?> dropdown-toggle btnSaveToMealsWeeksMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="caret"></span>
-                      <span class="sr-only">Toggle Dropdown</span>
-                    </span>
-                    <ul id="r<?=$results[$i]['id']?>WeekMenu" class="dropdown-menu">
-                    </ul>
-                  </span>
-                </div>
                 <div class="likes divSaveToFavorites <?=( $results[$i]['favorite_flag'] == 1 ? "favorite-recipe" : "" )?>"><i class="fa fa-heart"></i><span class="favorite-count"><?=$results[$i]['favorite_count']?></span></div>
               </div>
             </div>
