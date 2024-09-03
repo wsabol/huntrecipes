@@ -1,0 +1,15 @@
+# environment file
+.env
+
+# os/plugin cache files
+.DS_Store
+.php-cs-fixer.cache
+php_errorlog
+.well-known
+.well-known/*
+
+# Composer
+vendor
+vendor/*
+/vendor
+/vendor/*
