@@ -2,7 +2,7 @@
 
 //this makes the connection to the database and any other necessary items
 @session_start();
-require_once("../../_php_common.php");
+require_once("../../../_php_common.php");
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ini_set('display_errors', '1');
 
@@ -73,6 +73,3 @@ if (
 }
 
 echo json_encode($response);
-
-$App = "";
-?>

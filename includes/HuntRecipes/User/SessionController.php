@@ -107,7 +107,7 @@ class SessionController {
      * @return void
      */
     public function redirect_to_login(): void {
-        $redirect = "/login/?ref=" . urlencode(@$_SERVER["REQUEST_URI"]);
+        $redirect = "/login.php?ref=" . urlencode(@$_SERVER["REQUEST_URI"]);
 
         if (headers_sent()) {
             die("Redirect failed. <a href='$redirect'>Please click on this link</a>");

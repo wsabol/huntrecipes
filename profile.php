@@ -125,19 +125,6 @@ require_once('_head.php');
 									<span class="help-inline"></span>
 								</span>
 							</dd>
-							<dt class="facebook-background" >Facebook</dt>
-							<dd>
-								<span id="facebook-link-status">
-									<?php
-									if ( $_SESSION['Login']['facebook_user_id']*1 > 0 ) {
-										echo '<i class="fa fa-check"></i> Linked to Facebook <small><span onclick="fb_unlink();" class="btn btn-sm">Unlink</span></small>';
-									} else {
-										echo '<span class="btn btn-sm btn-facebook" onclick="fb_link();" >Link with your <i class="fa fa-facebook"></i>acebook</span>';
-									}
-									?>
-								</span>
-								<span id="facebook-help-inline" class="help-inline"></span>
-							</dd>
 						</dl>
 					</div>
 				</div>
@@ -169,74 +156,6 @@ require_once('_head.php');
 			xfbml   : true // parse XFBML
 		});
   };
-	
-	function fb_link(){
-		FB.login(function(response) {
-
-			if (response.authResponse) {
-				console.log('Welcome!  Fetching your information.... ');
-				//console.log(response); // dump complete info
-				var access_token = response.authResponse.accessToken; //get access token
-				var user_id = response.authResponse.userID; //get FB UID
-				console.log('Linking to FB user:'+user_id);
-				
-				FB.api(
-					'/'+user_id+'/picture?type=large&height=270&width=270',
-					function (response) {
-						if (response && !response.error) {
-							//console.log(response);
-							/* handle the result */
-							$.ajax({
-								url: '/API/v0/facebook/facebook_link_callback.json.php',
-								type: 'GET',
-								data: {
-									facebook_user_id: user_id,
-									facebook_access_token: access_token,
-									facebook_picture: response.data.url
-								},
-								success: function( response ) {
-									console.log(response);
-									if ( response.success == 1 ) {
-										$('#facebook-link-status').html('<i class="fa fa-check"></i> Linked to Facebook <small><span onclick="fb_unlink();" class="btn btn-sm">Unlink</span></small>');
-										$('#profile_picture').attr('src', response.data.url);
-									} else {
-										$('#facebook-help-inline').text(response.err_msg);
-									}
-								}
-							});
-						}
-					}
-				);
-				
-			} else {
-				//user hit cancel button
-				console.log('User cancelled login or did not fully authorize.');
-			}
-		}, {
-			scope: 'public_profile'
-		});
-	}
-	(function() {
-		var e = document.createElement('script');
-		e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-		e.async = true;
-		$('body').append(e);
-	}());
-	
-	function fb_unlink() {
-		$.ajax({
-			url: '/API/v0/facebook/facebook_unlink_callback.json.php',
-			type: 'GET',
-			success: function( response ) {
-				console.log(response);
-				if ( response.success == 1 ) {
-					$('#facebook-link-status').html('<span class="btn btn-sm btn-facebook" onclick="fb_link();" >Link with your <i class="fa fa-facebook"></i>acebook</span>');
-				} else {
-					$('#facebook-help-inline').text(response.err_msg);
-				}
-			}
-		});
-	}
 	
 	$(function(){
 		

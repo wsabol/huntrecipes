@@ -1,0 +1,31 @@
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+    <!--row-->
+    <div class="row">
+        <!--content-->
+        <section class="content full-width">
+            <!--row-->
+            <div class="row">
+                <div class="one-third">
+                    <div class="error-container">
+                        <span class="error_type" style="padding-top: 10px;">🤔</span>
+                        <span class="error_text">Page not found</span>
+                    </div>
+                </div>
+
+                <div class="two-third">
+                    <div class="container">
+                        <p>The page you’ve requested could not be found, or it was already removed from the database. </p>
+                        <p>You go back <a href="/home/">home</a> and start over there.</p>
+                    </div>
+                </div>
+            </div>
+            <!--//row-->
+        </section>
+        <!--//content-->
+
+    </div>
+    <!--//row-->
+{% endblock %}

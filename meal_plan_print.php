@@ -3,12 +3,7 @@ $App = "";
 require_once('_php_common.php');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-@session_write_close(); 
-
-if ( @$App->R['week_of']*1 < 1 ) {
-	header('Location: /error404.php');
-	exit;
-}
+@session_write_close();
 
 $sel_query = "
   Call spSelectWeeksMeals(".$_SESSION['Login']['id'].", '".$App->R['week_of']."');

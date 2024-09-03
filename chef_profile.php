@@ -3,12 +3,7 @@ $App = "";
 require_once('_php_common.php');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-@session_write_close(); 
-
-if ( @$App->R['chef_id']*1 <= 1 ) {
-	header('Location: /error404.php');
-	exit;
-}
+@session_write_close();
 
 $sel_query = "
 	Call spSelectChefProfile(".$App->R['chef_id'].");
@@ -16,10 +11,6 @@ $sel_query = "
 $result = $App->oDBMY->query($sel_query);
 $Chef = $result->fetch_assoc();
 $result->free();
-if ( !is_array($Chef) ) {
-	header('Location: /error404.php');
-	exit;
-}
 
 
 // build site

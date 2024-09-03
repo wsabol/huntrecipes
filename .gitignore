@@ -17,3 +17,14 @@ vendor
 vendor/*
 /vendor
 /vendor/*
+
+# npm
+lib/node_modules
+lib/node_modules/*
+js/*
+/js/app.dev.js
+/js/*.js
+/js/*.txt
+/js/*.map
+css/*
+/css/*.css

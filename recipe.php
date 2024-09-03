@@ -3,12 +3,7 @@ $App = "";
 require_once('_php_common.php');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-@session_write_close(); 
-
-if ( @$App->R['recipe_id']*1 < 1 ) {
-	header('Location: /error404.php');
-	exit;
-}
+@session_write_close();
 
 $sel_query = "
 	Call spSelectRecipe(".$App->R['recipe_id'].", ".(@$_SESSION['Login']['id']*1).");
@@ -17,10 +12,6 @@ $sel_query = "
 $result = $App->oDBMY->query($sel_query);
 $Recipe = $result->fetch_assoc();
 $result->free();
-if ( !is_array($Recipe) ) {
-	header('Location: /error404.php');
-	exit;
-}
 
 $sel_query = "
 	Call spSelectRecipeIngredients(".$App->R['recipe_id'].");
@@ -73,10 +64,6 @@ $siteImage = "http://huntrecipes.willsabol.com/".$Recipe['image_filename'];
 $bodyClass = "recipePage";
 require_once('_head.php');
 ?>
-
-<!-- Load Facebook SDK for JavaScript -->
-<p id="fb-root"></p>
-
 <!--wrap-->
 <div class="wrap clearfix">
 	<? //wla($Recipe); ?>

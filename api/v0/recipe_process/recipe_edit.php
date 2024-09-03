@@ -15,10 +15,6 @@ $sel_query = "
 $result = $App->oDBMY->query($sel_query);
 $Recipe = $result->fetch_assoc();
 $result->free();
-if (!is_array($Recipe)) {
-    header('Location: /error404.php');
-    exit;
-}
 
 $sel_query = "
 	Call spSelectRecipeIngredients(" . $App->R['recipe_id'] . ");

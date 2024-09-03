@@ -27,6 +27,7 @@ class Page_Controller {
             'page_title' => $page_title,
             'breadcrumbs' => $breadcrumbs,
             'current_user_id' => 0,
+            'current_user_is_chef' => false,
             'is_production' => IS_PRODUCTION
         );
 

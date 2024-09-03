@@ -59,7 +59,7 @@
 }
 
 .ingredients dt.no-amount:before {
-	content: &nbsp;
+	content: '&nbsp';
 }
 
 .click-behave {
@@ -71,25 +71,6 @@
 	opacity: 1;
 }
 
-.facebook-background {
-	background-color: #4267B2 !important;
-}
-
-.pinterest-background {
-	background-color: #BD081C !important;
-}
-
-.btn-facebook {
-    color: #fff;
-    background-color: #4267B2;
-    border: 0;
-}
-.btn-facebook:hover, 
-.btn-facebook:focus {
-	-webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.2);
-	-moz-box-shadow: inset 0 0 30px rgba(0,0,0,.2);
-	box-shadow: inset 0 0 30px rgba(0,0,0,.2);
-}
 .btn-theme {
 	background-color: #FF8E88;
 }

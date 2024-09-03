@@ -174,13 +174,7 @@ require_once("_head.php");
             </div>
             <div class="f-row bwrap">
               <input type="submit" value="Register" />
-              <p style="margin: 10px 0; padding: 0; text-align: center;">
-                - OR -
-              </p>
-              <button type="button" onclick="fb_register();" class="button button-facebook btn-block" id="cmdLoginWithFacebook" >
-								<i class="fa fa-facebook-official" ></i>
-								Register with Facebook
-							</button>
+
 							<p id="register_error" class="help-block"></p>
             </div>
           </form>
@@ -216,41 +210,6 @@ require_once("_head.php");
 				var access_token = response.authResponse.accessToken; //get access token
 				var user_id = response.authResponse.userID; //get FB UID
 				console.log('Registering in as FB user:'+user_id);
-				
-        var fb_email;
-        var fb_name;
-        FB.api('/me?fields=id,name,email', function(response) {
-          //console.log( response );
-          fb_email = response.email; //get user email
-          fb_name = response.name; //get user email
-					
-          // you can store this data into your database
-					FB.api('/'+user_id+'/picture?type=large&height=270&width=270', function (response) {
-						if (response && !response.error) {
-							//console.log(response);
-							/* handle the result */
-							$.ajax({
-								url: '/API/v0/facebook/facebook_registration_callback.json.php',
-								type: 'GET',
-								data: {
-									name: fb_name,
-									email: fb_email,
-									facebook_user_id: user_id,
-									facebook_access_token: access_token,
-									facebook_picture: response.data.url
-								},
-								success: function( response ) {
-									//console.log(response);
-									if ( response.success == 1 ) {
-										window.location = '/profile.php';
-									} else {
-										$('#register_error').text(response.err_msg);
-									}
-								}
-							});
-						}
-					});
-        });
         
 			} else {
 				//user hit cancel button
@@ -260,12 +219,6 @@ require_once("_head.php");
 			scope: 'public_profile,email'
 		});
 	}
-	(function() {
-		var e = document.createElement('script');
-		e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-		e.async = true;
-		$('body').append(e);
-	}());
   
   $(function(){
     

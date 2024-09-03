@@ -37,22 +37,14 @@ header("Accept-Encoding: gzip;q=0, deflate;q=0, sdch;q=0");
 		<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800" rel="stylesheet">
 		<script src="https://use.fontawesome.com/e808bf9397.js"></script>
 		<link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
-		<link rel='stylesheet' href='/assets/font-awesome/css/font-awesome.min.css' type='text/css'>
 		<!-- print fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Alex+Brush" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-		<!-- iCheck -->
-		<link rel="stylesheet" href="/assets/iCheck/flat/_all.css">
 		<link href='/assets/css/style.recipes_common.css' rel='stylesheet' type='text/css'>
 		
-		<script type="text/javascript" src='/assets/jquery-3.1.1/jquery.min.js'></script>
+		<script type="text/javascript" src='//code.jquery.com/jquery-3.1.1.min.js'></script>
 		<!-- Bootstrap 3.3.6 -->
 		<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-		<!-- DataTables -->
-		<script src="/assets/datatables/jquery.dataTables.min.js"></script>
-		<script src="/assets/datatables/dataTables.bootstrap.min.js"></script>
-		<!-- iCheck -->
-    <script type="text/javascript" src="/assets/iCheck/icheck.min.js"></script>
 		<script type="text/javascript" src='/API/v0/fraction/fraction.js'></script>
 		<script type="text/javascript" src='/assets/js/_js_common.js'></script>
 		<script type="text/javascript" src="/assets/js/recipes_init.js"></script>
@@ -75,10 +67,5 @@ header("Accept-Encoding: gzip;q=0, deflate;q=0, sdch;q=0");
 		<![endif]-->
 	</head>
 	<body id="printerFriendly" class="<?=@$bodyClass?>">
-		<!--preloader-->
-		<div class="preloader">
-			<div class="spinner"></div>
-		</div>
-		<!--//preloader-->
 		<!--main-->
 		<main class="main" role="main">

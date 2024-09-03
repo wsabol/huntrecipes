@@ -3,13 +3,7 @@ $App = "";
 require_once('_php_common.php');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-@session_write_close(); 
-
-if ( @$_SESSION['Login']['chef_id']*1 == 0 ) {
-	header('Location: /error404.php');
-	exit;
-}
-
+@session_write_close();
 
 function recipeIngredientRecurse( &$App, $recipe_id, &$dbOutput, $oIngr, $i = 0 ) {
   if ( $i >= count( $oIngr ) ) {

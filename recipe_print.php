@@ -5,21 +5,12 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 @session_write_close(); 
 
-if ( @$App->R['recipe_id']*1 < 1 ) {
-	header('Location: /error404.php');
-	exit;
-}
-
 $sel_query = "
 	Call spSelectRecipe(".$App->R['recipe_id'].", ".(@$_SESSION['Login']['id']*1).");
 ";
 $result = $App->oDBMY->query($sel_query);
 $Recipe = $result->fetch_assoc();
 $result->free();
-if ( !is_array($Recipe) ) {
-	header('Location: /error404.php');
-	exit;
-}
 
 $sel_query = "
 	Call spSelectRecipeIngredients(".$App->R['recipe_id'].");

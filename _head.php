@@ -18,47 +18,43 @@
 		<meta property="og:description"   content="Hunt Recipes - a family reunion cookbook." />
 		<meta property="og:image"         content="<?=( isset($siteImage) ? $siteImage : "https://huntrecipes.willsabol.com/assets/images/ico/HR_250.png" ) ?>" />
 		
-		<link rel="apple-touch-icon" sizes="57x57" href="/assets/images/favicon/apple-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="/assets/images/favicon/apple-icon-60x60.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicon/apple-icon-72x72.png">
-		<link rel="apple-touch-icon" sizes="76x76" href="/assets/images/favicon/apple-icon-76x76.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/favicon/apple-icon-114x114.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="/assets/images/favicon/apple-icon-120x120.png">
-		<link rel="apple-touch-icon" sizes="144x144" href="/assets/images/favicon/apple-icon-144x144.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="/assets/images/favicon/apple-icon-152x152.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-icon-180x180.png">
-		<link rel="icon" type="image/png" sizes="192x192"  href="/assets/images/favicon/android-icon-192x192.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="96x96" href="/assets/images/favicon/favicon-96x96.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
-		<link rel="manifest" href="/assets/manifest.json">
+		<link rel="apple-touch-icon" sizes="57x57" href="/assets/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="/assets/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="/assets/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="/assets/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="/assets/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="/assets/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="/assets/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="/assets/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="/assets/favicon/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
 		<meta name="msapplication-TileColor" content="#ffffff">
 		<meta name="msapplication-TileImage" content="/assets/images/favicon/ms-icon-144x144.png">
 		<meta name="theme-color" content="#ffffff">
 		
 		<!-- Bootstrap 3.3.6 -->
-		<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/assets/css/style.css" />
-		<link rel="stylesheet" href="/assets/css/icons.css" />
+		<link rel="stylesheet" href="//huntrecipes.willsabol.com/assets/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//huntrecipes.willsabol.com/assets/css/style.css" />
+		<link rel="stylesheet" href="//huntrecipes.willsabol.com/assets/css/icons.css" />
 		<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800" rel="stylesheet">
 		<script src="https://use.fontawesome.com/e808bf9397.js"></script>
 		<link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
-		<link rel='stylesheet' href='/assets/font-awesome/css/font-awesome.min.css' type='text/css'>
+		<link rel='stylesheet' href='//huntrecipes.willsabol.com/assets/font-awesome/css/font-awesome.min.css' type='text/css'>
 		<!-- iCheck -->
-		<link rel="stylesheet" href="/assets/iCheck/flat/_all.css">
-		<link href='/assets/css/style.recipes_common.css' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="//huntrecipes.willsabol.com/assets/iCheck/flat/_all.css">
+		<link href='//huntrecipes.willsabol.com/assets/css/style.recipes_common.css' rel='stylesheet' type='text/css'>
 		
-		<script type="text/javascript" src='/assets/jquery-3.1.1/jquery.min.js'></script>
+		<script type="text/javascript" src='//code.jquery.com/jquery-3.1.1.min.js'></script>
 		<!-- Bootstrap 3.3.6 -->
-		<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-		<!-- DataTables -->
-		<script src="/assets/datatables/jquery.dataTables.min.js"></script>
-		<script src="/assets/datatables/dataTables.bootstrap.min.js"></script>
-		<!-- iCheck -->
-    <script type="text/javascript" src="/assets/iCheck/icheck.min.js"></script>
-		<script type="text/javascript" src='/API/v0/fraction/fraction.js'></script>
-		<script type="text/javascript" src='/assets/js/_js_common.js'></script>
-		<script type="text/javascript" src="/assets/js/recipes_init.js"></script>
+		<script src="//huntrecipes.willsabol.com/assets/bootstrap/js/bootstrap.min.js"></script>
+        <!-- iCheck -->
+        <script type="text/javascript" src="//huntrecipes.willsabol.com/assets/iCheck/icheck.min.js"></script>
+		<script type="text/javascript" src='//huntrecipes.willsabol.com/API/fraction/fraction.js'></script>
+		<script type="text/javascript" src='//huntrecipes.willsabol.com/assets/js/_js_common.js'></script>
+		<script type="text/javascript" src="//huntrecipes.willsabol.com/assets/js/recipes_init.js"></script>
 		
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -79,11 +75,6 @@
 		<![endif]-->
 	</head>
 	<body class="<?=@$bodyClass?>">
-		<!--preloader-->
-		<div class="preloader">
-			<div class="spinner"></div>
-		</div>
-		<!--//preloader-->
 		<?php
 		require_once('_main_header.php');
 		?>

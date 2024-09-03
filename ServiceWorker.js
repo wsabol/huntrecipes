@@ -21,7 +21,6 @@ const RUNTIME = 'runtime';
 const PRECACHE_URLS = [
     './',
     'assets/css/icons.css',
-    'assets/css/style-rtl.css',
     'assets/css/style.css',
     'assets/css/style.recipe_common.css',
     'assets/js/_js_common.js',

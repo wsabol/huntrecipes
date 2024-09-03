@@ -1,0 +1,64 @@
+<!--header-->
+<header class="head" role="banner">
+    <!--wrap-->
+    <div class="wrap clearfix">
+        <a href="/" title="HuntRecipes" class="logo"><img src="/assets/images/ico/huntr_logo_transparent_scale.png" alt="HuntRecipes" /></a>
+
+        <nav class="main-nav" role="navigation" id="menu">
+            <ul>
+                <li class="current-menu-item"><a href="/home/" title="Home"><span>Home</span></a></li>
+                <li><a href="recipes.html" title="Recipes"><span>Recipes</span></a>
+                    <ul>
+                        <li><a href="recipes2.html" title="Recipes 2">Recipes 2</a></li><li><a href="recipe.html" title="Recipe">Recipe</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" title="Pages"><span>Pages</span></a>
+                    <ul>
+                        <li><a href="left_sidebar.html" title="Left sidebar page">Left sidebar page</a></li>
+                        <li><a href="right_sidebar.html" title="Right sidebar page">Right sidebar page</a></li>
+                        <li><a href="two_sidebars.html" title="Both sidebars page">Both sidebars page</a></li>
+                        <li><a href="full_width.html" title="Full width page">Full width page</a></li>
+                        <li><a href="login.html" title="Login page">Login page</a></li><li><a href="register.html" title="Register page">Register page</a></li>
+                        <li><a href="error404.html" title="Error page">Error page</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <nav class="user-nav" role="navigation">
+            <ul>
+                {% if (current_user_id > 0) %}
+                    <li class="light"><a href="/profile.php" title="My account"><i class="icon fa fa-user"></i> <span>My account</span></a>
+                        <ul class="sub-menu">
+                            <li><a href="/profile.php?tabid=favorites" title="Favorites">Favorites</a></li>
+                            <li><a href="/profile.php?tabid=meal-planning" title="Meal Planning">Meal Planning</a></li>
+                            <li><a href="/profile.php?tabid=chef-portal" title="Chef Portal">Chef Portal</a></li>
+                            <li><a href="/profile.php?tabid=settings" title="Settings">Settings</a></li>
+                        </ul>
+                    </li>
+
+                    {% if (current_user_is_chef) %}
+                        <li class="medium"><a href="/submit_recipe.php" title="Submit a recipe"><i class="icon icon-themeenergy_fork-spoon"></i> <span>Submit a recipe</span></a></li>
+                    {% endif %}
+
+                    {% if not is_production %}
+                        <li class="dark"><a onclick="if($('.slicknav_nav').hasClass('slicknav_hidden')) $('#headDevTools').toggleClass('hidden');" href="#" title="Developer Tools"><i class="icon fa fa-gears"></i> <span>Developer Tools</span></a>
+                            <ul class="sub-menu">
+                                <li><a href="/API/v0/recipe_process/recipe_process.php" target="_blank" title="Recipe Process">Recipe Process</a></li>
+                                <li><a href="/API/v0/recipe_process/servings_redux.php" target="_blank" title="Servings Redux">Servings Redux</a></li>
+                                <li><a href="/API/v0/recipe_process/ingredients_redux.php" target="_blank" title="Ingredients Redux">Ingredients Redux</a></li>
+                                <li><a href="/API/v0/recipe_process/recipe_type_redux.php" target="_blank" title="Recipe Type Redux">Recipe Type Redux</a></li>
+                                <li><a href="/API/v0/SocialChefDemo/HTML/" target="_blank" title="SocialChef Demo">SocialChef Demo</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                {% else %}
+                    <li class="light"><a href="/login.php" title="Login"><i class="icon fa fa-sign-in"></i> <span>Login</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <!--//wrap-->
+</header>
+<!--//header-->
