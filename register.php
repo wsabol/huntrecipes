@@ -178,7 +178,7 @@ require_once("_head.php");
 							<p id="register_error" class="help-block"></p>
             </div>
           </form>
-          <p>Already have an account yet? <a href="login.php">Log in.</a></p>
+          <p>Already have an account yet? <a href="/login/">Log in.</a></p>
         </div>
       </section>
       <!--//content-->

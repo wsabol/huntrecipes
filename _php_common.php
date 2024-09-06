@@ -36,7 +36,7 @@ if (empty(@$skip_session_create)) {
 $App = new Application();
 
 $guestAccessPages = array(
-    "/login.php",
+    "/login/",
     "/API/v0/login/std_login.json.php",
     "/forgot_password.php",
     "/register.php",
@@ -65,7 +65,7 @@ if (@$skip_session_create * 1 == 0) {
     ) {
         //print_r( $_SERVER );
         //exit;
-        // header("Location: /login.php?ref=" . @$_SERVER["REQUEST_URI"] . "");
+        // header("Location: /login/?ref=" . @$_SERVER["REQUEST_URI"] . "");
     }
 }
 

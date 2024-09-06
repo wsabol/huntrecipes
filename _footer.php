@@ -47,7 +47,7 @@
 							<?php if ( @$_SESSION['Login']['id']*1 > 0 ) { ?>
 								<li><a href="/profile.php" title="Account">Account</a></li>
 							<?php } else { ?>
-								<li><a href="/login.php" title="Login">Login</a></li>
+								<li><a href="/login/" title="Login">Login</a></li>
 							<?php } ?>
 						</ul>
 					</nav>

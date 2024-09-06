@@ -135,7 +135,7 @@ require_once("_head.php");
           </div>
         </form>
         <p><a href="/forgot_username.php">Forgotten username?</a></p>
-        <p>Already have an account yet? <a href="login.php">Log in.</a></p>
+        <p>Already have an account yet? <a href="/login/">Log in.</a></p>
       </div>
     </section>
     <!--//content-->

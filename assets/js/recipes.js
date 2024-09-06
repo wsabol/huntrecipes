@@ -92,7 +92,7 @@ $(function(){
           }
         } else {
           console.log(response.query);
-          window.location.href = '/login.php';
+          window.location.href = '/login/';
         }
 
         $btn.find('i').removeClass('fa-spin fa-fw');

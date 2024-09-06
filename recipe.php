@@ -254,7 +254,7 @@ require_once('_head.php');
 							</a>
 						</li>
 						<li class="liSaveToFavorites <?=( $Recipe['favorite_flag'] == 1 ? "favorite-recipe" : "" )?> medium-brown" >
-							<a id="btnSaveToFavorites<?=( @$_SESSION['Login']['id']*1 == 0 ? "NoLogin" : "" )?>" href="<?=( @$_SESSION['Login']['id']*1 == 0 ? "/login.php?ref=".urlencode("/recipe.php?recipe_id=".$App->R['recipe_id']) : "#" )?>" title="Favorites">
+							<a id="btnSaveToFavorites<?=( @$_SESSION['Login']['id']*1 == 0 ? "NoLogin" : "" )?>" href="<?=( @$_SESSION['Login']['id']*1 == 0 ? "/login/?ref=".urlencode("/recipe.php?recipe_id=".$App->R['recipe_id']) : "#" )?>" title="Favorites">
 								<i class="fa fa-heart"></i>
 								<span><?=( $Recipe['favorite_flag'] == 1 ? "Favorited" : "Save to Favorites" )?></span>
 							</a>

@@ -15,35 +15,32 @@ class Navigation {
             [
                 "title" => "Home",
                 "a_href" => "/home/",
-                "li_class" => "",
+                "is_active" => false,
             ],
             [
                 "title" => "About",
                 "a_href" => "/about/",
-                "li_class" => "",
+                "is_active" => false,
             ],
             [
                 "title" => "Featured",
                 "a_href" => "/featured/",
-                "li_class" => "",
-                "permission" => function () {
-                    return true;
-                }
+                "is_active" => false,
             ],
             [
                 "title" => "Recipes",
                 "a_href" => "/recipes/",
-                "li_class" => "",
+                "is_active" => false,
             ],
             [
                 "title" => "Contact",
                 "a_href" => "/contact/",
-                "li_class" => "",
+                "is_active" => false,
             ],
             [
                 "title" => "Developer",
                 "a_href" => "/developer/",
-                "li_class" => "",
+                "is_active" => false,
                 "permission" => function(){
                     if (isset($_SESSION)) {
                         if (isset($_SESSION['User'])) {
@@ -112,7 +109,7 @@ class Navigation {
                 [
                     "title" => "Login",
                     "a_href" => "/login/",
-                    "icon" => "fa fa-sign-in",
+                    "icon" => "fa-solid fa-arrow-right-to-bracket",
                     "li_class" => "light"
                 ]
             ];
@@ -130,20 +127,7 @@ class Navigation {
 
             if ($allowed) {
                 if (@$s['a_href'] == $_SERVER['REQUEST_URI']) {
-                    $s['li_class'] .= " active";
-                }
-
-                if (count(@$s['submenu'] ?? []) > 0) {
-                    foreach ($s['submenu'] as &$item) {
-                        if ($item['href'] == $_SERVER['REQUEST_URI']) {
-                            $item['class'] = " active";
-
-                            if (!str_contains($s['li_class'], "active")) {
-                                $s['li_class'] .= " active";
-                            }
-                        }
-                    }
-
+                    $s['is_active'] = true;
                 }
             }
 
@@ -164,7 +148,7 @@ class Navigation {
 
             if ($allowed) {
                 if (@$s['a_href'] == $_SERVER['REQUEST_URI']) {
-                    $s['li_class'] .= " active";
+                    $s['li_class'] .= " current-menu-item";
                 }
             }
 

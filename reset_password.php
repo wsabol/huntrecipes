@@ -92,7 +92,7 @@ require_once("_head.php");
               <input type="submit" >
             </div>
           </form>
-          <p>Remembered your password? <a href="login.php">Log in.</a></p>
+          <p>Remembered your password? <a href="/login/">Log in.</a></p>
         <? } 
 				elseif ( $resetDisplayCode == 1 ) { 
 					?>

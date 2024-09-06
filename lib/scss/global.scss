@@ -1,0 +1,109 @@
+@import "settings";
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+figure,
+em,
+img,
+small,
+strong,
+fieldset,
+form,
+ul {
+    border: 0;
+    margin: 0;
+    padding: 0
+}
+
+body {
+    font-size: $font-size-base;
+    font-family: $font-family-base;
+    color: $gray-800;
+    background: url(../../assets/images/bgr/body.jpg) 0 0 repeat;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    text-rendering: optimizeLegibility;
+}
+
+html {
+    -webkit-text-size-adjust: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: $primary;
+}
+
+img,
+fieldset,
+abbr,
+acronym {
+    border: 0;
+}
+
+/* LAYOUT */
+
+.main {
+    min-height: 500px;
+    padding: 40px 0 120px;
+}
+
+/* TYPOGRAPHY */
+
+h1 {
+    margin: 10px 0 12px 0;
+}
+
+h2 {
+    margin: 8px 0 12px 0;
+}
+
+h3 {
+    margin: 12px 0 18px 0;
+}
+
+h4 {
+    margin: 12px 0 18px 0;
+}
+
+h5 {
+    margin: 8px 0 10px 0;
+}
+
+h6 {
+    margin: 8px 0 10px 0;
+}
+
+p {
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+p:empty {
+    display: none;
+}
+
+.hero h1 {
+    margin: 10px 0 40px 0;
+}
+
+.hero p {
+    font-size: $font-size-lg;
+    margin: 0 0 15px 0;
+}
+
+.btn {
+    text-transform: uppercase;
+}
+
+// breadcrumbs
+
+.breadcrumb {
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+}
+

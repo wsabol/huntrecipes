@@ -6,7 +6,7 @@ function cntRegistrationAuth( $email, $username, $name ) {
   // registration email confirm notice
   $msgBody = '
     Hello Dear User,<br>
-    <a href="http://'.$_SERVER['HTTP_HOST'].'/login.php?uname='.$username.'&registration_auth='.$registration_hash.'" >Click Here</a> to authenticate your login.<br>
+    <a href="http://'.$_SERVER['HTTP_HOST'].'/login/?uname='.$username.'&registration_auth='.$registration_hash.'" >Click Here</a> to authenticate your login.<br>
     <br>
     See you soon '.$name.'!<br>
     <br>

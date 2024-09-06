@@ -19,11 +19,12 @@ class Page_Controller {
             }
         }
 
+        $nav = new Navigation();
+
         $context = array(
             'current_year' => date("Y"),
-            'user_name' => '',
-            'user_title' => '',
-            'user_image' => '/assets/img/user2-160x160.jpg',
+            'main_nav' => $nav->get_main_nav(),
+            'user_nav' => $nav->get_user_nav(),
             'page_title' => $page_title,
             'breadcrumbs' => $breadcrumbs,
             'current_user_id' => 0,

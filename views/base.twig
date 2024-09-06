@@ -1,31 +1,30 @@
+
 {% include 'partials/head.twig' %}
 
 <body class="{{ body_class }}" data-current-user-id={{ current_user_id }}>
 
-    {% include 'partials/header.twig' %}
+    <div class="container">
 
-    <main class="main" role="main">
-        {% block main_wrapper %}
-        <div class="wrap clearfix">
+        {% include 'partials/header.twig' %}
+
+        <main class="main" role="main">
             {% include 'partials/breadcrumbs.twig' %}
-
             {% block main_content %}{% endblock %}
-        </div>
-        {% endblock %}
-    </main>
+        </main>
+    </div>
+
+    {% if show_call_to_action %}
+        <!--call to action-->
+        <section class="cta">
+            <div class="wrap clearfix">
+                <a href="/register/" class="button big white right">Sign up</a>
+                <h2>Love this food? Get more when you sign up for an account.</h2>
+            </div>
+        </section>
+        <!--//call to action-->
+    {% endif %}
 
     {% if show_footer %}
-
-        {% if (current_user_id == 0) %}
-            <!--call to action-->
-            <section class="cta">
-                <div class="wrap clearfix">
-                    <a href="/register/" class="button big white right">Sign up</a>
-                    <h2>Love this food? Get more when you sign up for an account.</h2>
-                </div>
-            </section>
-            <!--//call to action-->
-        {% endif %}
 
         {% include 'partials/footer.twig' %}
 

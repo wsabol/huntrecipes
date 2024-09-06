@@ -47,7 +47,7 @@
 				}
 				else {
 					?>
-					<li class="light"><a href="/login.php" title="Login"><i class="icon fa fa-sign-in"></i> <span>Login</span></a></li>
+					<li class="light"><a href="/login/" title="Login"><i class="icon fa fa-sign-in"></i> <span>Login</span></a></li>
 					<?php
 				}
 				?>
