@@ -3,13 +3,11 @@ $App = "";
 require_once('_php_common.php');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-@session_write_close(); 
-
+@session_write_close();
 
 /** built site **/
 $bodyClass = ( @$_SESSION['Login']['id']*1 == 0 ? "home" : "" );
 require_once('_head.php');
-
 
 /* recipe of the day */
 $rotd_query = "
