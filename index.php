@@ -87,6 +87,7 @@ if ( @$_SESSION['Login']['id']*1 == 0 ) {
 	</div>
 	<!--//intro-->
 	<?php
+    exit;
 }
 ?>
 <!--wrap-->
@@ -213,73 +214,6 @@ if ( @$_SESSION['Login']['id']*1 == 0 ) {
 				</div>
 			</div>
 			<!--//cwrap-->
-			
-			<?php
-			if ( @$_SESSION['Login']['id']*1 > 0 ) {
-				$wkStart = new DateTime("today");
-				while ( $wkStart->format("N") != $_SESSION['Login']['week_start_day_of_week'] ) {
-					$wkStart->sub(new DateInterval("P1D"));
-				}
-				$week_of = $wkStart->format('Y-m-d');
-				$wkStart = "";
-				
-				$sel_query = "
-					Call spSelectWeeksMeals(".$_SESSION['Login']['id'].", '".$week_of."');
-				";
-				$MPResults = array();
-				$r = $App->oDBMY->query( $sel_query );
-				while ( $row = $r->fetch_assoc() ) {
-					array_push($MPResults, $row);
-				}
-				$r->free();
-				?>
-				<!--cwrap-->
-				<div class="cwrap">
-					<header class="s-title">
-						<h2 class="ribbon bright">Your Week</h2>
-					</header>
-					<?php
-					if ( count($MPResults) == 0 ) {
-						?>
-						<div id="NoMoreLoadDiv" class="alert alert-banner">No meals this week.</div>
-						<?php
-					} else {
-						for ( $i = 0; $i < count($MPResults); $i++ ) {
-							?>
-							<div class="row">
-								<!--entries-->
-								<div class="entries full-width _column-entries _column-entries-three">
-									<!--item-->
-									<div class="entry one-third _column-entry">
-										<figure>
-											<img src="<?=$MPResults[$i]['image_filename']?>" alt="" />
-											<figcaption><a href="recipe.php?recipe_id=<?=$MPResults[$i]['id']?>"><i class="icon icon-themeenergy_eye2"></i> <span>View recipe</span></a></figcaption>
-										</figure>
-										<div class="container">
-											<h2><a href="recipe.php?recipe_id=<?=$MPResults[$i]['id']?>"><?=htmlspecialchars($MPResults[$i]['title'])?></a></h2> 
-											<div class="actions">
-												<div data-recipe-id="<?=$MPResults[$i]['id']?>" data-week-of="<?=$week_of?>" >
-													<div class="meal-plan">
-													</div>
-													<div class="likes divSaveToFavorites <?=( $MPResults[$i]['favorite_flag'] == 1 ? "favorite-recipe" : "" )?>"><i class="fa fa-heart"></i><span class="favorite-count"><?=$MPResults[$i]['favorite_count']?></span></div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!--item-->
-								</div>
-								<!--//entries-->
-							</div>
-							<?php
-						}
-					}
-					?>
-					<div class="quicklinks">
-						<a href="javascript:void(0)" class="button scroll-to-top">Back to top</a>
-					</div>
-				</div>
-				<!--//cwrap-->
-			<? } ?>
 			
 		</section>
 		<!--//content-->
