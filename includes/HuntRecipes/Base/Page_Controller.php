@@ -25,6 +25,7 @@ class Page_Controller {
             'current_year' => date("Y"),
             'main_nav' => $nav->get_main_nav(),
             'user_nav' => $nav->get_user_nav(),
+            'footer_nav' => $nav->get_footer_nav(),
             'page_title' => $page_title,
             'breadcrumbs' => $breadcrumbs,
             'current_user_id' => 0,

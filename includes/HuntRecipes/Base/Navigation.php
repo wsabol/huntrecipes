@@ -7,6 +7,7 @@ use HuntRecipes\User\SessionController;
 class Navigation {
     private array $_main_nav;
     private array $_user_nav;
+    private array $_footer_nav;
 
     public function __construct() {
         $sess = new SessionController();
@@ -68,8 +69,25 @@ class Navigation {
                     ],
                 ]
             ],
+        ];
 
-
+        $this->_footer_nav = [
+            [
+                "title" => "Home",
+                "a_href" => "/home/",
+            ],
+            [
+                "title" => "About",
+                "a_href" => "/about/",
+            ],
+            [
+                "title" => "Recipes",
+                "a_href" => "/recipes/",
+            ],
+            [
+                "title" => "Contact",
+                "a_href" => "/contact/",
+            ],
         ];
 
         if ($sess->has_user()) {
@@ -98,6 +116,13 @@ class Navigation {
                     ]
                 ];
             }
+
+            $this->_footer_nav[] = [
+                [
+                    "title" => "My account",
+                    "a_href" => "/profile/",
+                ]
+            ];
         }
         else {
             $this->_user_nav = [
@@ -108,7 +133,13 @@ class Navigation {
                     "li_class" => "light"
                 ]
             ];
+
+            $this->_footer_nav[] = [
+                "title" => "Login",
+                "a_href" => "/login/",
+            ];
         }
+
     }
 
     public function get_main_nav(): array {
@@ -145,15 +176,15 @@ class Navigation {
             }
 
             if ($allowed) {
-                if (@$s['a_href'] == $_SERVER['REQUEST_URI']) {
-                    $s['li_class'] .= " current-menu-item";
-                }
-
                 unset($s['permission']);
                 $user_nav[] = $s;
             }
         }
 
         return $user_nav;
+    }
+
+    public function get_footer_nav(): array {
+        return $this->_footer_nav;
     }
 }

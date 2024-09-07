@@ -43,14 +43,9 @@
 
                 <nav class="foot-nav">
                     <ul>
-                        <li><a href="/home/" title="Home">Home</a></li>
-                        <li><a href="/browse/" title="Recipes">Recipes</a></li>
-                        <li><a href="/contact/" title="Contact">Contact</a></li>
-                        {% if (current_user_id > 0) %}
-                            <li><a href="/profile.php" title="Account">Account</a></li>
-                        {% else %}
-                            <li><a href="/login/" title="Login">Login</a></li>
-                        {% endif %}
+                        {% for item in footer_nav %}
+                            <li><a href="{{ item.a_href }}">{{ item.title }}</a></li>
+                        {% endfor %}
                     </ul>
                 </nav>
             </div>
