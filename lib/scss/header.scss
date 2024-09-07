@@ -1,5 +1,9 @@
 @import "settings";
 
+header > .container {
+    padding: 0;
+}
+
 .main-header {
     height: 100%;
     background-color: $white;
@@ -146,4 +150,10 @@
         float: right;
     }
 
+}
+
+@include media-breakpoint-up(sm) {
+    header > .container {
+        padding: 0 12px;
+    }
 }

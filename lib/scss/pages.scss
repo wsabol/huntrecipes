@@ -18,6 +18,8 @@
     position: absolute;
     left: 0;
     bottom: 0;
+    height: 100vh;
+    width: auto;
 }
 
 .welcome .main {
@@ -35,4 +37,11 @@
     color: $white;
     max-width: 85%;
     text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+}
+
+@media (min-width: 1612px) {
+    .intro .bg img {
+        width: 100vw;
+        height: auto;
+    }
 }

@@ -1,4 +1,3 @@
-#Header set Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data:application www.w3.org cdn.jsdelivr.net code.jquery.com cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com huntrecipes.willsabol.com use.fontawesome.com cdn.fontawesome.com"
 
 AddHandler application/x-httpd-php74 .php .php5 .php4 .php3 .html
 

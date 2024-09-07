@@ -23,11 +23,6 @@ class Navigation {
                 "is_active" => false,
             ],
             [
-                "title" => "Featured",
-                "a_href" => "/featured/",
-                "is_active" => false,
-            ],
-            [
                 "title" => "Recipes",
                 "a_href" => "/recipes/",
                 "is_active" => false,
@@ -129,9 +124,12 @@ class Navigation {
                 if (@$s['a_href'] == $_SERVER['REQUEST_URI']) {
                     $s['is_active'] = true;
                 }
+
+                unset($s['permission']);
+                $main_nav[] = $s;
             }
 
-            $main_nav[] = $s;
+
         }
 
         return $main_nav;
@@ -150,9 +148,10 @@ class Navigation {
                 if (@$s['a_href'] == $_SERVER['REQUEST_URI']) {
                     $s['li_class'] .= " current-menu-item";
                 }
-            }
 
-            $user_nav[] = $s;
+                unset($s['permission']);
+                $user_nav[] = $s;
+            }
         }
 
         return $user_nav;

@@ -1,29 +1,44 @@
 <!--footer-->
-<footer class="foot" role="contentinfo">
-    <div class="wrap clearfix">
-        <div class="row">
-            <article style="font-style: italic;" class="three-fourth">
-                <h5>Dear Hunt Family,</h5>
-                <p>We know how to have a fun! Dad and Dotty sparked these gourmet get-togethers with the first reunion in 1983. Through their loving example, these 14 summers
-                    have created memories that are with us every day. You have shared many of these in this book thus giving them a life of their own. But this is only a beginning-over 14 years our clan
-                    is stronger by 14 people. Here's to many more great times together!
-                <p>Joan and Stuart<br>June 30, 1997</p>
-            </article>
-            <article class="one-fourth">
-                <h5>Stay in Touch</h5>
-                <div class="row">
-                    <div class="full-width">
-                        <ul class="social">
-                            <li><a href="//www.facebook.com/jo.sabol" title="facebook"><i class="fa fa-fw fa-facebook"></i></a></li>
-                            <li><a href="//www.linkedin.com/in/joan-hunt-sabol-03258096/" title="linkedin"><i class="fa fa-fw fa-linkedin"></i></a></li>
-                            <li><a href="//www.pinterest.com/josabol/" title="pinterest"><i class="fa fa-fw fa-pinterest-p"></i></a></li>
-                            <li><a href="/contact/" title="Contact"><i class="fa fa-fw fa-envelope"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </article>
+<footer class="foot fixed-bottom">
 
-            <div class="bottom">
+    {% if current_user_id == 0 and not hide_call_to_action %}
+        <!--call to action-->
+        <section class="cta">
+            <div class="container cta-row">
+                <h3>Love this food? Get more when you sign up for an account.</h3>
+                <a href="/register/" class="btn btn-light btn-lg">Sign up</a>
+            </div>
+        </section>
+        <!--//call to action-->
+    {% endif %}
+
+    <div class="container">
+
+        <div class="footer-about">
+            <div class="row">
+                <article style="font-style: italic;" class="col-lg-9">
+                    <h5>Dear Hunt Family,</h5>
+                    <p>We know how to have a fun! Dad and Dotty sparked these gourmet get-togethers with the first reunion in 1983. Through their loving example, these 14 summers
+                        have created memories that are with us every day. You have shared many of these in this book thus giving them a life of their own. But this is only a beginning-over 14 years our clan
+                        is stronger by 14 people. Here's to many more great times together!
+                    <p>Joan and Stuart<br>June 30, 1997</p>
+                </article>
+                <article class="col-lg-3">
+                    <h5>Stay in Touch</h5>
+
+                    <div class="social-links">
+                        <a href="//www.facebook.com/jo.sabol" title="facebook" class="btn btn-primary"><i class="fa fa-brands fa-fw fa-facebook-f"></i></a>
+                        <a href="//www.linkedin.com/in/joan-hunt-sabol-03258096/" title="linkedin" class="btn btn-primary"><i class="fa fa-brands fa-fw fa-linkedin"></i></a>
+                        <a href="//www.pinterest.com/josabol/" title="pinterest" class="btn btn-primary"><i class="fa fa-brands fa-fw fa-pinterest-p"></i></a>
+                        <a href="/contact/" title="Contact" class="btn btn-primary"><i class="fa fa-fw fa-envelope"></i></a>
+                    </div>
+
+                </article>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="row row-cols-auto">
                 <p class="copy">Copyright {{ current_year }} <a href="//www.willsabol.com/" target="_blank" >Will Sabol</a>. All rights reserved</p>
 
                 <nav class="foot-nav">
@@ -40,6 +55,7 @@
                 </nav>
             </div>
         </div>
+
     </div>
 </footer>
 <!--//footer-->

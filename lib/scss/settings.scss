@@ -164,6 +164,9 @@ $navbar-light-hover-color:          $white;
 $navbar-light-active-color:         $white;
 $navbar-light-disabled-color:       $gray-600;
 
+$navbar-toggler-padding-y:          .5rem;
+$navbar-toggler-padding-x:          .75rem;
+
 // button
 
 $btn-padding-y:               11px;
@@ -177,7 +180,7 @@ $btn-padding-y-sm:            $btn-padding-y;
 $btn-padding-x-sm:            $btn-padding-x;
 $btn-font-size-sm:            $font-size-sm;
 
-$btn-padding-y-lg:            1.5 * $btn-padding-y;
+$btn-padding-y-lg:            $btn-padding-y;
 $btn-padding-x-lg:            1.5 * $btn-padding-x;
 $btn-font-size-lg:            $font-size-lg;
 
