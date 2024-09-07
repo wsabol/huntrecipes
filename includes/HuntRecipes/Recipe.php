@@ -5,6 +5,7 @@ namespace HuntRecipes;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
+use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
     private SqlController $conn;
@@ -58,13 +59,26 @@ class Recipe extends Common_Object {
         $cuisine_id = @$props->cuisine_id ?? 0;
         $chef_id = @$props->chef_id ?? 0;
 
+        $current_user_id = 0;
+        $sess = new SessionController();
+        if ($sess->is_started()) {
+            if ($sess->has_user()) {
+                $current_user_id = $sess->user()->id;
+            }
+        }
+
         $sel_query = "
         select r.*
             ,co.name as course
             ,cu.name as cuisine
             ,rt.name as type
             ,ch.name as chef
-            ,0 as likes_count
+            ,IFNULL((
+                SELECT count(1)
+                FROM UserRecipeFavorite u
+                WHERE u.recipe_id = r.id
+            ), 0) as likes_count,
+            CASE WHEN urf.id IS NULL THEN 0 ELSE 1 END as is_liked
         from Recipe r
         LEFT JOIN Course co
             ON co.id = r.course_id
@@ -74,6 +88,9 @@ class Recipe extends Common_Object {
             ON rt.id = r.type_id
         LEFT JOIN Chef ch
             ON ch.id = r.chef_id
+        LEFT JOIN UserRecipeFavorite urf
+            ON urf.recipe_id = r.id
+            AND urf.user_id = $current_user_id
         WHERE r.published_flag = 1
         AND CASE WHEN $recipe_type_id = 0 THEN 1 WHEN $recipe_type_id = r.type_id THEN 1 ELSE 0 END = 1
         AND CASE WHEN $course_id = 0 THEN 1 WHEN $course_id = r.course_id THEN 1 ELSE 0 END = 1
@@ -97,6 +114,7 @@ class Recipe extends Common_Object {
             }
 
             $row->link = "/recipes/recipe/?id=" . $row->id;
+            $row->is_liked = (bool)$row->is_liked;
 
             $data[] = $row;
         }

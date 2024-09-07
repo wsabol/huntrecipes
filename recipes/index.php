@@ -22,6 +22,11 @@ $page_title = "Recipes";
 // Breadcrumbs.
 $breadcrumbs = array(
     array(
+        'name' => 'Home',
+        'link' => '/home/',
+        'current_page' => false,
+    ),
+    array(
         'name' => $page_title,
         'link' => '/recipes/',
         'current_page' => true,
