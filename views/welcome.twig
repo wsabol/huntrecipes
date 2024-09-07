@@ -38,17 +38,11 @@
                                 <p>There’s sure to be something tempting for you to try.</p>
                                 <p>Enjoy!</p>
 
-                                <form action="/recipes/">
-                                    <input type="text" class="form-control mb-2" placeholder="Enter your search term" />
+                                <form action="/recipes/" method="get" id="welcome-form">
+                                    <input type="text" name="q" class="form-control mb-2" placeholder="Enter your search term" />
 
-                                    <select class="form-control mb-3" >
-                                        <option>or select a category</option>
-                                        <option>Appetizers</option>
-                                        <option>Cocktails</option>
-                                        <option>Deserts</option>
-                                        <option>Main courses</option>
-                                        <option>Snacks</option>
-                                        <option>Soups</option>
+                                    <select class="form-control mb-3" name="cuisine_id" >
+                                        <option value=0>or select a cuisine</option>
                                     </select>
 
                                     <div class="d-grid gap-2">
