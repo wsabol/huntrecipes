@@ -1,0 +1,76 @@
+{% set show_footer = true %}
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+
+        <!--left sidebar-->
+        <aside class="col-lg-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Search for recipes</h5>
+
+                    <form id="search-form" onsubmit="return false">
+                        <div class="mb-3">
+                            <label for="keyword" class="form-label">Keyword</label>
+                            <input class="form-control" type="search" id="keyword" name="keyword" placeholder="Enter a keyword search" value="{{ search.keyword }}" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recipe_type_id" class="form-label">Recipe Type</label>
+                            <select class="form-select" id="recipe_type_id" name="recipe_type_id" >
+                                <option value=0>Any Type</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="course_id" class="form-label">Course</label>
+                            <select class="form-select" id="course_id" name="course_id" >
+                                <option value=0>Any Course</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cuisine_id" class="form-label">Cuisine</label>
+                            <select class="form-select" id="cuisine_id" name="cuisine_id" >
+                                <option value=0>Any Cuisine</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="chef_id" class="form-label">Chef</label>
+                            <select class="form-select" id="chef_id" name="chef_id" >
+                                <option value=0>Any Chef</option>
+                            </select>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 d-grid gap-2">
+                        <button class="btn btn-primary" id="search-btn">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning" role="alert" id="loading-alert">
+                Loading results...
+            </div>
+
+        </aside>
+        <!--//left sidebar-->
+
+        <!--content-->
+        <section class="col-lg-9">
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="results-container">
+
+            </div>
+
+        </section>
+        <!--//content-->
+    </div>
+    <!--//row-->
+
+{% endblock %}

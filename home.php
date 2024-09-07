@@ -95,7 +95,7 @@ if ( !!$result ) {
 								<blockquote><i class="fa fa-quote-left"></i> <?=$ChefOTD['wisdom']?></blockquote>
 								<div class="actions">
 									<div>
-										<a href="browse.php?chef_id=<?=$ChefOTD['chef_id']?>" class="button">Check out <?=( $ChefOTD['male_flag'] == 1 ? "his" : "her" )?> recipes</a>
+										<a href="/recipes/?chef_id=<?=$ChefOTD['chef_id']?>" class="button">Check out <?=( $ChefOTD['male_flag'] == 1 ? "his" : "her" )?> recipes</a>
 									</div>
 								</div>
 							</div>
@@ -244,7 +244,7 @@ if ( !!$result ) {
 							$class = "medium";
 						}
 						?>
-						<li class="<?=$class?>"><a href="browse.php?<?=$rCat['ctype']?>_id=<?=$rCat['entity_id']?>" title="<?=$rCat['name']?>"><i class="icon <?=$rCat['icon']?>"></i> <span><?=$rCat['name']?></span></a></li>
+						<li class="<?=$class?>"><a href="/recipes/?<?=$rCat['ctype']?>_id=<?=$rCat['entity_id']?>" title="<?=$rCat['name']?>"><i class="icon <?=$rCat['icon']?>"></i> <span><?=$rCat['name']?></span></a></li>
 						<?php
 						$cat_counter++;
 					}

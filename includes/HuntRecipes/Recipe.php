@@ -50,12 +50,21 @@ class Recipe extends Common_Object {
     }
 
     public static function list(SqlController $conn, array $props): array {
+        $props = (object)$props;
+
+        $keyword = $conn->escape_string(@$props->keyword ?? '');
+        $recipe_type_id = @$props->recipe_type_id ?? 0;
+        $course_id = @$props->course_id ?? 0;
+        $cuisine_id = @$props->cuisine_id ?? 0;
+        $chef_id = @$props->chef_id ?? 0;
+
         $sel_query = "
         select r.*
             ,co.name as course
             ,cu.name as cuisine
             ,rt.name as type
             ,ch.name as chef
+            ,0 as likes_count
         from Recipe r
         LEFT JOIN Course co
             ON co.id = r.course_id
@@ -65,14 +74,30 @@ class Recipe extends Common_Object {
             ON rt.id = r.type_id
         LEFT JOIN Chef ch
             ON ch.id = r.chef_id
-        order by r.name
+        WHERE r.published_flag = 1
+        AND CASE WHEN $recipe_type_id = 0 THEN 1 WHEN $recipe_type_id = r.type_id THEN 1 ELSE 0 END = 1
+        AND CASE WHEN $course_id = 0 THEN 1 WHEN $course_id = r.course_id THEN 1 ELSE 0 END = 1
+        AND CASE WHEN $cuisine_id = 0 THEN 1 WHEN $cuisine_id = r.cuisine_id THEN 1 ELSE 0 END = 1
+        AND CASE WHEN $chef_id = 0 THEN 1 WHEN $chef_id = r.chef_id THEN 1 ELSE 0 END = 1
+        AND CASE WHEN '$keyword' = '' THEN 1 WHEN r.title like '%$keyword%' THEN 1 ELSE 0 END = 1
+        AND CASE WHEN '$keyword' = '' THEN 1 WHEN r.instructions like '%$keyword%' THEN 1 ELSE 0 END = 1
+        order by r.title
         ";
+        // echo $sel_query;
         $data = [];
 
         $result = $conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting recipes: " . $conn->last_message());
+        }
 
         while ($row = $result->fetch_object()) {
-            $row->published_flag = (bool)$row->published_flag;
+            if (!str_starts_with($row->image_filename, "/")) {
+                $row->image_filename = "/" . $row->image_filename;
+            }
+
+            $row->link = "/recipes/recipe/?id=" . $row->id;
+
             $data[] = $row;
         }
 

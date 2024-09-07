@@ -45,3 +45,15 @@
         height: auto;
     }
 }
+
+// RECIPES
+
+#results-container {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#results-container.loading {
+    opacity: 0.75;
+    pointer-events: none;
+}

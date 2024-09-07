@@ -8,6 +8,7 @@
     <main class="main" role="main">
         <div class="container">
             {% include 'partials/breadcrumbs.twig' %}
+            <h1 class="page-title">{{ page_title }}</h1>
             {% block main_content %}{% endblock %}
         </div>
     </main>

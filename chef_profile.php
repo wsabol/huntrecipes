@@ -38,7 +38,7 @@ require_once('_head.php');
 						</figure>
 						<div class="container">
 							<p>Recipes submitted: <?=$Chef['recipe_count']?></p>
-							<a class="button btn-block" href="browse.php?chef_id=<?=$App->R['chef_id']?>" >
+							<a class="button btn-block" href="/recipes/?chef_id=<?=$App->R['chef_id']?>" >
 								<?=( $Chef['male_flag'] == 1 ? "His" : "Her" )?> Recipes
 							</a>
 						</div>

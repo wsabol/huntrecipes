@@ -50,25 +50,25 @@ acronym {
 
 .main {
     min-height: 500px;
-    padding: 40px 0 120px;
+    padding: 20px 0 80px;
 }
 
 /* TYPOGRAPHY */
 
 h1 {
-    margin: 10px 0 12px 0;
+    margin: 24px 0 12px 0;
 }
 
 h2 {
-    margin: 8px 0 12px 0;
+    margin: 18px 0 12px 0;
 }
 
 h3 {
-    margin: 12px 0 18px 0;
+    margin: 14px 0 12px 0;
 }
 
 h4 {
-    margin: 12px 0 18px 0;
+    margin: 10px 0 12px 0;
 }
 
 h5 {
@@ -99,6 +99,10 @@ p:empty {
 
 .btn {
     text-transform: uppercase;
+}
+
+.page-title {
+    margin: 40px 0;
 }
 
 // breadcrumbs
@@ -197,4 +201,101 @@ p:empty {
 .cta .button {
     min-width: 170px;
     margin-left: auto;
+}
+
+// content
+
+.content {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.25rem 0.5rem;
+    margin-bottom: 30px;
+    position: relative;
+    background: $white;
+    border-radius: $border-radius;
+    -webkit-box-shadow: $btn-box-shadow;
+    -moz-box-shadow: $btn-box-shadow;
+    box-shadow: $btn-box-shadow
+}
+
+// recipe card
+
+.recipe-card figure {
+    position: relative;
+    overflow: hidden;
+}
+
+.recipe-card figcaption {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    // z-index: 10;
+    text-align: center;
+    background: rgba($primary, 0.8);
+    width: 100%;
+    height: 100%;
+    border-radius: $border-radius $border-radius 0 0;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+}
+
+.recipe-card figcaption a {
+    width: 100%;
+    height: 100%;
+    color: $white;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+}
+
+.recipe-card figcaption .icon {
+    display: inline-block;
+    margin: 27% 0 3px;
+    font-size: 30px;
+}
+
+.recipe-card figcaption span {
+    width: 100%;
+    display: inline-block;
+}
+
+.recipe-card figure:hover figcaption {
+    opacity: 1;
+}
+
+.recipe-card .card-actions {
+    display: flex;
+    flex-direction: row;
+    padding-top: 0.5rem;
+}
+
+.card-actions .likes {
+    cursor: pointer;
+    color: $gray;
+}
+
+.card-actions .likes i {
+    margin-right: 0.3rem;
+    transition: $transition-base;
+}
+
+.card-actions .likes:hover i {
+    color: $gray-500 !important;
+}
+
+.card-actions .likes.liked i {
+    cursor: pointer;
+    color: $primary-700 !important;
+}
+
+.card-actions .likes.liked:hover i {
+    color: $primary-600 !important;
 }

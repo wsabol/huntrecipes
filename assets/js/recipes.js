@@ -36,7 +36,7 @@ $(function(){
       return;
     }
     
-    window.location.href = '/browse.php?'+jQuery.param( search );
+    window.location.href = '/recipes/?'+jQuery.param( search );
   });
   
   $('#q').keyup(function(e){

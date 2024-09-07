@@ -78,12 +78,12 @@ require_once('_head.php');
 				<nav class="breadcrumbs">
 					<ul>
 						<li><a href="#">Recipes</a></li>
-						<li><a href="browse.php?type_id=<?=$Recipe['type_id']?>"><?=$Recipe['type']?></a></li>
+						<li><a href="/recipes/?type_id=<?=$Recipe['type_id']?>"><?=$Recipe['type']?></a></li>
 						<?php if ( $Recipe['course_id']*1 > 0 ) { ?>
-							<li><a href="browse.php?course_id=<?=$Recipe['course_id']?>"><?=$Recipe['course']?></a></li>
+							<li><a href="/recipes/?course_id=<?=$Recipe['course_id']?>"><?=$Recipe['course']?></a></li>
 						<?php } ?>
 						<?php if ( $Recipe['cuisine_id']*1 > 0 ) { ?>
-							<li><a href="browse.php?cuisine_id=<?=$Recipe['cuisine_id']?>"><?=$Recipe['cuisine']?></a></li>
+							<li><a href="/recipes/?cuisine_id=<?=$Recipe['cuisine_id']?>"><?=$Recipe['cuisine']?></a></li>
 						<?php } ?>
 					</ul>
 				</nav>
