@@ -47,6 +47,10 @@ class Recipe extends Common_Object {
             $this->serving_measure_id = $row->serving_measure_id;
             $this->parent_recipe_id = $row->parent_recipe_id;
             $this->published_flag = (bool)$row->published_flag;
+
+            if (!str_starts_with($row->image_filename, "/")) {
+                $this->image_filename = "/" . $this->image_filename;
+            }
         }
     }
 
@@ -122,34 +126,48 @@ class Recipe extends Common_Object {
         return $data;
     }
 
-    public static function list_top_recipes(SqlController $conn): array {
+    public static function top_recipes(SqlController $conn): array {
+        $top = [];
+
+        $sess = new SessionController();
+
         $sel_query = "
-        select r.*
-            ,co.name as course
-            ,cu.name as cuisine
-            ,rt.name as type
-            ,ch.name as chef
-        from Recipe r
-        LEFT JOIN Course co
-            ON co.id = r.course_id
-        LEFT JOIN Cuisine cu
-            ON cu.id = r.cuisine_id
-        LEFT JOIN RecipeType rt
-            ON rt.id = r.type_id
-        LEFT JOIN Chef ch
-            ON ch.id = r.chef_id
-        order by r.name
+        SELECT
+            r.id
+        FROM Recipe r
+        WHERE r.published_flag = 1
+        ORDER BY (
+            SELECT count(1)
+            FROM UserRecipeFavorite lrf
+            WHERE lrf.recipe_id = r.id
+        ) DESC,
+        RAND()
+        LIMIT 6;
         ";
-        $data = [];
 
         $result = $conn->query($sel_query);
-
-        while ($row = $result->fetch_object()) {
-            $row->published_flag = (bool)$row->published_flag;
-            $data[] = $row;
+        if ($result === false) {
+            throw new SqlException("Error getting top recipes: " . $conn->last_message());
         }
 
-        return $data;
+        while ($row = $result->fetch_object()) {
+            $recipe = new Recipe($row->id, $conn);
+
+            $data = $recipe->toObject();
+            $data->is_liked = false;
+            $data->likes_count = $recipe->get_likes_count();
+            $data->link = $recipe->get_link();
+
+            if ($sess->is_started()) {
+                if ($sess->has_user()) {
+                    $data->is_liked = $recipe->is_liked($sess->user()->id);
+                }
+            }
+
+            $top[] = $data;
+        }
+
+        return $top;
     }
 
     protected function exists_in_db(): bool {
@@ -233,5 +251,150 @@ class Recipe extends Common_Object {
             throw new SqlException('Error deleting Recipe: ' . $this->conn->last_message());
         }
         return true;
+    }
+
+    public static function recipe_of_the_day(SqlController $conn): self {
+        $result = $conn->query("SELECT recipe_id FROM RecipeOfTheDay ORDER BY day DESC LIMIT 1");
+        if ($result === false) {
+            throw new SqlException("Error getting recipe of the day: " . $conn->last_message());
+        }
+        if ($result->num_rows === 0) {
+            throw new SqlException("recipe of the day does not exist");
+        }
+
+        $row = $result->fetch_object();
+        return new self($row->recipe_id, $conn);
+    }
+
+    public static function top_recipe_categories(SqlController $conn): array {
+        $categories = [];
+
+        $sel_query = "
+        SELECT *
+        FROM (
+            select
+                rt.id AS entity_id,
+                'recipe_type' AS ctype,
+                rt.name,
+                rt.icon,
+                (
+                    SELECT count(1) FROM Recipe r
+                    WHERE r.type_id = rt.id
+                    AND published_flag = 1
+                ) recipe_count
+            FROM RecipeType rt
+            UNION 
+            select
+                rc.id AS entity_id,
+                'cuisine' AS ctype,
+                rc.name,
+                rc.icon,
+                (
+                    SELECT count(1) FROM Recipe r
+                    WHERE r.cuisine_id = rc.id
+                    AND published_flag = 1
+                ) recipe_count
+            FROM Cuisine rc
+            UNION
+            select
+                c.id AS entity_id,
+                'course' AS ctype,
+                c.name,
+                c.icon,
+                (
+                    SELECT count(1) FROM Recipe r
+                    WHERE r.course_id = c.id
+                    AND published_flag = 1
+                ) recipe_count
+            FROM Course c
+        ) rcat
+        WHERE icon != ''
+        ORDER BY rcat.recipe_count DESC
+        LIMIT 24;
+        ";
+
+        $result = $conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting top categories: " . $conn->last_message());
+        }
+        if ($result->num_rows === 0) {
+            throw new SqlException("Did not find any categories");
+        }
+
+        $counter = 0;
+        while ($row = $result->fetch_object()) {
+
+            if ( $counter % 4 == 0 ) {
+                $row->class = "light";
+            } elseif ( $counter % 4 == 2 ) {
+                $row->class = "dark";
+            } else {
+                $row->class = "medium";
+            }
+
+            $categories[] = $row;
+            $counter++;
+        }
+
+        return $categories;
+    }
+
+    public function get_report_type(): string {
+        if ($this->type_id === 0) {
+            return "";
+        }
+        return (new RecipeType($this->type_id, $this->conn))->name;
+    }
+
+    public function get_course(): string {
+        if ($this->course_id === 0) {
+            return "";
+        }
+        return (new Course($this->course_id, $this->conn))->name;
+    }
+
+    public function get_cuisine(): string {
+        if ($this->cuisine_id === 0) {
+            return "";
+        }
+        return (new Cuisine($this->cuisine_id, $this->conn))->name;
+    }
+
+    public function get_chef(): string {
+        if ($this->chef_id === 0) {
+            return "";
+        }
+        return (new Chef($this->chef_id, $this->conn))->name;
+    }
+
+    public function is_liked(int $user_id): bool {
+        $sel_query = "
+        SELECT *
+        FROM UserRecipeFavorite
+        WHERE recipe_id = $this->id
+        AND user_id = $user_id
+        ";
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting liked status: " . $this->conn->last_message());
+        }
+        return $result->num_rows > 0;
+    }
+
+    public function get_likes_count(): int {
+        $sel_query = "
+        SELECT *
+        FROM UserRecipeFavorite
+        WHERE recipe_id = $this->id
+        ";
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting like count: " . $this->conn->last_message());
+        }
+        return $result->num_rows;
+    }
+
+    public function get_link(): string {
+        return "/recipes/recipe/?id=$this->id";
     }
 }

@@ -264,6 +264,10 @@ $card-bg:                           $white;
 $card-img-overlay-padding:          $spacer;
 $card-group-margin:                 2rem;
 
+.card-title {
+    margin-top: 0;
+}
+
 // inputs
 
 $input-padding-y:                       9px;
@@ -345,8 +349,9 @@ $alert-dismissible-padding-r:   $alert-padding-x * 3; // 3x covers width of x pl
 // root & body
 
 :root {
-    --bs-border-radius-pill: $border-radius-sm;
-    --bs-border-radius: $border-radius;
+    --bs-border-radius-pill: #{$border-radius-sm};
+    --bs-border-radius: #{$border-radius};
+    --bs-border-width: #{$border-width};
     --bs-bg-opacity: 1;
 
     --bs-link-opacity: 1;
@@ -360,5 +365,5 @@ $alert-dismissible-padding-r:   $alert-padding-x * 3; // 3x covers width of x pl
 }
 
 body {
-    --bs-body-line-height: $line-height-base;
+    --bs-body-line-height: #{$line-height-base};
 }

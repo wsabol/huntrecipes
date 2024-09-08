@@ -105,6 +105,62 @@ p:empty {
     margin: 40px 0;
 }
 
+h2.ribbon {
+    background: url(../../assets/images/bgr/ribbons.png) -216px -61px no-repeat;
+    padding: 0 !important;
+    width: 189px;
+    height: 44px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 40px;
+    font-weight: 700;
+    color: #fff !important;
+    position: absolute;
+    top: 20px;
+    left: 35px;
+    z-index: 9999;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0 0 30px;
+    max-width: 100%;
+}
+
+h2.ribbon.star {
+    background-position: -408px -61px;
+    width: 50px;
+    height: 60px;
+    text-indent: -99999px;
+    top: 0;
+}
+
+h2.ribbon.bright {
+    background-position: 0 -60px;
+    width: 210px;
+    height: 45px;
+    position: static;
+    font-size: 22px;
+    line-height: 43px;
+    font-weight: 600;
+    margin: 0 0 26px;
+}
+
+blockquote {
+    position: relative;
+    color: $gray-700;
+    padding: 1rem 0 1.25rem;
+    margin: 0 0 1.25rem;
+}
+
+blockquote i {
+    color: $primary;
+    font-size: 1.25rem !important;
+    margin-right: 5px;
+}
+
+blockquote span {
+    font-style: italic;
+}
+
 // breadcrumbs
 
 .breadcrumb {

@@ -1,29 +1,4 @@
-.pointer {
-  cursor: pointer;
-}
 
-.golden-width {
-	width: 61.8%;
-}
-
-.no-padding {
-	padding: 0 !important;
-}
-
-.s-title .breadcrumbs{
-	margin:0;
-}
-
-.s-title .breadcrumbs ul {
-	border:0;
-	box-shadow:none;
-	-webkit-box-shadow:none;
-	padding: 0 0 60px 15px;
-}
-
-.s-title > h1{
-	padding-bottom: 15px;
-}
 
 .child-recipe-title {
 	font-size: 15px;
@@ -60,27 +35,6 @@
 
 .ingredients dt.no-amount:before {
 	content: '&nbsp';
-}
-
-.click-behave {
-	opacity: 0.75;
-}
-.click-behave:hover,
-.click-behave:active,
-.click-behave:focus {
-	opacity: 1;
-}
-
-.btn-theme {
-	background-color: #FF8E88;
-}
-.btn-disabled {
-    color: #fff;
-    background-color: #a0a0a0;
-    border-color: transparent;
-}
-.btn-theme + .btn-theme.dropdown-toggle {
-	border-left: 1px solid #FFBBB7;
 }
 
 .dl-horizontal dt {

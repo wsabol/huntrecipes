@@ -35,7 +35,7 @@ class Chef extends Common_Object {
             $this->is_male = (bool)$row->male_flag; // todo change in db
             $this->wisdom = $row->wisdom;
             $this->story = $row->story;
-            $this->favorite_foods = $this->favorite_cuisine; // todo change this in db
+            $this->favorite_foods = $row->favorite_cuisine; // todo change this in db
         }
     }
 
@@ -122,5 +122,18 @@ class Chef extends Common_Object {
             throw new SqlException('Error deleting Chef: ' . $this->conn->last_message());
         }
         return true;
+    }
+
+    public static function chef_of_the_day(SqlController $conn): self {
+        $result = $conn->query("SELECT chef_id FROM ChefOfTheDay ORDER BY day DESC LIMIT 1");
+        if ($result === false) {
+            throw new SqlException("Error getting chef of the day: " . $conn->last_message());
+        }
+        if ($result->num_rows === 0) {
+            throw new SqlException("chef of the day does not exist");
+        }
+
+        $row = $result->fetch_object();
+        return new self($row->chef_id, $conn);
     }
 }
