@@ -18,10 +18,15 @@ $twig = new \Twig\Environment(
 );
 
 // Page title
-$page_title = "Welcome";
+$page_title = "Page not found";
 
 // Breadcrumbs.
 $breadcrumbs = array(
+    array(
+        'name' => 'Home',
+        'link' => '/home/',
+        'current_page' => false,
+    ),
     array(
         'name' => $page_title,
         'link' => '/hrm/',

@@ -25,7 +25,7 @@ header > .container {
 }
 
 .main-header.navbar {
-    --bs-navbar-toggler-icon-bg: url( data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba%28255, 255, 255, 0.75%29%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e);
+    --bs-navbar-toggler-icon-bg: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba%28255, 255, 255, 0.75%29%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e');
 }
 
 .main-header .navbar-nav {
@@ -52,15 +52,15 @@ header > .container {
 
 .main-header .nav-item .nav-link.active,
 .main-header .nav-link.dropdown-toggle.show {
-    background: $primary;
+    background: $primary-700;
 }
 
 .main-header .nav-item:hover .nav-link {
-    background: $primary-500;
+    background: $primary-600;
 }
 
 .navbar-toggler {
-    background-color: $primary;
+    background-color: $primary-700;
 }
 
 .user-nav {

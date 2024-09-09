@@ -14,10 +14,10 @@ $gray-800: #434343;
 $gray-900: #353535;
 
 // – Reds.
-$red-100: #ffded8;
-$red-200: #ffbbb2;
-$red-300: #ff988b;
-$red-400: #ff7064;
+$red-100: #ffaa9e;
+$red-200: #ff988b;
+$red-300: #ff7064;
+$red-400: #ff5a50;
 $red-500: #FF3E3A;
 $red-600: #de3531;
 $red-700: #9e2320;
@@ -126,10 +126,12 @@ $font-family-sans-serif:   'Raleway', 'Helvetica', 'Arial', sans-serif !default;
 $font-family-base:         $font-family-sans-serif !default;
 
 $line-height-base:          1.42;
+$line-height-lg:            1.6;
 
 $font-size-base:           0.875rem !default;
 $font-size-sm:             0.8125rem;
 $font-size-lg:              1rem;
+$font-size-xlg:              1.125rem;
 
 $font-weight-light:        300;
 $font-weight-normal:       400;

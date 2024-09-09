@@ -2,6 +2,14 @@
 
 /* WELCOME */
 
+.welcome {
+    width: 100vw;
+    background-image: url('../../assets/images/intro.jpg');
+    background-position: bottom;
+    background-size: cover;
+    height: 100vh;
+}
+
 .welcome .intro {
     position: relative;
     top: 0;
@@ -13,17 +21,12 @@
     min-height: 740px;
 }
 
-.intro .bg img {
-    z-index: -1;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 100vh;
-    width: auto;
-}
-
 .welcome .main {
     margin-top: 2.5rem;
+}
+
+.welcome .hero {
+    text-align: center;
 }
 
 .welcome .hero h1 {
@@ -39,10 +42,9 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
 
-@media (min-width: 1612px) {
-    .intro .bg img {
-        width: 100vw;
-        height: auto;
+@include media-breakpoint-up(lg) {
+    .welcome .hero {
+        text-align: left;
     }
 }
 
@@ -147,4 +149,121 @@
 
 .boxed li a:hover .icon {
     transform: rotate(360deg);
+}
+
+// ERROR PAGE
+
+.error-container {
+    margin-bottom: 30px;
+}
+
+.error-container .error_type {
+    color: $white;
+    // height: 140px;
+    background: $red-400;
+    text-align: center;
+    font-size: 94px;
+    line-height: 140px;
+    font-weight: 600;
+    vertical-align: bottom;
+}
+
+.error-container .error_text {
+    color: $white;
+    background: $red-500;
+    text-align: center;
+    font-size: 22px;
+    line-height: 57px;
+    font-weight: 600;
+    text-shadow: 0 0 1px rgba(0, 0, 0, .15);
+}
+
+// RECIPE SINGLE
+
+$recipe-box-shadow: 0 1px 0 rgba($black, .15);
+
+.recipe-ingredients {
+    margin: 0 0 8px 0;
+}
+
+.recipe-ingredients dt {
+    margin: 0;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    background: $pink-700;
+    color: $white;
+    -webkit-box-shadow: $recipe-box-shadow;
+    -moz-box-shadow: $recipe-box-shadow;
+    box-shadow: $recipe-box-shadow;
+    padding: 7px 10px;
+}
+
+.recipe-ingredients dd {
+    margin: 0;
+    font-weight: $font-weight-normal;
+    font-size: $font-size-lg;
+    background: $white;
+    -webkit-box-shadow: $recipe-box-shadow;
+    -moz-box-shadow: $recipe-box-shadow;
+    box-shadow: $recipe-box-shadow;
+    padding: 7px 10px;
+}
+
+.recipe-instructions {
+    counter-reset: li;
+    list-style: none;
+    *list-style: decimal;
+    padding: 0;
+    margin: 0 0 8px 0;
+}
+
+.recipe-instructions ol {
+    margin: 0;
+    padding: 0;
+}
+
+.recipe-instructions li {
+    position: relative;
+    background: $white;
+    font-size: $font-size-xlg;
+    padding: 15px 20px;
+    margin: 0 0 30px 50px;
+    line-height: $line-height-lg;
+    -webkit-box-shadow: $recipe-box-shadow;
+    -moz-box-shadow: $recipe-box-shadow;
+    box-shadow: $recipe-box-shadow;
+}
+
+.recipe-instructions li:before {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -50px;
+    top: 0;
+    background: $pink-700;
+    color: $white;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 33px;
+    text-shadow: $recipe-box-shadow;
+}
+
+.recipe-instructions li:after {
+    position: absolute;
+    content: '';
+    border: .5em solid transparent;
+    left: 0;
+    top: 20px;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+}
+
+.recipe-instructions li:hover:after {
+    left: 0;
+    border-left-color: $pink-700;
 }
