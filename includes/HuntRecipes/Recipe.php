@@ -5,6 +5,7 @@ namespace HuntRecipes;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
+use HuntRecipes\Measure\Fraction;
 use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
@@ -16,7 +17,7 @@ class Recipe extends Common_Object {
     public int $chef_id = 0;
     public string $title;
     public string $instructions;
-    public string $image_filename = 'assets/images/recipes/generic_recipe.jpg';
+    public string $image_filename = '/assets/images/recipes/generic_recipe.jpg';
     public float $serving_count;
     public int $serving_measure_id = 0;
     public int $parent_recipe_id = 0;
@@ -397,4 +398,66 @@ class Recipe extends Common_Object {
     public function get_link(): string {
         return "/recipes/recipe/?id=$this->id";
     }
+
+    public function get_ingredients(): array {
+        $ingredients = [];
+
+        $sel_query = "
+        SELECT
+            ri.id recipe_id,
+            ri.ingredient_id,
+            i.name raw_ingredient_name,
+            i.name_plural raw_ingredient_name_plural,
+            ri.ingredient_prep,
+            ri.amount,
+            ri.measure_id,
+            CASE WHEN ri.amount > 1
+                THEN m.name_plural
+                ELSE m.name
+                END measure,
+            m.measure_type_id,
+            CASE WHEN m.abbr = ''
+                THEN (CASE WHEN ri.amount > 1
+                THEN m.name_plural
+                ELSE m.name END)
+                ELSE m.abbr
+                END measure_abbr,
+            ri.amount * m.general_unit_conversion as general_measure_amount,
+            mt.general_measure_id,
+            ri.optional_flag
+        FROM RecipeIngredient ri
+        JOIN Ingredient i
+        ON i.id = ri.ingredient_id
+        JOIN Measure m
+        ON m.id = ri.measure_id
+        JOIN MeasureType mt
+        ON mt.id = m.measure_type_id
+        WHERE ri.recipe_id = $this->id
+        ORDER BY m.measure_type_id DESC,
+            ri.amount * m.general_unit_conversion DESC,
+            i.name ASC;
+        ";
+
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting recipe ingredients: " . $this->conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            $row->value_formatted = (new RecipeAmount($row->amount, $row->measure_id, $this->serving_count))->amount_formatted();
+            $row->name_formatted = $row->raw_ingredient_name;
+
+            $ingredients[] = $row;
+        }
+
+        return $ingredients;
+    }
+
+    public function get_instructions(): array {
+        return array_values(array_filter(explode("\n", $this->instructions), "strlen"));
+    }
+
+    public function format_ingredient_amount(float $general_measure_amount, int $measure_type_id, float $amount): string {
+
+     }
 }

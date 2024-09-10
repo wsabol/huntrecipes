@@ -1,6 +1,6 @@
 <?php
 
-namespace HuntRecipes\Base;
+namespace HuntRecipes\Measure;
 
 class Fraction {
     public float $decimal;
@@ -157,6 +157,17 @@ class Fraction {
         $b = $b->copy();
         $b->normalize();
         return ($a->decimal === $b->decimal);
+    }
+
+    public function is_partial_allowed(array $fractions_allowed): bool {
+        $string = $this->toString();
+        $parts = explode("-", $string);
+        $last = end($parts);
+        if (!str_contains($last, "/")) {
+            return true;
+        }
+
+        return in_array($last, $fractions_allowed);
     }
 
 }
