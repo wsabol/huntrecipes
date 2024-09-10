@@ -31,7 +31,6 @@ class Measure {
     public string $abbr_alt;
     public int $measure_type;
     public float $base_unit_conversion;
-    public bool $is_metric;
     public array $fractions;
 
     private const JSON_PATH = __DIR__ . "/../../../assets/measure.json";
@@ -58,7 +57,6 @@ class Measure {
         $this->abbr_alt = @$data->abbr_alt ?? "";
         $this->measure_type = $data->measure_type;
         $this->base_unit_conversion = $data->base_unit_conversion;
-        $this->is_metric = $data->is_metric;
         $this->fractions = @$data->fractions ?? [];
     }
 

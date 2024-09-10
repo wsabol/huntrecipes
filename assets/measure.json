@@ -7,7 +7,6 @@
         "abbr_alt": null,
         "measure_type": "0",
         "base_unit_conversion": 1.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -19,7 +18,6 @@
         "abbr_alt": "t",
         "measure_type": "1",
         "base_unit_conversion": 1.00000000,
-        "is_metric": false,
         "fractions_allowed": [
             "1\/4",
             "1\/2",
@@ -34,7 +32,6 @@
         "abbr_alt": "T tbl",
         "measure_type": "1",
         "base_unit_conversion": 3.00000000,
-        "is_metric": false,
         "fractions_allowed": [
             "1\/4",
             "1\/2",
@@ -49,7 +46,6 @@
         "abbr_alt": "oz",
         "measure_type": "1",
         "base_unit_conversion": 6.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -61,7 +57,6 @@
         "abbr_alt": "c",
         "measure_type": "1",
         "base_unit_conversion": 48.00000000,
-        "is_metric": false,
         "fractions_allowed": [
             "1\/4",
             "1\/3",
@@ -78,7 +73,6 @@
         "abbr_alt": "pt",
         "measure_type": "1",
         "base_unit_conversion": 96.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -90,7 +84,6 @@
         "abbr_alt": "qt",
         "measure_type": "1",
         "base_unit_conversion": 192.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -102,7 +95,6 @@
         "abbr_alt": "g",
         "measure_type": "1",
         "base_unit_conversion": 768.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -114,7 +106,6 @@
         "abbr_alt": "oz",
         "measure_type": "2",
         "base_unit_conversion": 1.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -126,7 +117,6 @@
         "abbr_alt": "lbs",
         "measure_type": "2",
         "base_unit_conversion": 16.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -138,7 +128,6 @@
         "abbr_alt": "pinch",
         "measure_type": "1",
         "base_unit_conversion": 0.06250000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -150,7 +139,6 @@
         "abbr_alt": "dash",
         "measure_type": "1",
         "base_unit_conversion": 0.12500000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -162,7 +150,6 @@
         "abbr_alt": "smidgen",
         "measure_type": "1",
         "base_unit_conversion": 0.03125000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -174,7 +161,6 @@
         "abbr_alt": null,
         "measure_type": "0",
         "base_unit_conversion": 0.00000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -186,7 +172,6 @@
         "abbr_alt": null,
         "measure_type": "1",
         "base_unit_conversion": 0.01014420,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     },
@@ -198,7 +183,6 @@
         "abbr_alt": null,
         "measure_type": "1",
         "base_unit_conversion": 202.88400000,
-        "is_metric": true,
         "fractions_allowed": [
         ]
     },
@@ -210,7 +194,6 @@
         "abbr_alt": "ml",
         "measure_type": "1",
         "base_unit_conversion": 0.20288400,
-        "is_metric": true,
         "fractions_allowed": [
         ]
     },
@@ -222,7 +205,6 @@
         "abbr_alt": null,
         "measure_type": "1",
         "base_unit_conversion": 0.25000000,
-        "is_metric": false,
         "fractions_allowed": [
         ]
     }
