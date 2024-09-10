@@ -62,12 +62,12 @@ class Measure {
         $this->fractions = @$data->fractions ?? [];
     }
 
-    public static function get_all_of_type(int $measure_type): array {
+    public static function get_all_of_type(int $measure_type, bool $is_metric): array {
         $measures = json_decode(file_get_contents(self::JSON_PATH));
 
         $return = [];
         foreach ($measures as $m) {
-            if ((int)$m->measure_type === $measure_type) {
+            if ((int)$m->measure_type === $measure_type && $m->is_metric === $is_metric) {
                 $return[] = $m;
             }
         }

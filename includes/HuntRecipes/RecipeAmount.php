@@ -39,7 +39,7 @@ class RecipeAmount {
         }
 
         // get all measurement units of this type
-        $Measures = Measure::get_all_of_type($this->measure->measure_type);
+        $Measures = Measure::get_all_of_type($this->measure->measure_type, $this->measure->is_metric);
 
         // sort largest to smallest
         usort($Measures, fn($a, $b) => $b->base_unit_conversion <=> $a->base_unit_conversion);
