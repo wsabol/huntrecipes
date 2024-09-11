@@ -13,7 +13,6 @@ require_once RECIPES_ROOT . "/vendor/autoload.php";
 
 // app includes
 require_once("assets/Application.php");
-require_once("API/v0/fraction/fraction.php");
 
 /* load environment vars */
 $dotenv = Dotenv\Dotenv::createImmutable(RECIPES_ROOT);
@@ -65,121 +64,6 @@ if (@$skip_session_create * 1 == 0) {
         //exit;
         // header("Location: /login/?ref=" . @$_SERVER["REQUEST_URI"] . "");
     }
-}
-
-$_SESSION['Measure'] = array();
-$qMeasure = "
-	SELECT * FROM Measure
-";
-$rs = $App->oDBMY->query($qMeasure);
-while ($row = $rs->fetch_assoc()) {
-    if ($row['abbr'] == "c") {
-        $row['frac'] = array("1/4", "1/3", "1/2", "2/3", "3/4");
-        $row['frac_perm'] = 1;
-    } elseif ($row['abbr'] == "tsp") {
-        $row['frac'] = array("1/4", "1/2", "3/4");
-        $row['frac_perm'] = 1;
-    } elseif ($row['abbr'] == "tbsp") {
-        $row['frac'] = array("1/4", "1/2", "3/4");
-        $row['frac_perm'] = 0;
-    } else {
-        $row['frac'] = array();
-        $row['frac_perm'] = 0;
-    }
-    array_push($_SESSION['Measure'], $row);
-}
-$rs->free();
-unset($qMeasure);
-unset($rs);
-unset($row);
-
-function friendlyAmount($gen_amt, $measure_type_id, &$value_decimal) {
-    $value_decimal = 0;
-    if ($gen_amt <= 0) {
-        return "";
-    }
-
-    if ($measure_type_id == 0) {
-        $f0 = new Fraction($gen_amt);
-        $value_decimal = $f0->decimal;
-        return $f0->toString();
-    }
-
-    $Measure = array();
-    for ($i = 0; $i < count($_SESSION['Measure']); $i++) {
-        if ($_SESSION['Measure'][$i]['measure_type_id'] == $measure_type_id) {
-            array_push($Measure, $_SESSION['Measure'][$i]);
-        }
-    }
-    usort($Measure, function ($a, $b) {
-        $a0 = floatval($a['general_unit_conversion']);
-        $b0 = floatval($b['general_unit_conversion']);
-        if ($a0 < $b0) return 1;
-        if ($a0 > $b0) return -1;
-        return 0;
-    });
-    $value = "";
-    $tmp_value = "";
-    $frac = array();
-
-    for ($i = 0; $i < count($Measure) && $gen_amt > 0.0001; $i++) {
-        $convert = $gen_amt / $Measure[$i]['general_unit_conversion'];
-        $frac = $Measure[$i]['frac'];
-
-        if (abs(floor($convert) - $convert) < 0.0001 ||
-            (count($frac) > 0 && $Measure[$i]['frac_perm'] == 1)
-        ) {
-            $f1 = new Fraction($convert);
-            $tmp_value = $f1->toString();
-            $values = explode("-", $tmp_value, 2);
-            $vEnd = $values[count($values) - 1];
-            if (!in_array($vEnd, $frac) && strpos($vEnd, '/')) {
-                $floor = 0;
-                $f_vEnd = new Fraction($vEnd);
-
-                for ($j = 0; $j < count($frac); $j++) {
-                    $f_test = new Fraction($frac[$j]);
-                    if ($f_vEnd->decimal < $f_test->decimal) {
-                        break;
-                    } else {
-                        $floor = $f_test->decimal;
-                    }
-                }
-                $f_test = "";
-                $f1 = new Fraction($floor);
-            }
-
-            if ($f1->toString() != "0") {
-                if (strlen($value) === 0) {
-                    $value_decimal = $f1->decimal;
-                }
-                $value .= (strlen($value) > 0 ? " + " : "") . $f1->toString() . " " . $Measure[$i]['abbr'];
-                $gen_amt = ($convert - $f1->decimal) * $Measure[$i]['general_unit_conversion'];
-            }
-        } elseif ($i == count($Measure) - 1) {
-
-            if ($measure_type_id == 1) {
-                $f1 = new Fraction(round($convert));
-                if ($f1->toString() != "0") {
-                    $value .= (strlen($value) > 0 ? " + " : "") . $f1->toString() . " " . $Measure[$i]['abbr'];
-                    if ($value_decimal === 0) {
-                        $value_decimal = $f1->decimal;
-                    }
-                }
-            } else {
-                $f1 = new Fraction($convert);
-                if ($f1->decimal !== 0) {
-                    $value .= (strlen($value) > 0 ? " + " : "") . round($f1->decimal, 2) . " " . $Measure[$i]['abbr'];
-                    if ($value_decimal === 0) {
-                        $value_decimal = $f1->decimal;
-                    }
-                }
-            }
-
-        }
-    }
-
-    return $value;
 }
 
 function StdLoginRoutine($dbLoginRecord, $rememberme = 0) {

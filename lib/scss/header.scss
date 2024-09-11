@@ -52,7 +52,7 @@ header > .container {
 
 .main-header .nav-item .nav-link.active,
 .main-header .nav-link.dropdown-toggle.show {
-    background: $primary-700;
+    background: $primary-500;
 }
 
 .main-header .nav-item:hover .nav-link {
@@ -60,7 +60,7 @@ header > .container {
 }
 
 .navbar-toggler {
-    background-color: $primary-700;
+    background-color: $primary-500;
 }
 
 .user-nav {
@@ -91,15 +91,15 @@ header > .container {
 }
 
 .user-nav .light a {
-    background: $primary-500;
+    background: $primary-400;
 }
 
 .user-nav .medium a {
-    background: $primary-600;
+    background: $primary-500;
 }
 
 .user-nav .dark a {
-    background: $primary-700;
+    background: $primary-600;
 }
 
 .user-nav li a .icon {
@@ -121,17 +121,17 @@ header > .container {
 
 .user-nav .light.current-menu-item a,
 .user-nav .light:hover a {
-    color: $primary-300;
+    color: $primary-500;
 }
 
 .user-nav .medium.current-menu-item a,
 .user-nav .medium:hover a {
-    color: $primary-400;
+    color: $primary-600;
 }
 
 .user-nav .dark.current-menu-item a,
 .user-nav .dark:hover a {
-    color: $primary-500;
+    color: $primary-700;
 }
 
 // lg screens

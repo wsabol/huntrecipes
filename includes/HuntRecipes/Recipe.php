@@ -5,7 +5,6 @@ namespace HuntRecipes;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
-use HuntRecipes\Measure\Fraction;
 use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
@@ -457,7 +456,34 @@ class Recipe extends Common_Object {
         return array_values(array_filter(explode("\n", $this->instructions), "strlen"));
     }
 
-    public function format_ingredient_amount(float $general_measure_amount, int $measure_type_id, float $amount): string {
+    public function get_users_who_liked_this(): array {
+        $users = [];
 
-     }
+        $sel_query = "
+        SELECT
+            urf.user_id,
+            u.name,
+            u.profile_picture
+        FROM UserRecipeFavorite urf
+        JOIN User u
+        ON u.id = urf.user_id
+        WHERE urf.recipe_id = $this->id
+        ORDER BY RAND()
+        LIMIT 9;
+        ";
+
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting users who liked this recipe: " . $this->conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            if (!str_starts_with($row->profile_picture, "/")) {
+                $row->profile_picture = "/" . $row->profile_picture;
+            }
+            $users[] = $row;
+        }
+
+        return $users;
+    }
 }

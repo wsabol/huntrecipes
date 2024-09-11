@@ -61,7 +61,7 @@
 
 // home
 
-.categories-widget {
+.boxed-widget {
     display: block;
     width: 100%;
     margin-bottom: 30px;
@@ -73,20 +73,20 @@
     box-shadow: $btn-box-shadow
 }
 
-.categories-widget h5 {
+.boxed-widget h5 {
     padding: 16px 20px;
     margin: 0;
     color: $card-color;
 }
 
-.categories-widget .boxed {
+.boxed-widget .boxed {
     padding: 0;
     margin: 0;
     display: flex;
     flex-wrap: wrap;
 }
 
-.categories-widget .boxed li {
+.boxed-widget .boxed li {
     width: 33.333333333%;
     height: 90px;
     font-size: $font-size-sm;
@@ -100,7 +100,7 @@
     border-top: none !important;
 }
 
-.categories-widget .boxed li a {
+.boxed-widget .boxed li a {
     display: block;
     color: $white;
     width: 100%;
@@ -114,7 +114,7 @@
 }
 
 .boxed .light a {
-    background: $primary-500;
+    background: $primary-400;
 }
 
 .boxed .medium a {
@@ -122,7 +122,7 @@
 }
 
 .boxed .dark a {
-    background: $primary-700;
+    background: $primary-600;
 }
 
 .boxed .icon {
@@ -179,46 +179,10 @@
 
 // RECIPE SINGLE
 
-$recipe-box-shadow: 0 1px 0 rgba($black, .15);
-
-.recipe-ingredients {
-    margin: 0 0 8px 0;
-}
-
-.recipe-ingredients dt {
-    margin: 0;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-semibold;
-    background: $pink-700;
-    color: $white;
-    -webkit-box-shadow: $recipe-box-shadow;
-    -moz-box-shadow: $recipe-box-shadow;
-    box-shadow: $recipe-box-shadow;
-    padding: 7px 10px;
-}
-
-.recipe-ingredients dd {
-    margin: 0;
-    font-weight: $font-weight-normal;
-    font-size: $font-size-lg;
-    background: $white;
-    -webkit-box-shadow: $recipe-box-shadow;
-    -moz-box-shadow: $recipe-box-shadow;
-    box-shadow: $recipe-box-shadow;
-    padding: 7px 10px;
-}
-
-.recipe-instructions {
-    counter-reset: li;
-    list-style: none;
-    *list-style: decimal;
-    padding: 0;
-    margin: 0 0 8px 0;
-}
-
 .recipe-instructions ol {
     margin: 0;
     padding: 0;
+    counter-reset: li;
 }
 
 .recipe-instructions li {
@@ -228,28 +192,28 @@ $recipe-box-shadow: 0 1px 0 rgba($black, .15);
     padding: 15px 20px;
     margin: 0 0 30px 50px;
     line-height: $line-height-lg;
-    -webkit-box-shadow: $recipe-box-shadow;
-    -moz-box-shadow: $recipe-box-shadow;
-    box-shadow: $recipe-box-shadow;
+    -webkit-box-shadow: $dl-box-shadow;
+    -moz-box-shadow: $dl-box-shadow;
+    box-shadow: $dl-box-shadow;
 }
 
-.recipe-instructions li:before {
+.recipe-instructions li::before {
     content: counter(li);
     counter-increment: li;
     position: absolute;
     left: -50px;
     top: 0;
-    background: $pink-700;
+    background: $primary;
     color: $white;
     height: 50px;
     width: 50px;
     line-height: 50px;
     text-align: center;
     font-size: 33px;
-    text-shadow: $recipe-box-shadow;
+    text-shadow: $dl-box-shadow;
 }
 
-.recipe-instructions li:after {
+.recipe-instructions li::after {
     position: absolute;
     content: '';
     border: .5em solid transparent;
@@ -264,5 +228,37 @@ $recipe-box-shadow: 0 1px 0 rgba($black, .15);
 
 .recipe-instructions li:hover:after {
     left: 0;
-    border-left-color: $pink-700;
+    border-left-color: $primary;
+}
+
+.boxed-widget.liked-by-widget li {
+    background-size: cover;
+    position: relative;
+}
+
+.boxed-widget.liked-by-widget li a[href="javascript:"] {
+    cursor: default;
+}
+
+.boxed-widget.liked-by-widget li span {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    font-weight: 400;
+    color: $body-color;
+    background: $white;
+    border: none;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+    padding: 6px 10px;
+    text-transform: none;
+}
+
+.boxed-widget.liked-by-widget li:hover span {
+    opacity: 1;
 }

@@ -22,62 +22,79 @@ $red-500: #FF3E3A;
 $red-600: #de3531;
 $red-700: #9e2320;
 
-// – Pinks.
-$pink-100: #ffbfb9;
-$pink-200: #ffb2ab;
-$pink-300: #ffa59d;
-$pink-400: #ff978f;
-$pink-500: #ff8982;
-$pink-600: #ff7b74;
-$pink-700: #de6a64;
-$pink-800: #be5a54;
-$pink-900: #9e4a45;
+// – Pinks. redone
+$pink-100: #FA8F87;
+$pink-200: #F8857D;
+$pink-300: #F67B74;
+$pink-400: #F4716A;
+$pink-500: #DC655F;
+$pink-600: #C35953;
+$pink-700: #AB4D48;
+$pink-800: #92413C;
+$pink-900: #7A3531;
 
-// – Blues.
-$blue-100: #b9d3ff;
-$blue-200: #abcaff;
-$blue-300: #9dc1ff;
-$blue-400: #8fb8ff;
-$blue-500: #82aeff;
-$blue-600: #74a5ff;
-$blue-700: #648fde;
-$blue-800: #5479be;
-$blue-900: #45659e;
+// – Blues. done
+$blue-100: #87aff8;
+$blue-200: #79a5f6;
+$blue-300: #6A9AF4;
+$blue-400: #5E8ADB;
+$blue-500: #5379C2;
+$blue-600: #4769A9;
+$blue-700: #3B588F;
+$blue-800: #2F4876;
+$blue-900: #182744;
 
 $white: #fff;
 $black: #000;
 
-// – Yellows.
-$yellow-100: #ffdda1;
-$yellow-200: #ffd893;
-$yellow-300: #ffd384;
-$yellow-400: #ffce74;
-$yellow-500: #deb364;
+// – yellow. done
+$yellow-100: #f0f89f;
+$yellow-200: #eef78f;
+$yellow-300: #ecf57d;
+$yellow-400: #EAF46A;
+$yellow-500: #CDD65C;
+$yellow-600: #B0B84E;
+$yellow-700: #949A40;
+$yellow-800: #777C32;
+$yellow-900: #5A5E24;
 
-// – Greens.
-$green-100: #b4ffb4;
-$green-200: #a6ffa7;
-$green-300: #97ff99;
-$green-400: #86ff8a;
-$green-500: #74ff7b;
-$green-600: #64de6a;
-$green-700: #54be5a;
-$green-800: #459e4a;
-$green-900: #37803a;
+// – orange. done
+$orange-100: #f8d69b;
+$orange-200: #f7d08b;
+$orange-300: #f5ca7b;
+$orange-400: #F4C46A;
+$orange-500: #D1A75A;
+$orange-600: #AE8B49;
+$orange-700: #8A6E39;
+$orange-800: #675228;
+$orange-900: #443518;
+
+// – Greens. done
+$green-100: #8ff791;
+$green-200: #7ef682;
+$green-300: #6AF471;
+$green-400: #5CD763;
+$green-500: #4FB954;
+$green-600: #419C46;
+$green-700: #337F37;
+$green-800: #266129;
+$green-900: #18441a;
 
 // – Main Colors.
 $gray:      $gray-700;
-$blue:      $blue-800;
-$pink:      $pink-600;
+$blue:      $blue-400;
+$pink:      $pink-500;
 $yellow:    $yellow-500;
+$orange:    $orange-400;
 $red:       $red-600;
-$green:     $green-800;
+$favorite:  $red-500;
+$green:     $green-600;
 
 $primary:   $pink;
-$secondary: $gray-300;
+$secondary: $gray;
 $success:   $green;
-$info:      $blue-500;
-$warning:   $yellow;
+$info:      $blue;
+$warning:   $orange;
 $danger:    $red;
 $error:     $red;
 $light:     $gray-100;
@@ -103,7 +120,8 @@ $theme-colors: (
     "danger":     $danger,
     "error":      $error,
     "light":      $light,
-    "dark":       $dark
+    "dark":       $dark,
+    "favorite":   $favorite
 );
 
 $transition-base: all 0.2s ease-in;
@@ -215,21 +233,6 @@ $btn-active-bg-tint-amount:       20%;
 $btn-active-border-shade-amount:  25%;
 $btn-active-border-tint-amount:   10%;
 
-.btn-primary {
-    --bs-btn-color: #fff;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-active-color: #fff;
-    --bs-btn-disabled-color: #dfdfdf;
-}
-
-.btn-outline-primary {
-    --bs-btn-hover-color: #fff;
-}
-
-.btn-link:hover {
-    text-decoration: underline;
-}
-
 // dropdowns
 
 $dropdown-bg:                       $white;
@@ -338,34 +341,7 @@ $alert-border-scale:            -70%;
 $alert-color-scale:             40%;
 $alert-dismissible-padding-r:   $alert-padding-x * 3; // 3x covers width of x plus default padding on either side
 
-// Generate contextual modifier classes for colorizing the alert
-@each $state, $color in $theme-colors {
-    .alert-#{$state} {
-        --bs-alert-color: #{shade-color($color, $alert-color-scale)};
-        --bs-alert-bg: #{tint-color($color, -1 * $alert-bg-scale)};
-        --bs-alert-border-color: #{tint-color($color, -1 * $alert-border-scale)};
-        --bs-alert-link-color: #{tint-color($color, -1 * $alert-border-scale)};
-    }
-}
+// misc
 
-// root & body
+$dl-box-shadow: 0 1px 0 rgba($black, .15);
 
-:root {
-    --bs-border-radius-pill: #{$border-radius-sm};
-    --bs-border-radius: #{$border-radius};
-    --bs-border-width: #{$border-width};
-    --bs-bg-opacity: 1;
-
-    --bs-link-opacity: 1;
-    --bs-link-color-rgb: 65, 129, 139; // Primary
-
-    --bs-primary-rgb: 65, 129, 139; // Primary
-    --bs-secondary-rgb: 223, 223, 223; // Secondary
-    --bs-secondary-color: #{$gray-600};
-
-    --bs-white-rgb: 255, 255, 255;
-}
-
-body {
-    --bs-body-line-height: #{$line-height-base};
-}

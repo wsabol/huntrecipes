@@ -1,0 +1,90 @@
+@import "settings";
+
+// Maps.
+
+@each $color, $value in $theme-colors {
+    .btn-#{$color} {
+        @if $color == "light" {
+            @include button-variant(
+                            $value,
+                            $value,
+                    $hover-background: shade-color($value, $btn-hover-bg-shade-amount),
+                    $hover-border: shade-color($value, $btn-hover-border-shade-amount),
+                    $active-background: shade-color($value, $btn-active-bg-shade-amount),
+                    $active-border: shade-color($value, $btn-active-border-shade-amount)
+            );
+        } @else if $color == "dark" {
+            @include button-variant(
+                            $value,
+                            $value,
+                    $hover-background: tint-color($value, $btn-hover-bg-tint-amount),
+                    $hover-border: tint-color($value, $btn-hover-border-tint-amount),
+                    $active-background: tint-color($value, $btn-active-bg-tint-amount),
+                    $active-border: tint-color($value, $btn-active-border-tint-amount)
+            );
+        } @else if $color == "primary" or $color == "success" or $color == "info" or $color == "favorite" {
+            @include button-variant(
+                            $value,
+                            $value,
+                    $color: $white,
+                    $hover-color: $white,
+                    $active-color: $white
+            );
+        }  @else {
+            @include button-variant($value, $value);
+        }
+    }
+}
+
+@each $color, $value in $theme-colors {
+    .btn-outline-#{$color} {
+        @include button-outline-variant($value);
+    }
+}
+
+.btn-outline-favorite {
+    background: $white;
+    --#{$prefix}btn-color: #{$favorite};
+    --#{$prefix}btn-border-color: #{$favorite};
+    --#{$prefix}btn-hover-color: #{shade-color($favorite, $btn-hover-bg-shade-amount)};
+    --#{$prefix}btn-hover-bg: #{tint-color($favorite, 95%)};
+    --#{$prefix}btn-hover-border-color: #{shade-color($favorite, $btn-hover-bg-shade-amount)};
+    --#{$prefix}btn-focus-shadow-rgb: #{to-rgb($favorite)};
+    --#{$prefix}btn-active-color: #{shade-color($favorite, $btn-active-bg-shade-amount)};
+    --#{$prefix}btn-active-bg: #{tint-color($favorite, 95%)};
+    --#{$prefix}btn-active-border-color: #{shade-color($favorite, $btn-active-bg-shade-amount)};
+}
+
+// .btn-primary {
+//     --bs-btn-color: #fff;
+//     --bs-btn-hover-color: #fff;
+//     --bs-btn-active-color: #fff;
+//     --bs-btn-disabled-color: #dfdfdf;
+// }
+//
+// .btn-outline-primary {
+//     --bs-btn-hover-color: #fff;
+// }
+
+// Generate contextual modifier classes for colorizing the alert
+@each $state, $color in $theme-colors {
+    .alert-#{$state} {
+        --bs-alert-color: #{shade-color($color, $alert-color-scale)};
+        --bs-alert-bg: #{tint-color($color, -1 * $alert-bg-scale)};
+        --bs-alert-border-color: #{tint-color($color, -1 * $alert-border-scale)};
+        --bs-alert-link-color: #{tint-color($color, -1 * $alert-border-scale)};
+    }
+}
+
+// root & body
+
+:root {
+    --bs-border-radius-pill: #{$border-radius-sm};
+    --bs-border-radius: #{$border-radius};
+    --bs-border-width: #{$border-width};
+    --bs-bg-opacity: 1;
+}
+
+body {
+    --bs-body-line-height: #{$line-height-base};
+}

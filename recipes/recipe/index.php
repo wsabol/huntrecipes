@@ -95,6 +95,7 @@ $data->is_liked = false;
 $data->likes_count = $recipe->get_likes_count();
 $data->link = $recipe->get_link();
 $data->ingredient_columns = [];
+$data->liked_by = $recipe->get_users_who_liked_this();
 
 if (count($data->ingredients) < 12) {
     $data->ingredient_columns[] = [

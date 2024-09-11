@@ -16,7 +16,7 @@ class RecipeAmount {
 
     public function __construct(float $amount, int $measure, float $nominal_servicing_count) {
         $this->amount = $amount;
-        $this->measure = new Measure($measure);
+        $this->measure = Measure::create($measure);
         $this->nominal_servicing_count = $nominal_servicing_count;
         $this->new_servicing_count = $nominal_servicing_count;
 
@@ -40,6 +40,7 @@ class RecipeAmount {
 
         // get all measurement units of this type
         $Measures = Measure::get_all_of_type($this->measure->measure_type, $this->measure->is_metric);
+        // print_r($Measures);
 
         // sort largest to smallest
         usort($Measures, fn($a, $b) => $b->base_unit_conversion <=> $a->base_unit_conversion);
@@ -81,6 +82,7 @@ class RecipeAmount {
                     }
                 }
             }
+
         }
 
         return implode(" + ", $formatted_values);
