@@ -90,12 +90,12 @@
                 </div>
             {% endif %}
 
+            <div class="input-group mb-4">
+                <span class="input-group-text">Makes <i class="fa fa-edit" style="margin-left: 10px;"></i></span>
+                <input id="input-serving" type="text" class="form-control" placeholder="{{ recipe.serving_count }}" aria-label="Serving count" data-org-serving="{{ recipe.serving_count }}" value="{{ recipe.serving_count }}" >
+            </div>
+
             <dl class="basic row row-gap-2 mb-4">
-                <dt class="col-6 grey">Makes <i class="fa fa-edit pull-right" style="margin-top: 10px" aria-hidden="true"></i></dt>
-                <dd class="col-6">
-                    <input type="text" style="max-width: 40%" id="input-serving" data-org-serving="112.00000000"
-                           value="112" data-ddg-inputtype="unknown">
-                </dd>
 
                 {% if recipe.chef %}
                     <dt class="col-6 info">Chef</dt>

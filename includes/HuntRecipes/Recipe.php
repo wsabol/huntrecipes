@@ -443,7 +443,7 @@ class Recipe extends Common_Object {
         }
 
         while ($row = $result->fetch_object()) {
-            $row->value_formatted = (new RecipeAmount($row->amount, $row->measure_id, $this->serving_count))->amount_formatted();
+            $row->value_formatted = (new RecipeAmount($row->amount, $row->measure_id))->amount_formatted();
             $row->name_formatted = $row->raw_ingredient_name;
 
             $ingredients[] = $row;

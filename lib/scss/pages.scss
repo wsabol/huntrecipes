@@ -195,6 +195,7 @@
     -webkit-box-shadow: $dl-box-shadow;
     -moz-box-shadow: $dl-box-shadow;
     box-shadow: $dl-box-shadow;
+    border-radius: 0 $border-radius-sm $border-radius-sm $border-radius-sm;
 }
 
 .recipe-instructions li::before {
@@ -211,6 +212,7 @@
     text-align: center;
     font-size: 33px;
     text-shadow: $dl-box-shadow;
+    border-radius: $border-radius-sm 0 0 $border-radius-sm;
 }
 
 .recipe-instructions li::after {
@@ -233,6 +235,7 @@
 
 .boxed-widget.liked-by-widget li {
     background-size: cover;
+    background-position: center;
     position: relative;
 }
 

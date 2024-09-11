@@ -10,22 +10,12 @@ class RecipeAmount {
     private float $amount;
     private float $amount_in_base_measurement;
     private Measure $measure;
-    private float $nominal_servicing_count;
-    private float $new_servicing_count;
     private const EPSILON = 0.0001;
 
-    public function __construct(float $amount, int $measure, float $nominal_servicing_count) {
+    public function __construct(float $amount, int $measure) {
         $this->amount = $amount;
         $this->measure = Measure::create($measure);
-        $this->nominal_servicing_count = $nominal_servicing_count;
-        $this->new_servicing_count = $nominal_servicing_count;
-
         $this->amount_in_base_measurement = $amount * $this->measure->base_unit_conversion;
-    }
-
-    public function set_new_servicing_count(float $new_servicing_count) {
-        $this->new_servicing_count = $new_servicing_count;
-        $this->amount_in_base_measurement = $this->amount * $this->measure->base_unit_conversion * $new_servicing_count / $this->nominal_servicing_count;
     }
 
     public function amount_formatted(): string {
@@ -55,6 +45,11 @@ class RecipeAmount {
 
             if (abs(floor($current_amount) - $current_amount) < self::EPSILON || count($measure->fractions_allowed) > 0) {
 
+                // special case, is less than 1.25 pounds, continue to ounces
+                if ($measure->id === 9 && $current_amount < 1.25) {
+                    continue;
+                }
+
                 $f1 = new Fraction($current_amount);
                 if (!$f1->is_partial_allowed($measure->fractions_allowed)) {
                     $current_amount = floor($current_amount);
@@ -70,11 +65,9 @@ class RecipeAmount {
                 continue;
             }
 
-            if ($i === count($Measures) - 1 && $current_amount >= self::EPSILON) {
+            if ($i === count($Measures) - 1 && $current_amount > self::EPSILON) {
                 if ($this->measure->measure_type === MeasureType::WEIGHT) {
-                    if ($current_amount > self::EPSILON) {
-                        $formatted_values[] = round($current_amount, 2) . " " . $measure->abbr;
-                    }
+                    $formatted_values[] = round($current_amount, 2) . " " . $measure->abbr;
                 } else {
                     $f1 = new Fraction(round($current_amount));
                     if ($f1->decimal > self::EPSILON) {

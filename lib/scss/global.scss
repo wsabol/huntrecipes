@@ -380,6 +380,7 @@ blockquote span {
     -moz-box-shadow: $dl-box-shadow;
     box-shadow: $dl-box-shadow;
     padding: 7px 10px;
+    border-radius: $border-radius-sm 0 0 $border-radius-sm;
 }
 
 .basic dd {
@@ -391,6 +392,7 @@ blockquote span {
     -moz-box-shadow: $dl-box-shadow;
     box-shadow: $dl-box-shadow;
     padding: 7px 10px;
+    border-radius: 0 $border-radius-sm $border-radius-sm 0;
 }
 
 .basic {
