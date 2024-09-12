@@ -179,6 +179,13 @@
 
 // RECIPE SINGLE
 
+.recipe-ingredients dt.no-amount{
+    background:none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
 .recipe-instructions ol {
     margin: 0;
     padding: 0;

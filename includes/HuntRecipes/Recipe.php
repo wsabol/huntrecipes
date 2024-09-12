@@ -170,6 +170,52 @@ class Recipe extends Common_Object {
         return $top;
     }
 
+    public static function organize_ingredients_into_columns(array $ingredients, array $child1_ingredients, array $child2_ingredients): array {
+        $columns = [[
+            'items' => []
+        ], [
+            'items' => []
+        ]];
+
+        if (!empty($child1_ingredients) && !empty($child2_ingredients)) {
+            $columns[0]['items'] = $ingredients;
+            $columns[1]['items'] = $child1_ingredients;
+            $columns[1]['child'] = 1;
+            $columns[] = [
+                'items' => $child2_ingredients,
+                'child' => 2
+            ];
+            return $columns;
+        }
+
+        $main_column_count = 1;
+
+        if (count($ingredients) < 12) {
+            $columns[0]['items'] = $ingredients;
+        }
+        else {
+            $main_column_count = 2;
+            $breakpoint = ceil(2 * count($ingredients) / 3);
+            $columns[0]['items'] = array_slice($ingredients, 0, $breakpoint);
+            $columns[1]['items'] = array_slice($ingredients, $breakpoint);
+        }
+
+        if (!empty($child1_ingredients))  {
+
+            if ($main_column_count === 1) {
+                $columns[1]['items'] = $child1_ingredients;
+                $columns[1]['child'] = 1;
+            } else {
+                $columns[] = [
+                    'items' => $child1_ingredients,
+                    'child' => 1
+                ];
+            }
+        }
+
+        return $columns;
+    }
+
     protected function exists_in_db(): bool {
         $sel_query = "select * from Recipe where id = {$this->id}";
         $result = $this->conn->query($sel_query);
@@ -485,5 +531,64 @@ class Recipe extends Common_Object {
         }
 
         return $users;
+    }
+
+    /**
+     * @return Recipe[]
+     * @throws SqlException
+     */
+    public function get_child_recipes(): array {
+        $children = [];
+
+        $sel_query = "
+        select r.id
+        from Recipe r
+        WHERE r.parent_recipe_id = $this->id
+        ";
+
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting recipes: " . $this->conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            $children[] = new Recipe($row->id, $this->conn);
+        }
+
+        return $children;
+/*
+        $RecipeChildren = array();
+        if ( $Recipe['child_count'] > 0 ) {
+            $par_query = "
+		SELECT id FROM Recipe WHERE parent_recipe_id = ".$App->R['recipe_id'].";
+	";
+            $pResult = $App->oDBMY->query($par_query);
+            while ( $pRow = $pResult->fetch_assoc() ) {
+                $chl_query = "
+			Call spSelectRecipe(".$pRow['id'].", ".(@$_SESSION['Login']['id']*1).");
+		";
+                $cResult = $App->oDBMY->query($chl_query);
+                if ( !!$cResult ) {
+                    $cRow = $cResult->fetch_assoc();
+                    $cResult->free();
+
+                    $cRow['ingredients'] = array();
+                    $ching_query = "
+				Call spSelectRecipeIngredients(".$pRow['id'].");
+			";
+                    $ciResult = $App->oDBMY->query($ching_query);
+                    if ( !!$ciResult ) {
+                        while ( $ciRow = $ciResult->fetch_array() ) {
+                            array_push($cRow['ingredients'], $ciRow);
+                        }
+                        array_push($RecipeChildren, $cRow);
+                        $Recipe['ingredient_count'] += $cRow['ingredient_count'];
+                    }
+                }
+            }
+            $pResult->free();
+            $Recipe['child_count'] = count($RecipeChildren);
+        }*/
+
     }
 }

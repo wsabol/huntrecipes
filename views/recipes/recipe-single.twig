@@ -41,6 +41,11 @@
 
         {% for column in recipe.ingredient_columns %}
             <div class="col-lg-{{ recipe.ingredient_col_num }}">
+
+                {% if column.child > 0 %}
+                    <h5 class="child-recipe-title">{{ recipe.children[column.child - 1].title }}</h5>
+                {% endif %}
+
                 <dl class="basic recipe-ingredients row row-gap-2">
                     {% for item in column.items %}
                         <dt class="col-3 ingredient-amount{{ item.amount == 0 ? ' no-amount' : '' }}"
@@ -72,10 +77,20 @@
                         <li>{{ item }}</li>
                     {% endfor %}
                 </ol>
-
-                <!--child instructions-->
-
             </div>
+
+            <!--child instructions-->
+            {% for child in recipe.children %}
+                <h4 class="child-instructions-title">Instructions For {{ child.title }}</h4>
+                <div class="recipe-instructions">
+                    <ol>
+                        {% for item in child.instructions %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endfor %}
+
         </div>
 
 

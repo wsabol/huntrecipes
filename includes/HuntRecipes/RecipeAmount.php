@@ -20,7 +20,7 @@ class RecipeAmount {
 
     public function amount_formatted(): string {
         if ($this->amount <= 0) {
-            return "&nbsp;";
+            return "";
         }
 
         if ($this->measure->measure_type === MeasureType::COUNT) {

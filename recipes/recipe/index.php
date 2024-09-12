@@ -96,24 +96,22 @@ $data->likes_count = $recipe->get_likes_count();
 $data->link = $recipe->get_link();
 $data->ingredient_columns = [];
 $data->liked_by = $recipe->get_users_who_liked_this();
+$data->children = [];
 
-if (count($data->ingredients) < 12) {
-    $data->ingredient_columns[] = [
-        'items' => $data->ingredients
-    ];
-    $data->ingredient_columns[] = [
-        'items' => []
-    ];
+$children = $recipe->get_child_recipes();
+foreach ($children as $child) {
+    $child_obj = $child->toObject();
+    $child_obj->ingredients = $child->get_ingredients();
+    $child_obj->instructions = $child->get_instructions();
+
+    $data->children[] = $child_obj;
 }
-else {
-    $breakpoint = ceil(2 * count($data->ingredients) / 3);
-    $data->ingredient_columns[] = [
-        'items' => array_slice($data->ingredients, 0, $breakpoint)
-    ];
-    $data->ingredient_columns[] = [
-        'items' => array_slice($data->ingredients, $breakpoint)
-    ];
-}
+
+$data->ingredient_columns = Recipe::organize_ingredients_into_columns(
+    $data->ingredients,
+    @$data->children[0]->ingredients ?? [],
+    @$data->children[1]->ingredients ?? []
+);
 
 $data->ingredient_col_num = 12 / count($data->ingredient_columns);
 
