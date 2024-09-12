@@ -56,6 +56,34 @@ class Chef extends Common_Object {
         return $data;
     }
 
+    /**
+     * @param int $user_id
+     * @param SqlController $conn
+     * @return Chef|false
+     */
+    public static function from_user(int $user_id, SqlController $conn) {
+        $sel_query = "
+        select r.*
+        from Chef r
+        WHERE login_id = $user_id
+        ";
+        $result = $conn->query($sel_query);
+        if ($result->num_rows === 0) {
+            return false;
+        }
+
+        $row = $result->fetch_object();
+        $chef = new self(0, $conn);
+        $chef->id = $row->id;
+        $chef->name = $row->name;
+        $chef->login_id = $row->id;
+        $chef->is_male = (bool)$row->male_flag; // todo change in db
+        $chef->wisdom = $row->wisdom;
+        $chef->story = $row->story;
+        $chef->favorite_foods = $row->favorite_cuisine; // todo change this in db
+        return $chef;
+    }
+
     protected function exists_in_db(): bool {
         $sel_query = "select * from Chef where id = {$this->id}";
         $result = $this->conn->query($sel_query);

@@ -19,6 +19,7 @@ class User extends Common_Object {
     public bool $is_chef;
     public bool $is_developer;
     public bool $is_email_verified;
+    public DateTimeImmutable $date_created;
 
     private string $password;
 
@@ -46,6 +47,7 @@ class User extends Common_Object {
             $this->is_chef = (bool)$row->is_chef;
             $this->is_developer = (bool)$row->is_developer;
             $this->is_email_verified = (bool)$row->is_email_verified;
+            $this->date_created = new DateTimeImmutable($row->date_created);
 
             if (!str_starts_with($this->profile_picture, "/")) {
                 $this->profile_picture = "/$this->profile_picture";

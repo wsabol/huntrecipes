@@ -94,13 +94,13 @@ class Navigation {
             $this->_user_nav = [
                 [
                     "title" => "Favorites",
-                    "a_href" => "/profile/favorites/",
+                    "a_href" => "/account/?goto=favorites",
                     "icon" => "fa fa-heart",
                     "li_class" => "light"
                 ],
                 [
                     "title" => "My Account",
-                    "a_href" => "/profile/",
+                    "a_href" => "/account/",
                     "icon" => "fa fa-user",
                     "li_class" => "medium"
                 ],
@@ -117,7 +117,7 @@ class Navigation {
 
             $this->_footer_nav[] = [
                 "title" => "My account",
-                "a_href" => "/profile/",
+                "a_href" => "/account/",
             ];
         }
         else {
