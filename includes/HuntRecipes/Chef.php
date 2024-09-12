@@ -10,7 +10,7 @@ class Chef extends Common_Object {
     private SqlController $conn;
     public int $id;
     public string $name;
-    public int $login_id = 0;
+    public int $user_id = 0;
     public bool $is_male = false;
     public string $wisdom = '';
     public string $story = '';
@@ -31,7 +31,7 @@ class Chef extends Common_Object {
         if (!!$result) {
             $row = $result->fetch_object();
             $this->name = $row->name;
-            $this->login_id = $row->login_id;
+            $this->user_id = $row->login_id;
             $this->is_male = (bool)$row->male_flag; // todo change in db
             $this->wisdom = $row->wisdom;
             $this->story = $row->story;
@@ -76,7 +76,7 @@ class Chef extends Common_Object {
         $chef = new self(0, $conn);
         $chef->id = $row->id;
         $chef->name = $row->name;
-        $chef->login_id = $row->id;
+        $chef->user_id = $row->login_id;
         $chef->is_male = (bool)$row->male_flag; // todo change in db
         $chef->wisdom = $row->wisdom;
         $chef->story = $row->story;
@@ -104,7 +104,7 @@ class Chef extends Common_Object {
                          favorite_cuisine
         ) VALUES (
                   '" . $this->conn->escape_string($this->name) . "'
-                  $this->login_id,
+                  $this->user_id,
                   " . (int)$this->is_male . ",
                   '" . $this->conn->escape_string($this->wisdom) . "',
                   '" . $this->conn->escape_string($this->story) . "',
@@ -118,7 +118,7 @@ class Chef extends Common_Object {
             $save_query = "
             UPDATE Chef
             SET name = '" . $this->conn->escape_string($this->name) . "',
-                login_id = $this->login_id,
+                login_id = $this->user_id,
                 male_flag = " . (int)$this->is_male . ",
                 wisdom = '" . $this->conn->escape_string($this->wisdom) . "',
                 story = '" . $this->conn->escape_string($this->story) . "',

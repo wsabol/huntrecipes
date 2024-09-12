@@ -44,7 +44,6 @@ $guestAccessPages = array(
     "/index.php",
     "/recipe_print.php",
     "/ajax-json/search/ingredient_suggestions.json.php",
-    "/chef_profile.php",
     "/reset_password.php"
 );
 

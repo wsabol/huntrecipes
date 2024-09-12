@@ -156,7 +156,6 @@ h2.ribbon.bright {
 }
 
 blockquote {
-    position: relative;
     color: $gray-700;
     padding: 1rem 0 1.25rem;
     margin: 0 0 1.25rem;
@@ -168,7 +167,16 @@ blockquote i {
     margin-right: 5px;
 }
 
-blockquote span {
+.alert blockquote {
+    color: unset;
+}
+
+blockquote i {
+    color: unset;
+}
+
+blockquote .chef-quote {
+    display: inline;
     font-style: italic;
 }
 

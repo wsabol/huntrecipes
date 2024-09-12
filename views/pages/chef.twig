@@ -1,0 +1,56 @@
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+
+    <div class="row">
+
+        <!--profile left part-->
+        <div class="col-lg-4">
+
+            <div class="card" >
+                <img src="{{ chef.profile_picture }}" class="card-img-top" alt="{{ chef.name }}">
+                <div class="card-body">
+                    <h2 class="card-title mb-3">{{ chef.name }}</h2>
+                    <p class="card-text mb-4">User since: {{ chef.date_created|date("d M, Y") }}</p>
+
+                    <div class="d-grid gap-2">
+                        <a href="/recipes/?chef_id={{ chef.id }}" class="btn btn-primary">See {{ chef.is_male ? 'His' : 'Her' }} Recipes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--//profile left part-->
+
+        <div class="col-lg-8">
+
+            <div class="alert alert-info">
+                <blockquote class="chef-quote-wrapper mb-0" >
+                    <i class="fa fa-quote-left"></i>
+                    <h3 class="chef-quote">{{ chef.wisdom }}</h3>
+                </blockquote>
+            </div>
+
+            <div class="content">
+
+                <h4>{{ chef.is_male ? 'His' : 'Her' }} Story</h4>
+                <p>{{ chef.story }}</p>
+
+                <h4>Favorite Foods</h4>
+                <p>{{ chef.favorite_foods }}</p>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="ribbon bright">{{ chef.name }}'s Favorites</h2>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
