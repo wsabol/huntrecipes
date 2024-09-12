@@ -7,14 +7,10 @@ use HuntRecipes\User\SessionController;
 class Page_Controller {
 
     public function get_page_context(SessionController $sess, string $page_title, array $breadcrumbs, array $additional = []): array {
-        $user_name = '';
-        $title = '';
         $user_id = 0;
 
         if ($sess->is_started()) {
             if ($sess->has_user()) {
-                $user_name = $sess->user()->name;
-                $title = $sess->user()->title;
                 $user_id = $sess->user()->id;
             }
         }
@@ -34,8 +30,6 @@ class Page_Controller {
         );
 
         if ($sess->has_user()) {
-            $context['user_name'] = $user_name;
-            $context['user_title'] = $title;
             $context['current_user_id'] = $user_id;
         }
 

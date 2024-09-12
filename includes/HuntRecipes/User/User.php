@@ -12,24 +12,19 @@ class User extends Common_Object {
     public int $id;
     public string $username;
     public string $name;
-    public string $title;
     public string $email;
-    public bool $is_developer;
-    public DateTimeImmutable $birthdate;
     public int $account_status_id;
-    public bool $has_gigs_enabled;
-    public int $household_id;
+    public string $profile_picture;
+    public int $chef_app_pending;
+    public bool $is_chef;
+    public bool $is_developer;
+    public bool $is_email_verified;
 
     private string $password;
 
     public function __construct(int $user_id, ?SqlController $conn = null) {
         $this->id = $user_id;
-
-        // if (empty($conn)) {
-        //     $this->conn = new SqlController();
-        // } else {
-            $this->conn = $conn;
-        // }
+        $this->conn = $conn;
 
         if ($this->id > 0) {
             $this->update_from_db();
@@ -44,13 +39,17 @@ class User extends Common_Object {
             $this->username = $row->username;
             $this->password = $row->password;
             $this->name = $row->name;
-            $this->title = $row->title;
-            $this->email = $row->email_address;
+            $this->email = $row->email;
+            $this->account_status_id = $row->account_status_id;
+            $this->profile_picture = $row->profile_picture;
+            $this->chef_app_pending = $row->chef_app_pending;
+            $this->is_chef = (bool)$row->is_chef;
             $this->is_developer = (bool)$row->is_developer;
-            $this->birthdate = new DateTimeImmutable($row->birthdate);
-            $this->account_status_id = (int)$row->account_status_id;
-            $this->has_gigs_enabled = (bool)$row->has_gigs_enabled;
-            $this->household_id = $row->household_id;
+            $this->is_email_verified = (bool)$row->is_email_verified;
+
+            if (!str_starts_with($this->profile_picture, "/")) {
+                $this->profile_picture = "/$this->profile_picture";
+            }
         }
     }
 
@@ -92,26 +91,26 @@ class User extends Common_Object {
 
     public function save_to_db(): bool {
         $save_query = "
-        INSERT INTO Login(
+        INSERT INTO User(
                         username,
                         name,
-                        title, 
-                        email_address,
+                        email,
+                         account_status_id,
+                         profile_picture,
+                         chef_app_pending,
+                         is_chef,
                         is_developer,
-                        birthdate,
-                        account_status_id,
-                        has_gigs_enabled,
-                        household_id
+                        is_email_verified
         ) VALUES (
                   '{$this->username}',
                   '" . $this->conn->escape_string($this->name) . "',
-                  '" . $this->conn->escape_string($this->title) . "',
                   '{$this->email}',
-                  " . ($this->is_developer ? 1 : 0) .",
-                  '{$this->birthdate->format("Y-m-d")}',
                   {$this->account_status_id},
-                  " . ($this->has_gigs_enabled ? 1 : 0) .",
-                  {$this->household_id}
+                  '{$this->profile_picture}',
+                  {$this->chef_app_pending},
+                  " . ($this->is_chef ? 1 : 0) .",
+                  " . ($this->is_developer ? 1 : 0) .",
+                  " . ($this->is_email_verified ? 1 : 0) ."
         );
         
         SELECT LAST_INSERT_ID() as id;
@@ -119,16 +118,16 @@ class User extends Common_Object {
 
         if ($this->exists_in_db()) {
             $save_query = "
-            UPDATE Login
+            UPDATE User
             SET username = '{$this->username}',
                 name = '" . $this->conn->escape_string($this->name) . "',
-                title = '" . $this->conn->escape_string($this->title) . "',
-                email_address = '{$this->email}',
-                is_developer = " . ($this->is_developer ? 1 : 0) .",
-                birthdate = '{$this->birthdate->format("Y-m-d")}',
+                email = '{$this->email}',
                 account_status_id = {$this->account_status_id},
-                has_gigs_enabled = " . ($this->has_gigs_enabled ? 1 : 0) .",
-                household_id = {$this->household_id}
+                profile_picture = '{$this->profile_picture}',
+                chef_app_pending = {$this->chef_app_pending},
+                is_chef = " . ($this->is_chef ? 1 : 0) .",
+                is_developer = " . ($this->is_developer ? 1 : 0) .",
+                is_email_verified = " . ($this->is_email_verified ? 1 : 0) ."
             WHERE id = {$this->id};
             
             SELECT {$this->id} as id;
@@ -148,7 +147,7 @@ class User extends Common_Object {
 
     public function delete_from_db(): bool {
         $delete_query = "
-        DELETE FROM Login
+        DELETE FROM User
         WHERE id = {$this->id};
         ";
         $result = $this->conn->query($delete_query);
@@ -171,10 +170,9 @@ class User extends Common_Object {
      */
     public static function create_from_username(SqlController $conn, string $username) {
         $sel_query = "
-        select u.id
-        from User u
-        where username = '{$username}'
-        order by u.name
+        select id
+        from User
+        where username = '" . $conn->escape_string($username) . "'
         ";
         $result = $conn->query($sel_query);
         if ($result === false) {

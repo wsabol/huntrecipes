@@ -113,6 +113,10 @@ p:empty {
     margin: 40px 0;
 }
 
+.text-bold {
+    font-weight: $font-weight-bold;
+}
+
 h2.ribbon {
     background: url(../../assets/images/bgr/ribbons.png) -216px -61px no-repeat;
     padding: 0 !important;
@@ -126,7 +130,6 @@ h2.ribbon {
     position: absolute;
     top: 20px;
     left: 35px;
-    z-index: 9999;
     display: inline-block;
     overflow: hidden;
     margin: 0 0 30px;

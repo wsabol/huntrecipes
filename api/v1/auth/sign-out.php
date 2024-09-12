@@ -15,7 +15,7 @@ class Auth_Logout_Endpoint extends Common_Endpoint {
         switch ($method) {
             case 'POST':
             case 'GET':
-                $this->logout();
+                $this->sign_out();
                 break;
 
             default:
@@ -23,7 +23,7 @@ class Auth_Logout_Endpoint extends Common_Endpoint {
         }
     }
 
-    public function logout() {
+    public function sign_out() {
         $data = array();
         $code = 400;
         $message = '';

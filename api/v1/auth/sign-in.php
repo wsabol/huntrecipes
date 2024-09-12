@@ -16,7 +16,7 @@ class Auth_Login_Endpoint extends Common_Endpoint {
 
         switch ($method) {
             case 'POST':
-                $this->login();
+                $this->sign_in();
                 break;
 
             default:
@@ -24,7 +24,7 @@ class Auth_Login_Endpoint extends Common_Endpoint {
         }
     }
 
-    public function login(): bool {
+    public function sign_in(): bool {
         $data = array();
         $code = 400;
         $message = '';
@@ -58,13 +58,20 @@ class Auth_Login_Endpoint extends Common_Endpoint {
 
             $is_correct_password = password_verify($password, $user->get_password());
 
+            // legacy
             if (!$is_correct_password) {
-                throw new Exception("Username/Password provided do not match what we have on record");
+                $is_correct_password = sha1($password) === $user->get_password();
+            }
+
+            if (!$is_correct_password) {
+                throw new Exception("Username/Password provided do not match what we have on record $password");
             }
 
             if (!$user->is_enabled()) {
                 throw new Exception("Please contact your system administrator.");
             }
+
+            var_dump($user);
 
             $sess->set_user($user);
             $sess->close();

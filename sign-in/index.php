@@ -27,9 +27,9 @@ $request_uri = trim((string)@$_GET['ref']);
 
 // Template variables.
 $page = new Page_Controller();
-$context = $page->get_page_context($sess, "Welcome", [], [
+$context = $page->get_page_context($sess, "Sign In", [], [
     'request_uri' => $request_uri
 ]);
 
 // Render view.
-echo $twig->render('login.twig', $context);
+echo $twig->render('sign-in.twig', $context);

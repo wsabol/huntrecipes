@@ -93,50 +93,46 @@ class Navigation {
         if ($sess->has_user()) {
             $this->_user_nav = [
                 [
-                    "title" => "My account",
-                    "a_href" => "/profile/",
-                    "icon" => "fa fa-user",
+                    "title" => "Favorites",
+                    "a_href" => "/profile/favorites/",
+                    "icon" => "fa fa-heart",
                     "li_class" => "light"
                 ],
                 [
-                    "title" => "Favorites",
-                    "a_href" => "/profile/favorites",
-                    "icon" => "fa fa-heart",
-                    "li_class" => "light"
-                ]
+                    "title" => "My Account",
+                    "a_href" => "/profile/",
+                    "icon" => "fa fa-user",
+                    "li_class" => "medium"
+                ],
             ];
 
-            if ($_SESSION['User']->is_chef) {
+            if ($sess->user()->is_chef) {
                 $this->_user_nav[] = [
-                    [
-                        "title" => "Submit a recipe",
-                        "a_href" => "/recipes/submit/",
-                        "icon" => "icon icon-themeenergy_fork-spoon",
-                        "li_class" => "medium"
-                    ]
+                    "title" => "Submit a recipe",
+                    "a_href" => "/recipes/submit/",
+                    "icon" => "icon icon-themeenergy_fork-spoon",
+                    "li_class" => "dark"
                 ];
             }
 
             $this->_footer_nav[] = [
-                [
-                    "title" => "My account",
-                    "a_href" => "/profile/",
-                ]
+                "title" => "My account",
+                "a_href" => "/profile/",
             ];
         }
         else {
             $this->_user_nav = [
                 [
-                    "title" => "Login",
-                    "a_href" => "/login/",
+                    "title" => "Sign in",
+                    "a_href" => "/sign-in/",
                     "icon" => "fa-solid fa-arrow-right-to-bracket",
                     "li_class" => "light"
                 ]
             ];
 
             $this->_footer_nav[] = [
-                "title" => "Login",
-                "a_href" => "/login/",
+                "title" => "Sign In",
+                "a_href" => "/sign-in/",
             ];
         }
 

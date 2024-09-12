@@ -92,7 +92,6 @@
     font-size: $font-size-sm;
     line-height: 1.2;
     list-style: none;
-    // font-weight: $font-weight-bold;
     text-transform: uppercase;
     text-align: center;
     overflow: hidden;
@@ -271,4 +270,11 @@
 
 .boxed-widget.liked-by-widget li:hover span {
     opacity: 1;
+}
+
+// login page
+
+.content.sign-in-box {
+    margin-top: 40px;
+    padding: 20px 30px;
 }
