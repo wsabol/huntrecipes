@@ -361,6 +361,7 @@ blockquote .chef-quote {
 .card-actions .likes {
     cursor: pointer;
     color: $gray;
+    font-size: $font-size-lg;
 }
 
 .card-actions .likes i {
@@ -369,7 +370,7 @@ blockquote .chef-quote {
 }
 
 .card-actions .likes:hover i {
-    color: $orange-500 !important;
+    color: $red-400 !important;
 }
 
 .card-actions .likes.liked i {
@@ -378,7 +379,7 @@ blockquote .chef-quote {
 }
 
 .card-actions .likes.liked:hover i {
-    color: $red-500 !important;
+    color: $red-400 !important;
 }
 
 // basic dl styling

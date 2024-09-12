@@ -32,6 +32,8 @@ class Recipe_RecipeOfTheDay_Endpoint extends Common_Endpoint {
         try {
 
             $sess = new SessionController();
+            $sess->start();
+
             $conn = new SqlController();
             $recipe = Recipe::recipe_of_the_day($conn);
 
@@ -44,10 +46,8 @@ class Recipe_RecipeOfTheDay_Endpoint extends Common_Endpoint {
             $data->likes_count = $recipe->get_likes_count();
             $data->link = $recipe->get_link();
 
-            if ($sess->is_started()) {
-                if ($sess->has_user()) {
-                    $data->is_liked = $recipe->is_liked($sess->user()->id);
-                }
+            if ($sess->has_user()) {
+                $data->is_liked = $recipe->is_liked($sess->user()->id);
             }
 
             $message = 'Got recipe of the day';

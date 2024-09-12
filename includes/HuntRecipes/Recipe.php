@@ -65,10 +65,10 @@ class Recipe extends Common_Object {
 
         $current_user_id = 0;
         $sess = new SessionController();
-        if ($sess->is_started()) {
-            if ($sess->has_user()) {
-                $current_user_id = $sess->user()->id;
-            }
+        $sess->start();
+
+        if ($sess->has_user()) {
+            $current_user_id = $sess->user()->id;
         }
 
         $sel_query = "
@@ -130,6 +130,7 @@ class Recipe extends Common_Object {
         $top = [];
 
         $sess = new SessionController();
+        $sess->start();
 
         $sel_query = "
         SELECT
@@ -158,10 +159,8 @@ class Recipe extends Common_Object {
             $data->likes_count = $recipe->get_likes_count();
             $data->link = $recipe->get_link();
 
-            if ($sess->is_started()) {
-                if ($sess->has_user()) {
-                    $data->is_liked = $recipe->is_liked($sess->user()->id);
-                }
+            if ($sess->has_user()) {
+                $data->is_liked = $recipe->is_liked($sess->user()->id);
             }
 
             $top[] = $data;

@@ -9,10 +9,9 @@ class Page_Controller {
     public function get_page_context(SessionController $sess, string $page_title, array $breadcrumbs, array $additional = []): array {
         $user_id = 0;
 
-        if ($sess->is_started()) {
-            if ($sess->has_user()) {
-                $user_id = $sess->user()->id;
-            }
+        $sess->start();
+        if ($sess->has_user()) {
+            $user_id = $sess->user()->id;
         }
 
         $nav = new Navigation();
