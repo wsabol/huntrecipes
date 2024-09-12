@@ -6,7 +6,7 @@ use HuntRecipes\User\SessionController;
 require "../includes/common.php";
 
 $sess = new SessionController();
-$sess->start();
+$sess->validate();
 
 if ($sess->has_user()) {
     http_response_code(302);

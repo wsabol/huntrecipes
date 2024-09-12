@@ -41,19 +41,19 @@ class Auth_Login_Endpoint extends Common_Endpoint {
             }
 
             $dLogin = explode(";", base64_decode($request->elogin), 2);
-            $username = $dLogin[0];
+            $email = $dLogin[0];
             $password = @$dLogin[1];
 
-            if (empty($username) || empty($password)) {
+            if (empty($email) || empty($password)) {
                 throw new Exception('elogin not valid');
             }
 
             $auth = new Authenticator();
 
-            $user = User::create_from_username($auth->conn, $username);
+            $user = User::create_from_email($auth->conn, $email);
 
             if ($user === false) {
-                throw new Exception("Username does not match anything we have in the system");
+                throw new Exception("Email does not match any account. Try a different address");
             }
 
             $is_correct_password = password_verify($password, $user->get_password());
@@ -64,7 +64,7 @@ class Auth_Login_Endpoint extends Common_Endpoint {
             }
 
             if (!$is_correct_password) {
-                throw new Exception("Username/Password provided do not match what we have on record $password");
+                throw new Exception("Email/Password provided do not match what we have on record");
             }
 
             if (!$user->is_enabled()) {

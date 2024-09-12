@@ -9,15 +9,15 @@ ErrorDocument 404 /error-404/
 ####################
 # MAINTENANCE MODE
 ####################
-ErrorDocument 503 /maintenance.html
+ErrorDocument 503 /error/maintenance/
 <If "-e '%{DOCUMENT_ROOT}/site_maintenance_on'">
     RewriteEngine On
 
-    RewriteCond %{REQUEST_URI} !/maintenance [NC]
+    RewriteCond %{REQUEST_URI} !/error [NC]
 	RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg) [NC]
 
 	# serve default 503 response
-	RewriteRule .* /maintenance.html [R=503,L]
+	RewriteRule .* /error/maintenance/ [R=503,L]
 </If>
 
 #############

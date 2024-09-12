@@ -9,16 +9,16 @@ use HuntRecipes\Exception\SqlException;
 use HuntRecipes\Recipe;
 
 class User extends Common_Object {
+
     private SqlController $conn;
     public int $id;
-    public string $username;
     public string $name;
     public string $email;
     public int $account_status_id;
     public string $profile_picture;
     public int $chef_app_pending;
     public bool $is_chef;
-    public bool $is_developer;
+    public bool $is_developer = false;
     public bool $is_email_verified;
     public DateTimeImmutable $date_created;
 
@@ -38,7 +38,6 @@ class User extends Common_Object {
         $result = $this->conn->query($sel_query);
         if (!!$result) {
             $row = $result->fetch_object();
-            $this->username = $row->username;
             $this->password = $row->password;
             $this->name = $row->name;
             $this->email = $row->email;
@@ -95,9 +94,9 @@ class User extends Common_Object {
     public function save_to_db(): bool {
         $save_query = "
         INSERT INTO User(
-                        username,
                         name,
                         email,
+                         password,
                          account_status_id,
                          profile_picture,
                          chef_app_pending,
@@ -105,9 +104,9 @@ class User extends Common_Object {
                         is_developer,
                         is_email_verified
         ) VALUES (
-                  '{$this->username}',
                   '" . $this->conn->escape_string($this->name) . "',
-                  '{$this->email}',
+                  '" . $this->conn->escape_string($this->email) . "',
+                  '" . $this->conn->escape_string($this->password) . "',
                   {$this->account_status_id},
                   '{$this->profile_picture}',
                   {$this->chef_app_pending},
@@ -122,9 +121,8 @@ class User extends Common_Object {
         if ($this->exists_in_db()) {
             $save_query = "
             UPDATE User
-            SET username = '{$this->username}',
-                name = '" . $this->conn->escape_string($this->name) . "',
-                email = '{$this->email}',
+            SET name = '" . $this->conn->escape_string($this->name) . "',
+                email = '" . $this->conn->escape_string($this->email) . "',
                 account_status_id = {$this->account_status_id},
                 profile_picture = '{$this->profile_picture}',
                 chef_app_pending = {$this->chef_app_pending},
@@ -171,11 +169,11 @@ class User extends Common_Object {
      * @return false|User
      * @throws SqlException
      */
-    public static function create_from_username(SqlController $conn, string $username) {
+    public static function create_from_email(SqlController $conn, string $email) {
         $sel_query = "
         select id
         from User
-        where username = '" . $conn->escape_string($username) . "'
+        where email = '" . $conn->escape_string($email) . "'
         ";
         $result = $conn->query($sel_query);
         if ($result === false) {
@@ -225,5 +223,25 @@ class User extends Common_Object {
         }
 
         return $favorites;
+    }
+
+    public function is_safe_to_change_email_to(string $email): bool {
+        $sel_query = "
+        SELECT *
+        FROM User
+        WHERE email = '" . $this->conn->escape_string($email) . "'
+        AND id <> $this->id
+        ";
+
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error running email check: " . $this->conn->last_message());
+        }
+
+        return $result->num_rows === 0;
+    }
+
+    public function set_password(string $password) {
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
 }

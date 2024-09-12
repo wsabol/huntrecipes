@@ -7,15 +7,15 @@ use HuntRecipes\User\User;
 
 require '../../../../includes/common.php';
 
-class Account_User_Endpoint extends Common_Endpoint {
+class Account_Chef_Endpoint extends Common_Endpoint {
 
     public function __construct() {
-        // $this->restrict_access();
+        $this->restrict_access();
 
         $method = $_SERVER['REQUEST_METHOD'];
 
         switch ($method) {
-            case 'POST':
+            case 'PUT':
                 $this->update_account();
                 break;
 
@@ -76,4 +76,4 @@ class Account_User_Endpoint extends Common_Endpoint {
     }
 }
 
-new Account_User_Endpoint();
+new Account_Chef_Endpoint();

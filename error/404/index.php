@@ -3,10 +3,10 @@
 use HuntRecipes\Base\Page_Controller;
 use HuntRecipes\User\SessionController;
 
-require_once("../includes/common.php");
+require_once("../../includes/common.php");
 
 $sess = new SessionController();
-$sess->start();
+$sess->validate();
 
 // Set up Twig templating.
 $loader = new \Twig\Loader\FilesystemLoader(RECIPES_ROOT . '/views');

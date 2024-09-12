@@ -2,6 +2,7 @@
 
 namespace HuntRecipes;
 
+use DateTimeImmutable;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
@@ -145,7 +146,6 @@ class Recipe extends Common_Object {
         RAND()
         LIMIT 6;
         ";
-
         $result = $conn->query($sel_query);
         if ($result === false) {
             throw new SqlException("Error getting top recipes: " . $conn->last_message());
@@ -213,6 +213,51 @@ class Recipe extends Common_Object {
         }
 
         return $columns;
+    }
+
+    public static function set_new_recipe_of_the_day(DateTimeImmutable $date, SqlController $conn) {
+        $random_recipe = "
+        SELECT id
+        FROM Recipe
+        WHERE id NOT IN (
+            SELECT x.recipe_id
+            FROM RecipeOfTheDay x
+            WHERE x.day >= DATE_ADD('" . $date->format("Y-m-d") . "', INTERVAL -3 DAY)
+        )
+        AND published_flag = 1
+        ORDER BY RAND()
+        LIMIT 1
+        ";
+        $result = $conn->query($random_recipe);
+        if ($result === false) {
+            throw new SqlException("Error getting random recipe: " . $conn->last_message());
+        }
+
+        $recipe_id = $result->fetch_object()->id;
+
+        $new_query = "
+        INSERT INTO RecipeOfTheDay (
+                                    day,
+                                    recipe_id
+        )
+        VALUES (
+                '" . $date->format("Y-m-d") . "',
+                $recipe_id
+        );
+        ";
+        $result = $conn->query($new_query);
+        if ($result === false) {
+            throw new SqlException("Error setting recipe of the day: " . $conn->last_message());
+        }
+
+        $archive_query = "
+        DELETE FROM RecipeOfTheDay
+        WHERE day < DATE_ADD(CURDATE(), INTERVAL -30 DAY);
+        ";
+        $result = $conn->query($archive_query);
+        if ($result === false) {
+            throw new SqlException("Error archiving recipe of the day: " . $conn->last_message());
+        }
     }
 
     protected function exists_in_db(): bool {

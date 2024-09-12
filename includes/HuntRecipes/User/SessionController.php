@@ -52,9 +52,9 @@ class SessionController {
         // clear cookies
         setcookie(session_name(), '', time() - 3600);
         // free session variables
-        session_unset();
+        @session_unset();
         // kill php session
-        session_destroy();
+        @session_destroy();
     }
 
     /**
@@ -107,7 +107,7 @@ class SessionController {
      * @return void
      */
     public function redirect_to_login(): void {
-        $redirect = "/login/?ref=" . urlencode(@$_SERVER["REQUEST_URI"]);
+        $redirect = "/sign-in/?ref=" . urlencode(@$_SERVER["REQUEST_URI"]);
 
         if (headers_sent()) {
             die("Redirect failed. <a href='$redirect'>Please click on this link</a>");
@@ -168,12 +168,18 @@ class SessionController {
     }
 
     /**
-     * Starts session and evaluates its contents. If Session does not contain a valid user, it redirects to the login page.
+     * Starts session and evaluates its contents. If Session contains an invalid user, it redirects to the login page, otherwise is does nothing.
+     *
      * @return void
      */
     public function validate(): void {
         if (!$this->is_started()) {
             $this->start();
+        }
+
+        if (!$this->has_user()) {
+            $this->close();
+            return;
         }
 
         if (!$this->is_valid()) {
@@ -183,6 +189,17 @@ class SessionController {
         }
         
         $this->close();
+    }
+
+    public function require_valid_user(): void {
+        // redirect if invalid user
+        $this->validate();
+
+        // redirect if no user
+        if (!$this->has_user()) {
+            $this->logout();
+            $this->redirect_to_login();
+        }
     }
 
     public function logout() {

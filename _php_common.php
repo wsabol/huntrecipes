@@ -35,7 +35,6 @@ if (empty(@$skip_session_create)) {
 $App = new Application();
 
 $guestAccessPages = array(
-    "/API/v0/login/std_login.json.php",
     "/forgot_password.php",
     "/contact.php",
     "/API/v0/contact/contact_callback.php",
@@ -200,22 +199,6 @@ function resetLoginCookie() {
 
 function str_begins($testStr, $target) {
     return strpos($testStr, $target) === 0;
-}
-
-function str_ends($testStr, $target) {
-    return strpos($testStr, $target) === strlen($testStr) - strlen($target);
-}
-
-function getDaysOfWeekArray() {
-    // 0 - sunday
-    $week_day = array();
-    for ($dow = 0; $dow < 7; $dow++) {
-        $week_day[$dow] = array(
-            'name' => date('l', strtotime("Sunday +" . $dow . " days")),
-            'abbr' => date('D', strtotime("Sunday +" . $dow . " days"))
-        );
-    }
-    return $week_day;
 }
 
 function SendEmail($from_address, $to_name, $to_address, $cc_recipients, $bcc_recipients, $replyto_name, $replyto_address, $subject, $html_body, $attachment_count = 0, $aryAttachments = null) {

@@ -9,7 +9,7 @@ require '../../../../includes/common.php';
 class Account_Favorites_Endpoint extends Common_Endpoint {
 
     public function __construct() {
-        // $this->restrict_access();
+        $this->restrict_access();
 
         $method = $_SERVER['REQUEST_METHOD'];
 

@@ -2,6 +2,7 @@
 
 namespace HuntRecipes;
 
+use DateTimeImmutable;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
@@ -82,6 +83,50 @@ class Chef extends Common_Object {
         $chef->story = $row->story;
         $chef->favorite_foods = $row->favorite_cuisine; // todo change this in db
         return $chef;
+    }
+
+    public static function set_new_chef_of_the_day(DateTimeImmutable $date, SqlController $conn) {
+        $random_chef = "
+        SELECT id
+        FROM Chef
+        WHERE id NOT IN (
+            SELECT x.chef_id
+            FROM ChefOfTheDay x
+            WHERE x.day >= DATE_ADD('" . $date->format("Y-m-d") . "', INTERVAL -3 DAY)
+        )
+        ORDER BY RAND()
+        LIMIT 1
+        ";
+        $result = $conn->query($random_chef);
+        if ($result === false) {
+            throw new SqlException("Error getting random chef: " . $conn->last_message());
+        }
+
+        $chef_id = $result->fetch_object()->id;
+
+        $new_query = "
+        INSERT INTO ChefOfTheDay (
+                                    day,
+                                    chef_id
+        )
+        VALUES (
+                '" . $date->format("Y-m-d") . "',
+                $chef_id
+        );
+        ";
+        $result = $conn->query($new_query);
+        if ($result === false) {
+            throw new SqlException("Error setting chef of the day: " . $conn->last_message());
+        }
+
+        $archive_query = "
+        DELETE FROM ChefOfTheDay
+        WHERE day < DATE_ADD(CURDATE(), INTERVAL -30 DAY);
+        ";
+        $result = $conn->query($archive_query);
+        if ($result === false) {
+            throw new SqlException("Error archiving chef of the day: " . $conn->last_message());
+        }
     }
 
     protected function exists_in_db(): bool {
