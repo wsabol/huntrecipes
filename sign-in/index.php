@@ -23,11 +23,27 @@ $twig = new \Twig\Environment(
     )
 );
 
+$page_title = "Sign In";
+
+// Breadcrumbs.
+$breadcrumbs = array(
+    array(
+        'name' => 'Home',
+        'link' => '/home/',
+        'current_page' => false,
+    ),
+    array(
+        'name' => $page_title,
+        'link' => '#',
+        'current_page' => true,
+    ),
+);
+
 $request_uri = trim((string)@$_GET['ref']);
 
 // Template variables.
 $page = new Page_Controller();
-$context = $page->get_page_context($sess, "Sign In", [], [
+$context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
     'request_uri' => $request_uri
 ]);
 

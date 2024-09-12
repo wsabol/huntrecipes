@@ -4,7 +4,7 @@
 		<!--call to action-->
 		<section class="cta">
 			<div class="wrap clearfix">
-				<a href="/register.php" class="button big white right">Sign up</a>
+				<a href="#" class="button big white right">Sign up</a>
 				<h2>Love this food? Get more when you sign up for an account.</h2>
 			</div>
 		</section>
