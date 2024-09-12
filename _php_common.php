@@ -35,16 +35,13 @@ if (empty(@$skip_session_create)) {
 $App = new Application();
 
 $guestAccessPages = array(
-    "/login/",
     "/API/v0/login/std_login.json.php",
     "/forgot_password.php",
     "/register.php",
     "/contact.php",
     "/API/v0/contact/contact_callback.php",
-    "/errorPage.php",
     "/",
     "/index.php",
-    "/recipe.php",
     "/recipe_print.php",
     "/ajax-json/search/ingredient_suggestions.json.php",
     "/chef_profile.php",

@@ -549,7 +549,7 @@ $result->free();
                     console.log(response);
                     if (response.success == 1) {
                         //alert('Success');
-                        window.location.href = '/recipe.php?recipe_id=' + response.output_data.id;
+                        window.location.href = '/recipes/recipe/?id=' + response.output_data.id;
                     } else {
                         console.log(response.err_msg);
                     }

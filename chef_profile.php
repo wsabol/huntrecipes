@@ -115,10 +115,10 @@ require_once('_head.php');
 									<div class="entry one-fourth">
 										<figure>
 											<img src="<?=$ChefFavorites[$i]['image_filename']?>" alt="" />
-											<figcaption><a href="recipe.php?recipe_id=<?=$ChefFavorites[$i]['id']?>"><i class="icon icon-themeenergy_eye2"></i> <span>View recipe</span></a></figcaption>
+											<figcaption><a href="/recipes/recipe/?id=<?=$ChefFavorites[$i]['id']?>"><i class="icon icon-themeenergy_eye2"></i> <span>View recipe</span></a></figcaption>
 										</figure>
 										<div class="container">
-											<h2><a href="recipe.php?recipe_id=<?=$ChefFavorites[$i]['id']?>"><?=htmlspecialchars($ChefFavorites[$i]['title'])?></a></h2> 
+											<h2><a href="/recipes/recipe/?id=<?=$ChefFavorites[$i]['id']?>"><?=htmlspecialchars($ChefFavorites[$i]['title'])?></a></h2>
 											<div class="actions">
 												<div data-recipe-id="<?=$ChefFavorites[$i]['id']?>" >
 													<div class="likes divSaveToFavorites <?=( $ChefFavorites[$i]['favorite_flag'] == 1 ? "favorite-recipe" : "" )?>"><i class="fa fa-heart"></i><span class="favorite-count"><?=$ChefFavorites[$i]['favorite_count']?></span></div>

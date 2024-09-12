@@ -29,7 +29,7 @@ while ( $row = $result->fetch_assoc() ) {
         <?php
         for ( $i = 0; $i < count($Type); $i++ ) {
           ?>
-          <tr><td><?=$Type[$i]['recipe_id']?></td><td><a href="/recipe.php?recipe_id=<?=$Type[$i]['recipe_id']?>" target="_blank"><?=$Type[$i]['title']?></a></td></tr>
+          <tr><td><?=$Type[$i]['recipe_id']?></td><td><a href="/recipes/recipe/?id=<?=$Type[$i]['recipe_id']?>" target="_blank"><?=$Type[$i]['title']?></a></td></tr>
           <?php
         }
         ?>

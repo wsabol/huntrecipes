@@ -158,7 +158,7 @@ require_once('_head.php');
   					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h1>Success!</h1>
 						<p>Your recipe has been <?=( @$App->R['published_flag']*1 == 1 ? 'published' : 'saved' )?>.
-							<?=( @$App->R['published_flag']*1 == 1 ? 'View your new recipe <a href="/recipe.php?recipe_id='.(@$App->R['recipe_id']*1).'" >HERE</a>' : '' )?></p>
+							<?=( @$App->R['published_flag']*1 == 1 ? 'View your new recipe <a href="/recipes/recipe/?id='.(@$App->R['recipe_id']*1).'" >HERE</a>' : '' )?></p>
 					</div>
 					<?
 					if ( @$App->R['published_flag'] == 1 ) {
@@ -386,7 +386,7 @@ require_once('_head.php');
 					<div class="f-row full">
 						<input type="submit" name="submit_status" class="button" value="Save Recipe" >
 						<input type="submit" name="submit_status" class="pull-right button <?=( @$Recipe['recipe_id']*1 == 0 ? "hidden" : "" )?>" value="Discard Draft" style="background-color: #d9534f; margin-left: 12px;" >
-						<a class="pull-right button <?=( @$Recipe['recipe_id']*1 == 0 ? "hidden" : "" )?>" style="background-color: #337ab7;" href="/recipe.php?recipe_id=<?=@$Recipe['recipe_id']?>" >Preview</a>
+						<a class="pull-right button <?=( @$Recipe['recipe_id']*1 == 0 ? "hidden" : "" )?>" style="background-color: #337ab7;" href="/recipes/recipe/?id=<?=@$Recipe['recipe_id']?>" >Preview</a>
 					</div>
 				</form>
 			</div>
