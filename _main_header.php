@@ -16,13 +16,6 @@
 				<?php
 				if ( @$_SESSION['Login']['id'] > 0 ) {
 					?>
-					<li class="light"><a href="/profile.php" title="My account"><i class="icon fa fa-user"></i> <span>My account</span></a>
-						<ul class="sub-menu">
-							<li><a href="/profile.php?tabid=favorites" title="Favorites">Favorites</a></li>
-							<li><a href="/profile.php?tabid=chef-portal" title="Chef Portal">Chef Portal</a></li>
-							<li><a href="/profile.php?tabid=settings" title="Settings">Settings</a></li>
-						</ul>
-					</li>
 					
 					<?php
 					if ( @$_SESSION['Login']['chef_id']*1 > 0 ) { // developer

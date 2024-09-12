@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
+use HuntRecipes\Recipe;
 
 class User extends Common_Object {
     private SqlController $conn;
@@ -187,5 +188,42 @@ class User extends Common_Object {
 
         $row = $result->fetch_object();
         return new self($row->id, $conn);
+    }
+
+    public function get_favorites(): array {
+        $favorites = [];
+
+        $sel_query = "
+        SELECT
+            r.id,
+            IFNULL((
+                SELECT count(1)
+                FROM UserRecipeFavorite u
+                WHERE u.recipe_id = r.id
+            ), 0) as likes_count
+        FROM Recipe r
+        JOIN UserRecipeFavorite urf
+        ON urf.recipe_id = r.id
+        AND urf.user_id = $this->id
+        WHERE r.published_flag = 1
+        ";
+
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting user favorites: " . $this->conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            $recipe = new Recipe($row->id, $this->conn);
+
+            $data = $recipe->toObject();
+            $data->is_liked = true;
+            $data->likes_count = $row->likes_count;
+            $data->link = $recipe->get_link();
+
+            $favorites[] = $data;
+        }
+
+        return $favorites;
     }
 }

@@ -71,8 +71,6 @@ class Auth_Login_Endpoint extends Common_Endpoint {
                 throw new Exception("Please contact your system administrator.");
             }
 
-            var_dump($user);
-
             $sess->set_user($user);
             $sess->close();
 

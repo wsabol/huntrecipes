@@ -75,7 +75,10 @@
                          aria-labelledby="settings-tab"
                          tabindex="0">
 
+                        <div class="alert alert-error" style="display:none" id="alert-settings"></div>
+
                         <form id="frm-settings">
+                            <input type="hidden" name="user_id" value="{{ current_user_id }}">
 
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name</label>
@@ -103,7 +106,11 @@
                          role="tabpanel"
                          aria-labelledby="favorites-tab"
                          tabindex="0">
-                        favorites
+
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container">
+
+                        </div>
+
                     </div>
                     <div class="tab-pane fade {{ goto == 'chef' ? 'show active' : '' }}"
                          id="chef-tab-pane"

@@ -295,6 +295,12 @@ blockquote .chef-quote {
 
 // recipe card
 
+.recipe-card {
+    -webkit-box-shadow: $btn-box-shadow;
+    -moz-box-shadow: $btn-box-shadow;
+    box-shadow: $btn-box-shadow
+}
+
 .recipe-card figure {
     position: relative;
     overflow: hidden;
