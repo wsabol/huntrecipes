@@ -3,7 +3,7 @@
 use HuntRecipes\Base\Page_Controller;
 use HuntRecipes\User\SessionController;
 
-require "../includes/common.php";
+require "../../includes/common.php";
 
 $sess = new SessionController();
 $sess->validate();
@@ -30,6 +30,11 @@ $breadcrumbs = array(
     array(
         'name' => 'Home',
         'link' => '/home/',
+        'current_page' => false,
+    ),
+    array(
+        'name' => 'My Account',
+        'link' => '/account/',
         'current_page' => false,
     ),
     array(

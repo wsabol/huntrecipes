@@ -124,7 +124,7 @@ class Navigation {
             $this->_user_nav = [
                 [
                     "title" => "Sign in",
-                    "a_href" => "/sign-in/",
+                    "a_href" => "/account/sign-in/",
                     "icon" => "fa-solid fa-arrow-right-to-bracket",
                     "li_class" => "light"
                 ]
@@ -132,7 +132,7 @@ class Navigation {
 
             $this->_footer_nav[] = [
                 "title" => "Sign In",
-                "a_href" => "/sign-in/",
+                "a_href" => "/account/sign-in/",
             ];
         }
 
