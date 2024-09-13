@@ -48,4 +48,4 @@ $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
 ]);
 
 // Render view.
-echo $twig->render('sign-in.twig', $context);
+echo $twig->render('pages/sign-in.twig', $context);

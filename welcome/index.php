@@ -34,4 +34,4 @@ $page = new Page_Controller();
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs);
 
 // Render view.
-echo $twig->render('welcome.twig', $context);
+echo $twig->render('pages/welcome.twig', $context);

@@ -40,4 +40,4 @@ $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
 ]);
 
 // Render view.
-echo $twig->render('home.twig', $context);
+echo $twig->render('pages/home.twig', $context);

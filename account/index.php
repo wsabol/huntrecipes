@@ -52,4 +52,4 @@ $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
 ]);
 
 // Render view.
-echo $twig->render('account.twig', $context);
+echo $twig->render('pages/account.twig', $context);
