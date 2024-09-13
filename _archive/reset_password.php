@@ -61,7 +61,7 @@ if ( isset($App->R['reset_token']) ) {
 }
 
 $bodyClass = "";
-require_once("_head.php");
+// require_once("_head.php");
 //wla($App->R);
 ?>
 <!--wrap-->

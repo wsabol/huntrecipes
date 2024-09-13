@@ -36,7 +36,6 @@ $App = new Application();
 
 $guestAccessPages = array(
     "/forgot_password.php",
-    "/contact.php",
     "/API/v0/contact/contact_callback.php",
     "/",
     "/index.php",

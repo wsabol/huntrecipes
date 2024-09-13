@@ -30,7 +30,6 @@
 								<li><a href="https://www.facebook.com/jo.sabol" title="facebook"><i class="fa fa-fw fa-facebook"></i></a></li>
 								<li><a href="https://www.linkedin.com/in/joan-hunt-sabol-03258096/" title="linkedin"><i class="fa fa-fw fa-linkedin"></i></a></li>
 								<li><a href="https://www.pinterest.com/josabol/" title="pinterest"><i class="fa fa-fw fa-pinterest-p"></i></a></li>
-								<li><a href="/contact.php" title="Contact"><i class="fa fa-fw fa-envelope"></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -43,7 +42,6 @@
 						<ul>
 							<li><a href="/" title="Home">Home</a></li>
 							<li><a href="/recipes/" title="Recipes">Recipes</a></li>
-							<li><a href="/contact.php" title="Contact">Contact</a></li>
 						</ul>
 					</nav>
 				</div>

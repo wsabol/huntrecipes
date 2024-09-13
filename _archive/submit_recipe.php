@@ -51,7 +51,7 @@ $results->free();
 
 /** built site **/
 $bodyClass = ( @$_SESSION['Login']['id']*1 == 0 ? "home" : "" );
-require_once('_head.php');
+// require_once('_head.php');
 ?>
 <datalist id="IngredientsList" >
 	<?php

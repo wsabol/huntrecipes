@@ -13,7 +13,7 @@
 						<ul>
 							<li><a href="/" title="Home">Home</a></li>
 							<li><a href="/recipes/" title="Recipes">Recipes</a></li>
-							<li><a href="/contact.php" title="Contact">Contact</a></li>
+							<li><a href="/contact/" title="Contact">Contact</a></li>
 						</ul>
 					</nav>
 				</div>
