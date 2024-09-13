@@ -19,6 +19,9 @@ $twig = new \Twig\Environment(
     )
 );
 
+// todo get save to my favorites working
+// todo view printer friendly
+
 $conn = new SqlController();
 $page = new Page_Controller();
 $render_not_found = false;

@@ -36,6 +36,13 @@ $breadcrumbs = array(
     ),
 );
 
+// todo forgot password
+// todo reset password
+// todo Email verification
+// todo Chef application
+// todo show chef's recipes
+// todo dev utilities
+
 $conn = new SqlController();
 $chef = false;
 

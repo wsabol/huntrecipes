@@ -20,6 +20,7 @@ $twig = new \Twig\Environment(
     )
 );
 
+// todo dynamically populate chef's favorites
 
 $conn = new SqlController();
 $page = new Page_Controller();

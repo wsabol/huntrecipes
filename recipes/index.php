@@ -17,6 +17,11 @@ $twig = new \Twig\Environment(
     )
 );
 
+// todo search by ingredients
+// todo ingredient search suggestions
+// todo SUBMIT A RECIPE
+// todo recipe EDIT
+
 // Page title
 $page_title = "Recipes";
 
