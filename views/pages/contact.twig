@@ -1,0 +1,58 @@
+{% set show_footer = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+
+            <div class="alert alert-success" id="alert-success" style="display: none">
+                <h4 class="alert-heading">Thank you for your message!</h4>
+                <p>We will get back to you as soon as we can. In the meantime time, feel free to browse our recipes.</p>
+
+                <div style="display: flex; align-items: center;">
+                    <a href="/recipes/" class="btn btn-primary">Browse Recipes</a>
+                    <a href="/home/" class=" text-bold" style="margin-left: auto;">Go Home</a>
+                </div>
+            </div>
+
+            <div class="content sign-in-box" id="div-contact-wrapper">
+
+                <h4 class="mb-4">Contact Us</h4>
+
+                <div class="alert alert-error" id="alert-contact" style="display:none">
+
+                </div>
+
+                <form id="frm-contact">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input required type="text" class="form-control" name="name" placeholder="Name" aria-label="Name" value="{{ form_fill.your_name }}" >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input required type="email" class="form-control" name="email" placeholder="Email" aria-label="Email" value="{{ form_fill.your_email }}" >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea required rows=5 class="form-control" name="message" placeholder="Message" aria-label="Message"></textarea>
+                    </div>
+
+                    <div style="display:flex;">
+                        <button type="submit" class="btn btn-primary" style="margin-left:auto">Send Message</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}
