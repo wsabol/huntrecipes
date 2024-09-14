@@ -13,7 +13,7 @@ if (@$App->R['submit'] == "Submit") {
     $keys = array_keys($App->R);
     for ($i = 0; $i < count($keys); $i++) {
         $wRecipe = array();
-        if (str_begins($keys[$i], "write")) {
+        if (str_starts_with($keys[$i], "write")) {
             $wRecipe['id'] = trim($keys[$i], "write");
             $wRecipe['serving_count'] = $App->R["servings" . $wRecipe['id']];
             $wRecipe['serving_measure_id'] = $App->R["unit" . $wRecipe['id']];
