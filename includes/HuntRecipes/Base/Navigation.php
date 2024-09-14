@@ -47,25 +47,12 @@ class Navigation {
                 },
                 "submenu" => [
                     [
-                        "title" => "Recipe Process",
-                        "href" => "/API/v0/recipe_process/recipe_process.php"
-                    ],
-                    [
                         "title" => "Servings Redux",
                         "href" => "/API/v0/recipe_process/servings_redux.php"
                     ],
                     [
                         "title" => "Ingredients Redux",
                         "href" => "/API/v0/recipe_process/ingredients_redux.php"
-                    ],
-                    [
-                        "title" => "Recipe Type Redux",
-                        "href" => "/API/v0/recipe_process/recipe_type_redux.php"
-                    ],
-                    [
-                        "title" => "SocialChef Demo",
-                        "href" => "/API/v0/SocialChefDemo/HTML/",
-                        "target" => "_blank"
                     ],
                 ]
             ],

@@ -28,11 +28,8 @@
 						?>
 						<li class="dark"><a onclick="if($('.slicknav_nav').hasClass('slicknav_hidden')) $('#headDevTools').toggleClass('hidden');" href="#" title="Developer Tools"><i class="icon fa fa-gears"></i> <span>Developer Tools</span></a>
 							<ul class="sub-menu">
-								<li><a href="/API/v0/recipe_process/recipe_process.php" target="_blank" title="Recipe Process">Recipe Process</a></li>
 								<li><a href="/API/v0/recipe_process/servings_redux.php" target="_blank" title="Servings Redux">Servings Redux</a></li>
 								<li><a href="/API/v0/recipe_process/ingredients_redux.php" target="_blank" title="Ingredients Redux">Ingredients Redux</a></li>
-								<li><a href="/API/v0/recipe_process/recipe_type_redux.php" target="_blank" title="Recipe Type Redux">Recipe Type Redux</a></li>
-								<li><a href="/API/v0/SocialChefDemo/HTML/" target="_blank" title="SocialChef Demo">SocialChef Demo</a></li>
 							</ul>
 						</li>
 						<?php
@@ -64,11 +61,8 @@ if ( @$_SESSION['Login']['account_type_id']*1 == 4 ) { // developer
 	?>
 	<div id="headDevTools" class="devtools wrap clearfix hidden">
 		<div class="btn-group pull-right" role="group" >
-			<a class="no-style btn btn-default" href="/API/v0/recipe_process/recipe_process.php" target="_blank" title="Recipe Process">Recipe Process</a>
 			<a class="no-style btn btn-default" href="/API/v0/recipe_process/servings_redux.php" target="_blank" title="Servings Redux">Servings Redux</a>
 			<a class="no-style btn btn-default" href="/API/v0/recipe_process/ingredients_redux.php" target="_blank" title="Ingredients Redux">Ingredients Redux</a>
-			<a class="no-style btn btn-default" href="/API/v0/recipe_process/recipe_type_redux.php" target="_blank" title="Recipe Type Redux">Recipe Type Redux</a>
-			<a class="no-style btn btn-default" href="/API/v0/SocialChefDemo/HTML/" target="_blank" title="SocialChef Demo">SocialChef Demo</a>
 		</div>
 	</div>
 	<?php
