@@ -45,10 +45,7 @@ if(
       #wla( $row ) ;
       #exit;
 
-      if ( $row['account_status_id'] == 1 ) {
-        $response['logon_error'] = 'Please confirm your email before logging in.';
-        
-      } elseif ( $row['account_status_id'] == 3 ) {
+      if ( $row['account_status_id'] == 2 ) {
 				$response['logon_error'] = "Access Denied";
 				
 			} else {
