@@ -106,7 +106,7 @@
                 font-weight: 400;
                 font-family: 'Open Sans', 'Helvetica', sans-serif;
                 font-size: 16px;
-                text-transform: uppercase;
+                /*text-transform: uppercase;*/
                 margin-bottom: 16px;
                 margin: 0 0 16px 0;
             }
@@ -187,6 +187,30 @@
                 font-weight: 700;
                 color: #353535;
                 margin-bottom: 4px;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 11px 14px;
+                color: #fff !important;
+                font-weight: 400;
+                background-color: #DC655F;
+                text-align: center;
+                vertical-align: middle;
+                cursor: pointer;
+                user-select: none;
+                border-radius: 3px;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+            .btn:hover {
+                background-color: #e0746f;
+            }
+
+            .btn.btn-block {
+                display: block;
+                font-size: 16px;
             }
         </style>
         {% block custom_styles %}{% endblock %}

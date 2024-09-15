@@ -1,0 +1,23 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4">
+
+            <div class="alert alert-{{ alert }}" >
+                <h4>{{ heading }}</h4>
+                <p>{{ message }}</p>
+            </div>
+
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

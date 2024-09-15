@@ -93,10 +93,14 @@
                             <button type="submit" class="btn btn-primary mb-3">Update Account</button>
                         </form>
 
-                        {% if not user.is_email_verified %}
-                            <div class="alert alert-warning">
+                        {% if user.is_email_verified == 0 %}
+                            <div class="alert alert-warning" id="alert-verification-email">
                                 <p>Please verify your email</p>
-                                <button class="btn btn-warning">Send Verification Email</button>
+                                <button class="btn btn-warning btn-verify-email">Send Verification Email</button>
+                            </div>
+                            <div class="alert alert-success" id="alert-verification-email-sent" style="display:none">
+                                <h4>Verification link sent!</h4>
+                                <p>Follow the instructions in the email to verify your email.</p>
                             </div>
                         {% endif %}
 

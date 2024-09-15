@@ -2,21 +2,20 @@
 
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
-use HuntRecipes\User\SessionController;
 use HuntRecipes\User\User;
 
 require '../../../../includes/common.php';
 
-class Account_Chef_Endpoint extends Common_Endpoint {
+class Account_User_Verify_Endpoint extends Common_Endpoint {
 
     public function __construct() {
-        $this->restrict_access();
+        // $this->restrict_access();
 
         $method = $_SERVER['REQUEST_METHOD'];
 
         switch ($method) {
-            case 'PUT':
-                $this->update_account();
+            case 'POST':
+                $this->verify_account();
                 break;
 
             default:
@@ -24,7 +23,7 @@ class Account_Chef_Endpoint extends Common_Endpoint {
         }
     }
 
-    public function update_account(): bool {
+    public function verify_account(): bool {
         $data = array();
         $code = 400;
         $message = '';
@@ -37,27 +36,16 @@ class Account_Chef_Endpoint extends Common_Endpoint {
                 throw new Exception("user_id is not set");
             }
 
-            if (!isset($request->name)) {
-                throw new Exception("name is not set");
-            }
-
-            // todo finish this endpoint
-
             $conn = new SqlController();
             $user = new User($request->user_id, $conn);
-            $user->name = $request->name;
 
-            $new_email = ($user->email != $request->email);
-            $user->email = $request->email;
+            if (!$user->is_enabled()) {
+                throw new Exception("Account is not enabled");
+            }
 
-            $user->save_to_db();
+            $user->send_email_verification();
 
-            $sess = new SessionController();
-            $sess->start();
-            $sess->set_user($user);
-            $sess->close();
-
-            $message = "Successfully updated account";
+            $message = "Successfully send verification link";
             $code = 200;
 
         } catch (Exception $e) {
@@ -69,4 +57,4 @@ class Account_Chef_Endpoint extends Common_Endpoint {
     }
 }
 
-new Account_Chef_Endpoint();
+new Account_User_Verify_Endpoint();

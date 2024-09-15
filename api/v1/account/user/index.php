@@ -63,8 +63,8 @@ class Account_User_Endpoint extends Common_Endpoint {
                 $user->is_email_verified = false;
                 $user->save_to_db();
 
-                // todo send_email_verification
-                // $user->send_email_verification();
+                // send_email_verification
+                $user->send_email_verification();
             }
 
             $sess = new SessionController();

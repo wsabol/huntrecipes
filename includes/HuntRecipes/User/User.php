@@ -4,6 +4,7 @@ namespace HuntRecipes\User;
 
 use DateTimeImmutable;
 use HuntRecipes\Base\Common_Object;
+use HuntRecipes\Base\Email_Controller;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
 use HuntRecipes\Recipe;
@@ -243,5 +244,24 @@ class User extends Common_Object {
 
     public function set_password(string $password) {
         $this->password = password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    public function send_email_verification(): void {
+        $mailer = new Email_Controller();
+        $ev = EmailVerification::new_token($this->id, $this->conn);
+
+        $mailer->add_address($this->email);
+        $mailer->set_subject("New HuntRecipes Email Verification");
+
+        // mail body setup
+        $mailer->set_view('emails/email-verification.twig');
+        $mailer->set_message_context([
+            'subject' => $mailer->get_subject(),
+            'pre_text' => 'Please Verify Your Account',
+            'stoken' => $ev->get_secure_token()
+        ]);
+
+        // send
+        $mailer->send();
     }
 }
