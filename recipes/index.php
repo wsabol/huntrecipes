@@ -39,3 +39,13 @@ $breadcrumbs = array(
     ),
 );
 
+// Template variables.
+$page = new Page_Controller();
+$context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
+    'search' => [
+        'keyword' => @$_GET['q'] ?? ''
+    ]
+]);
+
+// Render view.
+echo $twig->render('recipes/recipes.twig', $context);
