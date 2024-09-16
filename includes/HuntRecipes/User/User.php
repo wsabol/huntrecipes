@@ -264,4 +264,8 @@ class User extends Common_Object {
         // send
         $mailer->send();
     }
+
+    public function has_open_email_verification(): bool {
+        return !empty(EmailVerification::list_active_tokens_for_user($this->id, $this->conn));
+    }
 }

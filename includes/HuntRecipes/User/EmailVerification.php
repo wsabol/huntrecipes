@@ -104,6 +104,29 @@ class EmailVerification {
         return $ev;
     }
 
+    public static function list_active_tokens_for_user(int $user_id, SqlController $conn): array {
+        $created_after = new DateTimeImmutable("-" . self::DAYS_TO_EXPIRE . " days");
+
+        $sel_query = "
+        select *
+        from EmailVerification
+        where is_used = 0
+        AND user_id = $user_id
+        AND date_created >= '" . $created_after->format("Y-m-d H:i:s") . "'
+        ";
+        $data = [];
+        // echo $sel_query;
+        $result = $conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting active tokens for user: " . $conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
     public function save_to_db(): bool {
         $save_query = "
         UPDATE EmailVerification
