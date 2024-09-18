@@ -158,7 +158,7 @@
 .error-container .error_type {
     color: $white;
     // height: 140px;
-    background: $red-400;
+    background: $gray-400;
     text-align: center;
     font-size: 94px;
     line-height: 140px;
@@ -168,7 +168,7 @@
 
 .error-container .error_text {
     color: $white;
-    background: $red-500;
+    background: $gray-800;
     text-align: center;
     font-size: 22px;
     line-height: 57px;
@@ -277,4 +277,10 @@
 .content.sign-in-box {
     margin-top: 40px;
     padding: 20px 30px;
+}
+
+// recipe edit
+
+.btn-ingredient-remove {
+    padding: 4px 8px;
 }

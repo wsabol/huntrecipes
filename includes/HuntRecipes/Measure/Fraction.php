@@ -85,13 +85,15 @@ class Fraction {
      * @return Fraction
      */
     private function normalize(): Fraction {
-        if ($this->decimal === 0) {
+        if (!$this->decimal) {
+            $this->decimal = 0;
             $this->sign = 0;
             $this->numerator = 0;
             $this->denominator = 1;
             return $this;
         }
-        $this->sign = round($this->decimal / abs($this->decimal));
+
+        $this->sign = (int)round($this->decimal / abs($this->decimal));
 
         $t = $this->recurs($this->decimal);
         $this->numerator = $t[0];

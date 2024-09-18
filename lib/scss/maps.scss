@@ -30,7 +30,7 @@
                     $hover-color: $white,
                     $active-color: $white
             );
-        }  @else {
+        } @else {
             @include button-variant($value, $value);
         }
     }
@@ -38,7 +38,16 @@
 
 @each $color, $value in $theme-colors {
     .btn-outline-#{$color} {
-        @include button-outline-variant($value);
+
+        @if $color == "primary" or $color == "success" or $color == "info" or $color == "favorite" {
+            @include button-outline-variant(
+                        $value,
+                    $color-hover: $white,
+                    $active-color: $white
+        );
+    } @else {
+            @include button-outline-variant($value);
+        }
     }
 }
 

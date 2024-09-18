@@ -197,8 +197,8 @@ $btn-font-size:               $font-size-base;
 $btn-line-height:             $line-height-base;
 $btn-white-space:             null; // Set to `nowrap` to prevent text wrapping
 
-$btn-padding-y-sm:            $btn-padding-y;
-$btn-padding-x-sm:            $btn-padding-x;
+$btn-padding-y-sm:            $btn-padding-y * 0.75;
+$btn-padding-x-sm:            $btn-padding-x * 0.75;
 $btn-font-size-sm:            $font-size-sm;
 
 $btn-padding-y-lg:            $btn-padding-y;
