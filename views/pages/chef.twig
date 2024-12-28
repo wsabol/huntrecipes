@@ -24,17 +24,19 @@
 
         <div class="col-lg-8">
 
-            {% if chef.wisdom %}
-                <div class="alert alert-light">
-                    <blockquote class="chef-quote-wrapper mb-0" >
-                        <i class="fa fa-quote-left"></i>
-                        <h3 class="chef-quote">{{ chef.wisdom }}</h3>
-                    </blockquote>
-                </div>
-            {% endif %}
-
             {% if chef.story or chef.faviroite_foods or chef.favorite_cuisine %}
                 <div class="content">
+
+                    {% if chef.wisdom %}
+                        <figure class="mb-4 mt-3">
+                            <blockquote class="blockquote">
+                                {{ chef.wisdom }}
+                            </blockquote>
+                            <figcaption class="blockquote-footer">
+                                {{ chef.name }}
+                            </figcaption>
+                        </figure>
+                    {% endif %}
 
                     {% if chef.story %}
                         <h4>{{ chef.is_male ? 'His' : 'Her' }} Story</h4>
@@ -57,7 +59,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h2 class="ribbon bright">{{ chef.name }}'s Favorites</h2>
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container" data-user-id="{{ chef.login_id }}">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container" data-user-id="{{ chef.user_id }}">
 
                     </div>
                 </div>

@@ -24,9 +24,8 @@ ul {
 }
 
 body {
-    font-size: $font-size-base;
-    font-family: $font-family-base;
-    color: $gray-800;
+    // font-size: $font-size-base;
+    // font-family: $font-family-base;
     background: url(../../assets/images/bgr/body.jpg) 0 0 repeat;
     overflow-x: hidden;
     word-wrap: break-word;
@@ -105,12 +104,26 @@ p:empty {
     text-transform: uppercase;
 }
 
+.btn-link {
+    box-shadow: none;
+    border-color: transparent;
+    border-radius: 0;
+}
+.btn-link:hover {
+    text-decoration: underline;
+    background-color: transparent;
+}
+
 .page-title {
     margin: 40px 0;
 }
 
 .text-bold {
     font-weight: $font-weight-bold;
+}
+
+.help-text {
+    color: $gray-700;
 }
 
 h2.ribbon {
@@ -151,29 +164,27 @@ h2.ribbon.bright {
     margin: 0 0 26px;
 }
 
-blockquote {
-    color: $gray-700;
-    padding: 1rem 0 1.25rem;
-    margin: 0 0 1.25rem;
-}
-
-blockquote i {
-    color: $primary;
-    font-size: 1.25rem !important;
-    margin-right: 5px;
-}
-
-.alert blockquote {
-    color: unset;
-}
-
-blockquote i {
-    color: unset;
-}
-
-blockquote .chef-quote {
-    display: inline;
+.blockquote {
     font-style: italic;
+}
+
+figure:has(> .blockquote) {
+    border-left: 2px solid $gray-700;
+    padding: 10px 15px 1px 15px;
+}
+
+.alert {
+    figure:has(> .blockquote) {
+        color: unset;
+        border-color: unset;
+    }
+    .blockquote {
+        color: unset;
+    }
+}
+
+.img-thumbnail {
+    background-color: $primary-600;
 }
 
 // breadcrumbs

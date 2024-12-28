@@ -64,17 +64,6 @@
     --#{$prefix}btn-active-border-color: #{shade-color($favorite, $btn-active-bg-shade-amount)};
 }
 
-// .btn-primary {
-//     --bs-btn-color: #fff;
-//     --bs-btn-hover-color: #fff;
-//     --bs-btn-active-color: #fff;
-//     --bs-btn-disabled-color: #dfdfdf;
-// }
-//
-// .btn-outline-primary {
-//     --bs-btn-hover-color: #fff;
-// }
-
 // Generate contextual modifier classes for colorizing the alert
 @each $state, $color in $theme-colors {
     .alert-#{$state} {

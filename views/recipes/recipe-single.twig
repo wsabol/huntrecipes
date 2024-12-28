@@ -31,7 +31,7 @@
         </div>
         <div class="col-lg-4">
             {% if recipe.image_filename != '/assets/images/recipes/generic_recipe.jpg' %}
-                <img style="width: 100%" class="mb-4" src="{{ recipe.image_filename }}" alt="{{ recipe.title }}"/>
+                <img style="width: 100%" class="img-thumbnail rounded mb-4" src="{{ recipe.image_filename }}" alt="{{ recipe.title }}"/>
             {% endif %}
         </div>
     </div>

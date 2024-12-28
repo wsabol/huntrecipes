@@ -128,6 +128,8 @@ class Navigation {
     public function get_main_nav(): array {
         $main_nav = [];
 
+        $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
         foreach ($this->_main_nav as $s) {
             $allowed = true;
             if (is_callable(@$s['permission'])) {
@@ -135,7 +137,7 @@ class Navigation {
             }
 
             if ($allowed) {
-                if (@$s['a_href'] == $_SERVER['REQUEST_URI']) {
+                if (@$s['a_href'] == $request_path) {
                     $s['is_active'] = true;
                 }
 

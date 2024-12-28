@@ -46,7 +46,7 @@ class Contact_Endpoint extends Common_Endpoint {
 
             $mailer->add_address($_ENV['EMAIL_CONTACT']);
             $mailer->add_reply_to($request->email);
-            $mailer->set_subject("HuntRecipes Support - $request->name - " . date('m/d/y'));
+            $mailer->set_subject("HuntRecipes Support - $request->name - " . date('n/j/Y'));
 
             // mail body setup
             $mailer->set_view('emails/support-contact.twig');
