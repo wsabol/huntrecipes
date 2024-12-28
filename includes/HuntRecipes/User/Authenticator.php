@@ -132,7 +132,7 @@ class Authenticator {
         from LoginSession
         where login_id = {$login_id}
         AND selector = '" . $this->conn->escape_string($selector) . "'
-        AND validator = '" . password_hash($validator, PASSWORD_BCRYPT) . "'
+        AND hashed_validator = '" . password_hash($validator, PASSWORD_BCRYPT) . "'
         ";
         $result = $this->conn->query($sel_query);
         if ($result === false) {

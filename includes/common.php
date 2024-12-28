@@ -38,10 +38,10 @@ ini_set("display_errors", IS_PRODUCTION ? 0 : 1);
  * @return string
  */
 function security_token(int $length = 40): string {
-    /* 40 char max security token */
+    // 40 char max security token
     try {
         return substr(bin2hex(random_bytes(20)), 0, $length);
-    } catch (\Throwable $t) {
+    } catch (Throwable) {
         return substr(sha1(md5(mt_rand())), 0, $length);
     }
 }

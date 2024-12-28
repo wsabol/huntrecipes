@@ -185,52 +185,45 @@ class Recipe_Endpoint extends Common_Endpoint {
         }
 
         switch ($request->action) {
-            case 'nothing-due':
-                return $this->set_nothing_due();
+            case 'set-favorite-recipe':
+                return $this->set_favorite_recipe($request);
 
             default:
-                echo $this->response([], 400, 'action is not recognized');
+                echo $this->response(message: "action not handled: {$request->action}");
                 return false;
         }
     }
 
-    private function set_nothing_due() {
+    private function set_favorite_recipe(object $request): bool {
         $data = array();
         $code = 400;
         $message = '';
 
         try {
 
-            $request = json_decode(file_get_contents('php://input'));
+            if (!isset($request->user_id)) {
+                throw new Exception("user_id is not set");
+            }
 
-            if (!isset($request->nmonth)) {
-                throw new Exception("nmonth is not set");
-            }
-            if (!isset($request->fyear)) {
-                throw new Exception("fyear is not set");
-            }
             if (!isset($request->recipe_id)) {
                 throw new Exception("recipe_id is not set");
             }
-            if (!isset($request->nothing_due)) {
-                throw new Exception("nothing_due is not set");
+
+            if (!isset($request->status)) {
+                throw new Exception("status is not set");
             }
-            $nothing_due = filter_var($request->nothing_due, FILTER_VALIDATE_BOOL);
 
             $conn = new SqlController();
             $recipe = new Recipe($request->recipe_id, $conn);
-            $success = $recipe->set_month_nothing_due(
-                $request->nmonth,
-                $request->fyear,
-                $nothing_due
-            );
+            $user_id = (int)$request->user_id;
+            $status = filter_var($request->status, FILTER_VALIDATE_BOOL);
 
-            if ($success) {
-                $code = 200;
-                $message = "Success setting nothing due";
-            } else {
-                $message = $conn->last_message();
-            }
+            $recipe->set_user_favorite($user_id, $status);
+            $data = $recipe->toObject();
+            $data->likes_count = $recipe->get_likes_count();
+
+            $message = "Successfully updated user favorite";
+            $code = 200;
 
         } catch (Exception $e) {
             $message = $e->getMessage();

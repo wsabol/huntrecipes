@@ -577,6 +577,43 @@ class Recipe extends Common_Object {
         return $users;
     }
 
+    public function set_user_favorite(int $user_id, bool $toggle_status = true): void {
+        if (!$toggle_status) {
+            $del_query = "
+            DELETE FROM UserRecipeFavorite
+            WHERE recipe_id = {$this->id}
+            AND user_id = {$user_id}
+            ";
+            $result = $this->conn->query($del_query);
+            if ($result === false) {
+                throw new SqlException("Error deleting favorite: " . $this->conn->last_message());
+            }
+            return;
+        }
+
+        $already_liked = $this->is_liked_by_user($user_id);
+
+        if ($already_liked) {
+            return;
+        }
+
+        $ins_query = "
+        INSERT INTO UserRecipeFavorite(
+                                       recipe_id,
+                                       user_id
+        )
+        VALUES(
+               $this->id,
+               $user_id
+        )
+        ";
+
+        $result = $this->conn->query($ins_query);
+        if ($result === false) {
+            throw new SqlException("Error adding recipe favorite: " . $this->conn->last_message());
+        }
+    }
+
     /**
      * @return Recipe[]
      * @throws SqlException
@@ -634,5 +671,16 @@ class Recipe extends Common_Object {
             $Recipe['child_count'] = count($RecipeChildren);
         }*/
 
+    }
+
+    public function is_liked_by_user(int $user_id): bool {
+        $del_query = "
+        SELECT *
+        FROM UserRecipeFavorite
+        WHERE recipe_id = {$this->id}
+        AND user_id = {$user_id}
+        ";
+        $result = $this->conn->query($del_query);
+        return $result->num_rows > 0;
     }
 }
