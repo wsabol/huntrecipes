@@ -73,7 +73,7 @@ class EmailVerification {
             throw new HuntRecipesException("Invalid user_id");
         }
 
-        $token = generateSecurityToken(24);
+        $token = security_token(24);
 
         $save_query = "
         INSERT INTO EmailVerification(

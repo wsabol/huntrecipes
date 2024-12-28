@@ -66,11 +66,11 @@ class Authenticator {
     }
 
     public function setPersistentLogin(int $login_id) {
-        $validator = generateSecurityToken();
+        $validator = security_token();
         $expires = time() + 3600 * 24 * 7;
 
         $uname_token = @$_COOKIE['uname_auth'];
-        $selector = generateSecurityToken(16);
+        $selector = security_token(16);
         if (!empty($uname_token)) {
             $selector = explode(":", $uname_token, 2)[0];
         }
