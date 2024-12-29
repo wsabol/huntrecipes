@@ -3,7 +3,7 @@
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
 use HuntRecipes\User\SessionController;
-use HuntRecipes\User\User;
+use HuntRecipes\Chef;
 
 require '../../../../includes/common.php';
 
@@ -36,26 +36,31 @@ class Account_Chef_Endpoint extends Common_Endpoint {
             if (!isset($request->user_id)) {
                 throw new Exception("user_id is not set");
             }
-
             if (!isset($request->name)) {
                 throw new Exception("name is not set");
             }
-
-            // todo finish this endpoint
+            if (!isset($request->is_male)) {
+                throw new Exception("is_male is not set");
+            }
+            if (!isset($request->favorite_foods)) {
+                throw new Exception("favorite_foods is not set");
+            }
+            if (!isset($request->story)) {
+                throw new Exception("story is not set");
+            }
+            if (!isset($request->wisdom)) {
+                throw new Exception("wisdom is not set");
+            }
 
             $conn = new SqlController();
-            $user = new User($request->user_id, $conn);
-            $user->name = $request->name;
+            $chef = Chef::from_user($request->user_id, $conn);
+            $chef->name = $request->name;
+            $chef->is_male = $request->is_male;
+            $chef->favorite_foods = $request->favorite_foods;
+            $chef->story = $request->story;
+            $chef->wisdom = $request->wisdom;
 
-            $new_email = ($user->email != $request->email);
-            $user->email = $request->email;
-
-            $user->save_to_db();
-
-            $sess = new SessionController();
-            $sess->start();
-            $sess->set_user($user);
-            $sess->close();
+            $chef->save_to_db();
 
             $message = "Successfully updated account";
             $code = 200;

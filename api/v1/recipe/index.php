@@ -220,6 +220,7 @@ class Recipe_Endpoint extends Common_Endpoint {
 
             $recipe->set_user_favorite($user_id, $status);
             $data = $recipe->toObject();
+            $data->liked = $status;
             $data->likes_count = $recipe->get_likes_count();
 
             $message = "Successfully updated user favorite";

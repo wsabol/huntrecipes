@@ -75,7 +75,7 @@
                          aria-labelledby="settings-tab"
                          tabindex="0">
 
-                        <div class="alert alert-error" style="display:none" id="alert-settings"></div>
+                        <div class="alert" style="display:none" id="alert-settings"></div>
 
                         <form id="frm-settings">
                             <input type="hidden" name="user_id" value="{{ current_user_id }}">
@@ -127,7 +127,9 @@
                          aria-labelledby="chef-tab"
                          tabindex="0">
 
-                        <form id="frm-settings">
+                        <div class="alert" style="display:none" id="alert-chef"></div>
+
+                        <form id="frm-chef">
                             <input type="hidden" name="user_id" value="{{ user.id }}">
 
                             <div class="mb-3">

@@ -20,8 +20,6 @@ $twig = new \Twig\Environment(
     )
 );
 
-// todo dynamically populate chef's favorites
-
 $conn = new SqlController();
 $page = new Page_Controller();
 $render_not_found = false;
@@ -84,7 +82,6 @@ $data->favorites = [];
 if ($data->user_id > 0) {
     $user = new User($data->user_id, $conn);
     $data->profile_picture = $user->profile_picture;
-    // $data->favorites = $user->
 }
 
 
