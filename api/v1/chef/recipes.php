@@ -3,6 +3,7 @@
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
 use HuntRecipes\Chef;
+use HuntRecipes\User\SessionController;
 
 require '../../../includes/common.php';
 
@@ -32,14 +33,29 @@ class Chef_Recipes_Endpoint extends Common_Endpoint {
 
             $request = (object)$_GET;
 
-            if (!$request->chef_id) {
-                throw new Exception("chef_id is not set");
+            $conn = new SqlController();
+            $chef = false;
+
+            if (isset($request->chef_id)) {
+                $chef = new Chef($request->chef_id, $conn);
+            }
+            elseif (isset($request->user_id)) {
+                $chef = Chef::from_user($request->user_id, $conn);
             }
 
-            $conn = new SqlController();
-            $chef = new Chef($request->chef_id, $conn);
+            if (!$chef) {
+                throw new Exception('chef not found. Expected valid chef_id or user_id');
+            }
 
-            $data = $chef->get_recipes();
+            $user_id = 0;
+            $sess = new SessionController();
+            if ($sess->has_user()) {
+                $user_id = $sess->user()->id;
+            }
+
+            $include_drafts = filter_var($request->include_drafts, FILTER_VALIDATE_BOOLEAN);
+
+            $data = $chef->get_recipes($user_id, $include_drafts);
 
             $code = 200;
 

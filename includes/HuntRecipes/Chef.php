@@ -214,7 +214,7 @@ class Chef extends Common_Object {
      * @return object[]
      * @throws SqlException
      */
-    public function get_recipes(): array {
+    public function get_recipes(int $current_user_id = 0, bool $included_drafts = false): array {
         $recipes = [];
 
         $sel_query = "
@@ -226,7 +226,7 @@ class Chef extends Common_Object {
                 WHERE u.recipe_id = r.id
             ), 0) as likes_count
         FROM Recipe r
-        WHERE r.published_flag = 1
+        WHERE " . ($included_drafts ? "1 = 1" : "r.published_flag = 1") . "
         AND r.chef_id = {$this->id}
         ";
 
@@ -239,7 +239,11 @@ class Chef extends Common_Object {
             $recipe = new Recipe($row->id, $this->conn);
 
             $data = $recipe->toObject();
-            $data->is_liked = true;
+            $data->is_liked = false;
+            if ($current_user_id > 0) {
+                $data->is_liked = $recipe->is_liked($current_user_id);
+            }
+
             $data->likes_count = $row->likes_count;
             $data->link = $recipe->get_link();
 
