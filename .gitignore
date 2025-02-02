@@ -30,5 +30,8 @@ css/*
 /css/*.css
 
 # assets
-assets/images/recipes/users
-assets/images/users
+/assets/images/recipes/*
+!/assets/images/recipes/index.php
+
+/assets/images/users/*
+!/assets/images/users/index.php
