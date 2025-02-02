@@ -28,3 +28,7 @@ js/*
 /js/*.map
 css/*
 /css/*.css
+
+# assets
+assets/images/recipes/users
+assets/images/users

@@ -1,8 +1,13 @@
 <?php
 
+use HuntRecipes\Chef;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
+use HuntRecipes\Endpoint\FileUploadController;
+use HuntRecipes\Ingredient;
+use HuntRecipes\Measure\Fraction;
 use HuntRecipes\Recipe;
+use HuntRecipes\RecipeIngredient;
 
 require '../../../includes/common.php';
 
@@ -42,64 +47,127 @@ class Recipe_Endpoint extends Common_Endpoint {
 
         try {
 
-            $request = json_decode(file_get_contents('php://input'));
+            $request = $this->get_request_data();
 
+            if (!isset($request->current_user_id)) {
+                throw new Exception("current_user_id is not set");
+            }
             if (!isset($request->recipe_id)) {
                 throw new Exception("recipe_id is not set");
             }
-            if (!isset($request->name)) {
-                throw new Exception("name is not set");
+            if (!isset($request->title)) {
+                throw new Exception("title is not set");
             }
-            if (!isset($request->company)) {
-                throw new Exception("company is not set");
+            if (!isset($request->course_id)) {
+                throw new Exception("course_id is not set");
             }
-            if (!isset($request->bill_type_id)) {
-                throw new Exception("bill_type_id is not set");
+            if (!isset($request->cuisine_id)) {
+                throw new Exception("cuisine_id is not set");
             }
-            if (!isset($request->day_of_month_due)) {
-                throw new Exception("day_of_month_due is not set");
+            if (!isset($request->type_id)) {
+                throw new Exception("type_id is not set");
             }
-            if (!isset($request->autopay_flag)) {
-                throw new Exception("autopay_flag is not set");
+            if (!isset($request->serving_count)) {
+                throw new Exception("serving_count is not set");
             }
-            if (!isset($request->login_id)) {
-                throw new Exception("login_id is not set");
+            if (!isset($request->serving_measure_id)) {
+                throw new Exception("serving_measure_id is not set");
             }
-            if (!isset($request->website)) {
-                throw new Exception("website is not set");
+
+            if (!isset($request->ingredients)) {
+                throw new Exception("ingredients is not set");
             }
-            if (!isset($request->username)) {
-                throw new Exception("username is not set");
+            $ingredients = json_decode($request->ingredients);
+            if (empty($ingredients)) {
+                throw new Exception("The recipe must have ingredients");
             }
-            if (!isset($request->date_opened)) {
-                throw new Exception("date_opened is not set");
+
+            if (!isset($request->instructions)) {
+                throw new Exception("current_user_id is not set");
             }
-            if (!isset($request->date_closed)) {
-                throw new Exception("date_closed is not set");
+            $instructions = json_decode($request->instructions);
+            if (empty($instructions)) {
+                throw new Exception("The recipe must have instructions");
             }
 
             $conn = new SqlController();
-            $recipe = new Recipe(0, $conn);
-            $recipe->id = $request->recipe_id;
-            $recipe->name = $request->name;
-            $recipe->company = $request->company;
-            $recipe->bill_type_id = (int)$request->bill_type_id;
-            $recipe->day_of_month_due = (int)$request->day_of_month_due;
-            $recipe->autopay_flag = filter_var($request->autopay_flag, FILTER_VALIDATE_BOOLEAN);
-            $recipe->login_id = (int)$request->login_id;
-            $recipe->website = $request->website;
-            $recipe->username = $request->username;
-            $recipe->date_opened = new DateTimeImmutable($request->date_opened);
-            $recipe->date_closed = empty($request->date_closed) ? null : new DateTimeImmutable($request->date_closed);
+            $recipe = new Recipe((int)$request->recipe_id, $conn);
+            $recipe->title = $request->title;
+            $recipe->course_id = (int)$request->course_id;
+            $recipe->cuisine_id = (int)$request->cuisine_id;
+            $recipe->type_id = (int)$request->type_id;
+            $recipe->serving_count = (new Fraction($request->serving_count))->decimal;
+            $recipe->serving_measure_id = (int)$request->serving_measure_id;
+            $recipe->instructions = implode("\n", array_values(array_filter($instructions, 'strlen')));
+
+            if ($recipe->id === 0) {
+                $chef = Chef::from_user((int)$request->current_user_id, $conn);
+                if (!$chef) {
+                    throw new Exception("Current user is not a chef");
+                }
+                $recipe->chef_id = $chef->id;
+            }
+
+            // handle file upload
+            if (isset($_FILES['recipe_image'])) {
+                $uploader = new FileUploadController('recipe_image');
+
+                // Check if it's an image or audio file
+                if (!$uploader->is_valid()) {
+                    throw new Exception("Error handling recipe image: " . $uploader->get_error());
+                }
+
+                // Check if it's an image or audio file
+                if (!$uploader->is_image()) {
+                    throw new Exception("Error handling recipe image: Only image files are allowed");
+                }
+
+                if (empty($errors)) {
+                    // Move file to permanent location
+                    $new_file = $uploader->move(Recipe::IMAGES_DIR);
+                    $recipe->image_filename = "/" . $new_file;
+                }
+            }
+
+            if (!empty($recipe->recipe_image)) {
+                $recipe->image_filename = $recipe->recipe_image;
+            }
 
             $success = $recipe->save_to_db();
+
+            if (!$success) {
+                throw new Exception("Failed to save recipe.");
+            }
+
+            $recipe_ingredients = [];
+            foreach ($ingredients as $ingredient) {
+                $i = Ingredient::create_from_name($ingredient->raw_ingredient_name, $conn);
+                $recipe_ingredients[] = RecipeIngredient::create(
+                    $conn,
+                    $recipe,
+                    $i,
+                    $ingredient->ingredient_prep,
+                    $ingredient->measure_id,
+                    (new Fraction($ingredient->amount))->decimal,
+                    filter_var($ingredient->optional, FILTER_VALIDATE_BOOL),
+                );
+            }
+
+            $success = $recipe->set_recipe_ingredients($recipe_ingredients);
 
             if ($success) {
                 $code = 200;
                 $message = "Success saving object";
             } else {
-                $message = $conn->last_message();
+                $message = "Error saving object";
             }
+
+            $data = $recipe->toObject();
+            $data->ingredients = $recipe->get_ingredients();
+            $data->instructions = $recipe->get_instructions();
+            $data->link = $recipe->get_link();
+            $data->likes_count = $recipe->get_likes_count();
+            $data->liked_by = $recipe->get_users_who_liked_this();
 
         } catch (Exception $e) {
             $message = $e->getMessage();

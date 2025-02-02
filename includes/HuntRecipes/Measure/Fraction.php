@@ -21,7 +21,7 @@ class Fraction {
      * @param mixed $numerator
      * @param mixed $denominator optional
      */
-    public function __construct($numerator, $denominator = null) {
+    public function __construct(mixed $numerator, mixed $denominator = null) {
 
         if ($numerator !== null && $denominator !== null) {
             // double argument invocation
@@ -32,42 +32,69 @@ class Fraction {
             ) {
                 $this->decimal = floatval(str_replace(",", "", $numerator)) / floatval(str_replace(",", "", $numerator));
             }
-
-        } elseif ($denominator === null) {
-            // single-argument invocation
-
-            $num = $numerator; // swap variable names for legibility
-            if ($num instanceof Fraction) {
-                $this->decimal = $num->decimal;
-
-            } elseif (is_numeric(str_replace(",", "", $num))) {  // just a straight number init
-                $this->decimal = floatval(str_replace(",", "", $num));
-
-            } elseif (is_numeric($num[0])) {
-
-                // hold the first and second part of the fraction, e.g. a = '1' and b = '2/3' in 1 2/3
-                // or a = '2/3' and b = undefined if we are just passed a single-part number
-                $arr = explode("-", $num, 2);
-                $a = isset($arr[0]) ? (int)@$arr[0] : null;
-                $b = isset($arr[1]) ? (int)@$arr[1] : null;
-
-                if (is_int($a) && $b !== null && str_contains($b, '/')) {
-                    // compound fraction e.g. 'A B/C'
-                    $this->decimal = floatval($a);
-                    $a = $this->add(new Fraction($b));
-                    $this->decimal = $a->decimal;
-
-                } elseif ($a !== null && str_contains($a, '/') && $b === null) {
-                    // simple fraction e.g. 'A/B'
-                    $f = explode("/", $a, 2);
-                    $this->decimal = floatval($f[0]) / floatval($f[1]);
-                } elseif ($a !== null && $b === null) {
-                    // just passed a number as a string
-                    $this->decimal = floatval($a);
-                }
+            else {
+                throw new \InvalidArgumentException("Invalid arguments provided for Fraction constructor ($numerator, $denominator)");
             }
+
+            $this->normalize();
+            return;
         }
+
+        // single-argument invocation
+
+        if ($numerator instanceof Fraction) {
+            $this->decimal = $numerator->decimal;
+            $this->normalize();
+            return;
+        }
+
+        $org_numerator = $numerator;
+
+        if (empty($numerator)) {
+            $numerator = 0;
+        }
+
+        $numerator = str_replace(",", "", $numerator);
+
+        if (is_numeric($numerator)) {
+            $this->decimal = floatval($numerator);
+            $this->normalize();
+            return;
+        }
+
+        // parse fraction
+        $sign = str_starts_with($numerator, '-') ? -1 : 1;
+        if ($sign === -1) {
+            $numerator = substr($numerator, 1);
+        }
+
+        if (!is_numeric(substr($numerator, 0, 1))) {
+            throw new \InvalidArgumentException("Unable to parse numerator ($org_numerator)");
+        }
+
+        // hold the first and second part of the fraction, e.g. a = '1' and b = '2/3' in 1 2/3
+        // or a = '2/3' and b = undefined if we are just passed a single-part number
+        $arr = explode("-", $numerator, 2);
+        $a = isset($arr[0]) ? @$arr[0] : null;
+        $b = isset($arr[1]) ? @$arr[1] : null;
+
+        if ((int)$a == $a && $b !== null && str_contains($b, '/')) {
+            // compound fraction e.g. 'A B/C'
+            $this->decimal = floatval($a);
+            $a = $this->add(new Fraction($b));
+            $this->decimal = $a->decimal;
+
+        } elseif ($a !== null && str_contains($a, '/') && $b === null) {
+            // simple fraction e.g. 'A/B'
+            $f = explode("/", $a, 2);
+            $this->decimal = floatval($f[0]) / floatval($f[1]);
+        } elseif ($a !== null && $b === null) {
+            // just passed a number as a string
+            $this->decimal = floatval($a);
+        }
+
         $this->normalize();
+        $this->sign = $sign;
     }
 
     public function __set($name, $value) {

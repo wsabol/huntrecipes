@@ -5,6 +5,7 @@ namespace HuntRecipes\Database;
 use HuntRecipes\Exception\SqlException;
 use mysqli;
 use mysqli_result;
+use mysqli_sql_exception;
 
 /**
  * HuntRecipes\Database\Mysql
@@ -51,8 +52,12 @@ class SqlController {
     public function query(string $sql_query_string) {
         @$this->clean();
 
-        $success = $this->db->multi_query($sql_query_string);
-        if (!$success) {
+        try {
+            $success = $this->db->multi_query($sql_query_string);
+            if (!$success) {
+                return false;
+            }
+        } catch (mysqli_sql_exception $e) {
             return false;
         }
 

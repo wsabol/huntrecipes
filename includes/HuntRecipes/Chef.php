@@ -209,4 +209,43 @@ class Chef extends Common_Object {
         $row = $result->fetch_object();
         return new self($row->chef_id, $conn);
     }
+
+    /**
+     * @return object[]
+     * @throws SqlException
+     */
+    public function get_recipes(): array {
+        $recipes = [];
+
+        $sel_query = "
+        SELECT
+            r.id,
+            IFNULL((
+                SELECT count(1)
+                FROM UserRecipeFavorite u
+                WHERE u.recipe_id = r.id
+            ), 0) as likes_count
+        FROM Recipe r
+        WHERE r.published_flag = 1
+        AND r.chef_id = {$this->id}
+        ";
+
+        $result = $this->conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting chef's recipes: " . $this->conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            $recipe = new Recipe($row->id, $this->conn);
+
+            $data = $recipe->toObject();
+            $data->is_liked = true;
+            $data->likes_count = $row->likes_count;
+            $data->link = $recipe->get_link();
+
+            $recipes[] = $data;
+        }
+
+        return $recipes;
+    }
 }

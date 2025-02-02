@@ -5,10 +5,12 @@ namespace HuntRecipes;
 use DateTimeImmutable;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
+use HuntRecipes\Exception\HuntRecipesException;
 use HuntRecipes\Exception\SqlException;
 use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
+    const IMAGES_DIR = 'assets/images/recipes';
     private SqlController $conn;
     public int $id;
     public int $course_id = 0;
@@ -17,7 +19,7 @@ class Recipe extends Common_Object {
     public int $chef_id = 0;
     public string $title;
     public string $instructions;
-    public string $image_filename = '/assets/images/recipes/generic_recipe.jpg';
+    public string $image_filename = 'assets/images/recipes/generic_recipe.jpg';
     public float $serving_count;
     public int $serving_measure_id = 0;
     public int $parent_recipe_id = 0;
@@ -284,16 +286,16 @@ class Recipe extends Common_Object {
                            parent_recipe_id,
                            published_flag
         ) VALUES (
-                  $this->course_id,
-                  $this->cuisine_id,
-                  $this->type_id,
-                  $this->chef_id,
-                  '" . $this->conn->escape_string($this->title) . "'
+                  {$this->course_id},
+                  {$this->cuisine_id},
+                  {$this->type_id},
+                  {$this->chef_id},
+                  '" . $this->conn->escape_string($this->title) . "',
                   '" . $this->conn->escape_string($this->instructions) . "',
                   '" . $this->conn->escape_string($this->image_filename) . "',
-                  $this->serving_count,
-                  $this->serving_measure_id,
-                  $this->parent_recipe_id,
+                  {$this->serving_count},
+                  {$this->serving_measure_id},
+                  {$this->parent_recipe_id},
                   " . ($this->published_flag ? 1 : 0) . "
         );
         
@@ -302,7 +304,7 @@ class Recipe extends Common_Object {
 
         if ($this->exists_in_db()) {
             $save_query = "
-            UPDATE  v
+            UPDATE Recipe
             SET course_id = $this->course_id,
                 cuisine_id = $this->cuisine_id,
                 type_id = $this->type_id,
@@ -682,5 +684,40 @@ class Recipe extends Common_Object {
         ";
         $result = $this->conn->query($del_query);
         return $result->num_rows > 0;
+    }
+
+    /**
+     * @param RecipeIngredient[] $recipe_ingredients
+     * @return bool
+     * @throws HuntRecipesException|SqlException
+     */
+    public function set_recipe_ingredients(array $recipe_ingredients): bool {
+
+        // recipe check
+        foreach ($recipe_ingredients as $recipe_ingredient) {
+            if ($recipe_ingredient->recipe_id != $this->id) {
+                throw new HuntRecipesException("This RecipeIngredient does not belong to this recipe");
+            }
+        }
+
+        // save
+        foreach ($recipe_ingredients as $recipe_ingredient) {
+            $recipe_ingredient->save_to_db();
+        }
+
+        // remove non matches
+        $existing_ids = [];
+        foreach ($recipe_ingredients as $recipe_ingredient) {
+            $existing_ids[] = $recipe_ingredient->id;
+        }
+
+        $del_query = "
+        DELETE FROM RecipeIngredient
+        WHERE recipe_id = {$this->id}
+        AND id not in(" . implode(',', $existing_ids) . ")
+        ";
+        $this->conn->query($del_query);
+
+        return true;
     }
 }
