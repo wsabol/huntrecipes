@@ -1,6 +1,7 @@
 <?php
 
 use HuntRecipes\Base\Page_Controller;
+use HuntRecipes\Chef;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Recipe;
 use HuntRecipes\User\SessionController;
@@ -97,9 +98,15 @@ $data->instructions = $recipe->get_instructions();
 $data->is_liked = false;
 $data->likes_count = $recipe->get_likes_count();
 $data->link = $recipe->get_link();
+$data->i_am_the_chef = false;
 $data->ingredient_columns = [];
 $data->liked_by = $recipe->get_users_who_liked_this();
 $data->children = [];
+
+if ($sess->has_user()) {
+    $chef = new Chef($recipe->chef_id, $conn);
+    $data->i_am_the_chef = $chef->user_id === $sess->user()->id;
+}
 
 $children = $recipe->get_child_recipes();
 foreach ($children as $child) {

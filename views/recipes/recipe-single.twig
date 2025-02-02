@@ -3,7 +3,7 @@
 {% extends 'base.twig' %}
 
 {% block page_title %}
-    <h1 class="page-title" style="margin-bottom:12px" data-recipe-id={{ recipe.id }}>{{ page_title }}</h1>
+    <h1 class="page-title" style="margin-bottom:12px" data-recipe-id={{ recipe.id }}>{{ page_title }}{{ recipe.published_flag ? '' : '&nbsp;<span class="badge bg-primary"><small>DRAFT</small></span>'|raw }}</h1>
 {% endblock %}
 
 {% block main_content %}
@@ -95,6 +95,14 @@
 
 
         <aside class="col-lg-3">
+
+            {% if recipe.i_am_the_chef %}
+                <div class="d-grid gap-2 mb-4">
+                    <a class="btn btn-secondary" href="/recipes/recipe/edit/?id={{ recipe.id }}" >
+                        <i class="fa fa-pencil"></i> Edit Recipe
+                    </a>
+                </div>
+            {% endif %}
 
             {% if current_user_id > 0 %}
                 <div class="d-grid gap-2 mb-4">
