@@ -17,8 +17,7 @@ $twig = new \Twig\Environment(
     )
 );
 
-// todo search by ingredients
-// todo ingredient search suggestions
+// todo add photo to recipe modal
 
 // Page title
 $page_title = "Recipes";

@@ -65,6 +65,7 @@ class Recipe extends Common_Object {
         $course_id = @$props->course_id ?? 0;
         $cuisine_id = @$props->cuisine_id ?? 0;
         $chef_id = @$props->chef_id ?? 0;
+        $ingredients = @$props->ingredients ?? [];
 
         $current_user_id = 0;
         $sess = new SessionController();
@@ -72,6 +73,21 @@ class Recipe extends Common_Object {
 
         if ($sess->has_user()) {
             $current_user_id = $sess->user()->id;
+        }
+
+        $ingredient_sql = "";
+        if (!empty($ingredients)) {
+            $ingredient_sql = "
+            AND r.id IN (
+                SELECT ri.recipe_id
+                FROM RecipeIngredient ri
+                JOIN Ingredient i
+                ON ri.ingredient_id = i.id
+                WHERE i.name IN(
+                    " . implode(',', array_map(fn($v) => "'" . $conn->escape_string($v) . "'", $ingredients)) . "
+                )
+            )
+            ";
         }
 
         $sel_query = "
@@ -99,6 +115,7 @@ class Recipe extends Common_Object {
             ON urf.recipe_id = r.id
             AND urf.user_id = $current_user_id
         WHERE r.published_flag = 1
+          $ingredient_sql
         AND CASE WHEN $recipe_type_id = 0 THEN 1 WHEN $recipe_type_id = r.type_id THEN 1 ELSE 0 END = 1
         AND CASE WHEN $course_id = 0 THEN 1 WHEN $course_id = r.course_id THEN 1 ELSE 0 END = 1
         AND CASE WHEN $cuisine_id = 0 THEN 1 WHEN $cuisine_id = r.cuisine_id THEN 1 ELSE 0 END = 1

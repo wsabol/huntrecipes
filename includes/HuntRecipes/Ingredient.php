@@ -145,6 +145,36 @@ class Ingredient extends Common_Object {
         return $data;
     }
 
+    public static function top(SqlController $conn, array $props): array {
+        $props = (object)$props;
+
+        $sel_query = "
+        select i.name, ROUND(count(1) / 10) as order_by
+        from Ingredient i
+        JOIN RecipeIngredient ri
+        ON ri.ingredient_id = i.id
+        WHERE i.name not in ('salt')
+        group by i.name
+        HAVING count(1) > 1
+        ORDER BY round(count(1) / 10) DESC, i.name
+        ";
+        // echo $sel_query;
+        $data = [];
+
+        $result = $conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error getting ingredients: " . $conn->last_message());
+        }
+
+        while ($row = $result->fetch_object()) {
+            $data[] = (object)[
+                'name' => $row->name,
+            ];
+        }
+
+        return $data;
+    }
+
     public static function create_from_name(string $name, SqlController $conn): self {
         $name = strtolower($name);
 

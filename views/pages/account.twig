@@ -145,19 +145,19 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="wisdom" class="form-label">Favorite Food</label>
-                                <textarea class="form-control" rows="2" name="favorite_foods" >{{ chef.favorite_foods }}</textarea>
+                                <label for="favorite_foods" class="form-label">Favorite Food</label>
+                                <textarea class="form-control" rows="2" name="favorite_foods" id="favorite_foods"  >{{ chef.favorite_foods }}</textarea>
                             </div>
 
                             <div class="mb-3">
                                 <label for="wisdom" class="form-label">Favorite Quote</label>
-                                <textarea class="form-control" rows="2" name="wisdom" >{{ chef.wisdom }}</textarea>
+                                <textarea class="form-control" rows="2" name="wisdom" id="wisdom" >{{ chef.wisdom }}</textarea>
                             </div>
 
                             <h4>Your Story</h4>
                             <div class="mb-3">
-                                <label for="story" class="form-label">How do you related to the Hunt's? How did you get here?</label>
-                                <textarea class="form-control" rows="3" name="story" >{{ chef.story }}</textarea>
+                                <label id="story" for="story" class="form-label">How do you related to the Hunt's? How did you get here?</label>
+                                <textarea class="form-control" rows="3" name="story" id="story"  >{{ chef.story }}</textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary mb-3">Update Chef Profile</button>

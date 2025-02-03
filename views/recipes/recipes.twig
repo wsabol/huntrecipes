@@ -46,6 +46,14 @@
                                 <option value=0>Any Chef</option>
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="ingredients" class="form-label">Ingredients</label>
+                            <select class="form-select" id="ingredients" name="ingredients[]" multiple data-allow-clear="true" >
+                                <option selected disabled hidden value="">Choose an ingredient...</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid tag.</div>
+                        </div>
                     </form>
 
                     <div class="mt-4 d-grid gap-2">

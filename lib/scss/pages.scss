@@ -59,6 +59,24 @@
     pointer-events: none;
 }
 
+.form-control-focus {
+    color: $dark;
+    background-color: $white;
+    border-color: $blue-200;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.was-validated :valid + .form-control-focus {
+    border-color: $green-700;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.was-validated :invalid + .form-control-focus {
+    border-color: $red-600;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
 // home
 
 .boxed-widget {
