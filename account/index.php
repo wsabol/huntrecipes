@@ -37,7 +37,6 @@ $breadcrumbs = array(
     ),
 );
 
-// todo forgot password
 // todo reset password
 // todo Chef application
 // todo dev utilities

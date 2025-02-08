@@ -249,9 +249,11 @@
                     <tr>
                         <td width="32" style="width: 32px; background-color: #fff;">&nbsp;</td>
                         <td bgcolor="#ffffff" style="background-color: #fff;">
-                            <div class="spacer-md">&nbsp;</div>
-                            <div class="h1">{{ subject }}</div>
-                            <div class="spacer-md">&nbsp;</div>
+                            {% if include_subject_header %}
+                                <div class="spacer-md">&nbsp;</div>
+                                <div class="h1">{{ subject }}</div>
+                                <div class="spacer-md">&nbsp;</div>
+                            {% endif %}
                             {% block content %}{% endblock %}
                         </td>
                         <td width="32" style="width: 32px; background-color: #fff;">&nbsp;</td>
@@ -265,10 +267,12 @@
                         <td class="footer_text">
                             <div class="spacer">&nbsp;</div>
                             {% block footer_reason %}
-                                <div class="p">This is an automated email from <a href="https://huntrecipes.willsabol.com">HuntRecipes</a>.</div>
+                                <div class="p">This is an automated email from
+                                    <a href="https://huntrecipes.willsabol.com">HuntRecipes</a>. Please do not reply
+                                    to this email as this address is not monitored.</div>
                                 <div class="spacer-xs">&nbsp;</div>
                             {% endblock %}
-                            <div class="p"><a href="https://willsabol.com">Will Sabol</a></div>
+                            <div class="p">© {{ 'now' | date('Y') }} <a href="https://willsabol.com">Will Sabol</a></div>
                             <div class="spacer">&nbsp;</div>
                         </td>
                         <td width="32" style="width: 32px;">&nbsp;</td>

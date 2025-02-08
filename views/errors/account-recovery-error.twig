@@ -1,0 +1,30 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="error-container">
+                <div class="error_type">🤔</div>
+                <div class="error_text">Uh Oh! What happened...</div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="content">
+                <p>Something strange has happened. </p>
+                <p class="mb-4">If you believe that this is an error, please <a href="/contact/">contact us</a>!
+                    In the meantime, <a href="/account/identify/">start over</a> and try your account recovery again.</p>
+                <a href="/account/identify/" class="btn btn-primary btn-lg">Start Over</a>
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

@@ -10,7 +10,6 @@ use HuntRecipes\Exception\SqlException;
 use HuntRecipes\Recipe;
 
 class User extends Common_Object {
-
     private SqlController $conn;
     public int $id;
     public string $name;
@@ -167,10 +166,12 @@ class User extends Common_Object {
     }
 
     /**
+     * @param SqlController $conn
+     * @param string $email
      * @return false|User
      * @throws SqlException
      */
-    public static function create_from_email(SqlController $conn, string $email) {
+    public static function create_from_email(SqlController $conn, string $email): self|false {
         $sel_query = "
         select id
         from User

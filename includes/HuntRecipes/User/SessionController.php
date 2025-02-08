@@ -2,6 +2,8 @@
 
 namespace HuntRecipes\User;
 
+use JetBrains\PhpStorm\NoReturn;
+
 /**
  * Session controller. Controls $_SESSION status and contents
  */
@@ -154,7 +156,7 @@ class SessionController {
 
         $auth = new Authenticator();
 
-        if (!$auth->validateLoginCookie(@$_COOKIE['uname_auth'])) {
+        if (!Authenticator::validateLoginCookie(@$_COOKIE['uname_auth'])) {
             return;
         }
 
@@ -210,4 +212,9 @@ class SessionController {
         $this->destroy();
     }
 
+    #[NoReturn] public function page_redirect(string $path): void {
+        http_response_code(302);
+        header("Location: $path");
+        exit();
+    }
 }

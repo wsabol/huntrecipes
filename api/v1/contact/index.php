@@ -1,5 +1,6 @@
 <?php
 
+use HuntRecipes\Base\Email_Controller;
 use HuntRecipes\Endpoint\Common_Endpoint;
 
 require '../../../includes/common.php';
@@ -42,7 +43,7 @@ class Contact_Endpoint extends Common_Endpoint {
                 throw new Exception("message is not set");
             }
 
-            $mailer = new \HuntRecipes\Base\Email_Controller();
+            $mailer = new Email_Controller();
 
             $mailer->add_address($_ENV['EMAIL_CONTACT']);
             $mailer->add_reply_to($request->email);

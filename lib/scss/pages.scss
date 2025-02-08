@@ -303,3 +303,20 @@
 .btn-instruction-remove {
     padding: 4px 8px;
 }
+
+// 6-digit input
+
+.digit-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 40px 20px;
+}
+.digit-input {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    border: 1px solid $gray-300;
+    border-radius: 4px;
+}

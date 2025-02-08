@@ -4,6 +4,8 @@ namespace HuntRecipes\User;
 
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
+use Random\RandomException;
+use Throwable;
 
 class Authenticator {
     public SqlController $conn;
@@ -57,7 +59,7 @@ class Authenticator {
         }
     }
 
-    public function validateLoginCookie(?string $uname_token): bool {
+    public static function validateLoginCookie(?string $uname_token): bool {
         if (empty($uname_token)) {
             return false;
         }
@@ -87,10 +89,10 @@ class Authenticator {
      * @param string $selector
      * @param string $validator
      * @param string $expires
-     * @return bool
+     * @return void
      * @throws SqlException
      */
-    private function update_login_token(int $login_id, string $selector, string $validator, string $expires): bool {
+    private function update_login_token(int $login_id, string $selector, string $validator, string $expires): void {
         $hashed = password_hash($validator, PASSWORD_BCRYPT);
         $sql_expires = date('Y-m-d H:i:s', $expires);
 
@@ -123,7 +125,6 @@ class Authenticator {
         if ($updResult === false) {
             throw new SqlException('Error saving LoginSession: ' . $this->conn->last_message());
         }
-        return true;
     }
 
     private function login_token_exists(int $login_id, string $selector, string $validator): bool {

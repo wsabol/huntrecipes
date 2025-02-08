@@ -41,7 +41,7 @@ class Auth_PersistentLogin_Endpoint extends Common_Endpoint {
 
             $uname_auth = $request->uname_auth;
 
-            if (!$auth->validateLoginCookie($uname_auth)) {
+            if (!Authenticator::validateLoginCookie($uname_auth)) {
                 throw new Exception("uname_auth is not valid");
             }
 

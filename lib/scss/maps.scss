@@ -4,7 +4,7 @@
 
 @each $color, $value in $theme-colors {
     .btn-#{$color} {
-        @if $color == "light" {
+        @if $color == "light" or $color == "white" {
             @include button-variant(
                             $value,
                             $value,
@@ -41,11 +41,11 @@
 
         @if $color == "primary" or $color == "success" or $color == "info" or $color == "favorite" {
             @include button-outline-variant(
-                        $value,
-                    $color-hover: $white,
-                    $active-color: $white
-        );
-    } @else {
+                $value,
+                $color-hover: $white,
+                $active-color: $white
+            );
+        } @else {
             @include button-outline-variant($value);
         }
     }

@@ -23,20 +23,10 @@ $twig = new \Twig\Environment(
     )
 );
 
-$page_title = "Sign In";
+$page_title = "Account Identification";
 
 // Breadcrumbs.
 $breadcrumbs = array(
-    array(
-        'name' => 'Home',
-        'link' => '/home/',
-        'current_page' => false,
-    ),
-    array(
-        'name' => 'My Account',
-        'link' => '/account/',
-        'current_page' => false,
-    ),
     array(
         'name' => $page_title,
         'link' => '#',
@@ -44,14 +34,11 @@ $breadcrumbs = array(
     ),
 );
 
-$request_uri = trim((string)@$_GET['ref']);
-
 // Template variables.
 $page = new Page_Controller();
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
-    'request_uri' => $request_uri,
     'email' => @$_GET['email']
 ]);
 
 // Render view.
-echo $twig->render('pages/sign-in.twig', $context);
+echo $twig->render('pages/account-identify.twig', $context);
