@@ -3,6 +3,10 @@
 
 {% block main_content %}
 
+    {% set email_alert = user.is_email_verified == 0
+        ? user.has_open_email_verification ? 'wait' : 'email'
+        : 'none' %}
+
     <div class="row">
 
         <!--profile left part-->
@@ -24,7 +28,7 @@
 
         <div class="col-lg-9">
 
-            <div class="content">
+            <div class="content email-alert-{{ email_alert }}" id="my-account-content">
 
                 <ul class="nav nav-pills nav-fill mb-4">
                     <li class="nav-item">
@@ -68,6 +72,7 @@
                                 aria-selected="{{ goto == 'recipes' ? 'true' : 'false' }}">My Recipes</button>
                     </li>
                 </ul>
+
                 <div class="tab-content" >
                     <div class="tab-pane fade {{ goto == '' or goto == 'settings' ? 'show active' : '' }}"
                          id="settings-tab-pane"
@@ -88,26 +93,26 @@
                             <div class="mb-4">
                                 <label for="name" class="form-label">Email</label>
                                 <input required type="email" class="form-control" name="email" placeholder="Email" aria-label="Email" value="{{ user.email }}">
+                                <div class="text-success m-1 email-verified"><i class="fa fa-check"></i> Verified</div>
+                                <div class="text-warning m-1 email-unverified"><i class="fa fa-warning"></i> Unverified</div>
                             </div>
 
                             <button type="submit" class="btn btn-primary mb-3">Update Account</button>
                         </form>
 
-                        {% if user.is_email_verified == 0 and user.has_open_email_verification %}
-                            <div class="alert alert-success" id="alert-verification-email">
-                                <h4>Please check your email</h4>
-                                <p>We emailed you a link to verify your account.</p>
-                            </div>
-                        {% elseif user.is_email_verified == 0 %}
-                            <div class="alert alert-warning" id="alert-verification-email">
-                                <p>Please verify your account</p>
-                                <button class="btn btn-warning btn-verify-email">Send Verification Email</button>
-                            </div>
-                            <div class="alert alert-success" id="alert-verification-email-sent" style="display:none">
-                                <h4>Verification link sent!</h4>
-                                <p>Follow the instructions in the email to verify your account.</p>
-                            </div>
-                        {% endif %}
+                        <div class="alert alert-success alert-verification" id="alert-verification-wait">
+                            <h4>Please check your email</h4>
+                            <p>We emailed you a link to verify your account.</p>
+                            <button class="btn btn-secondary btn-verify-email">Send Another Verification Email</button>
+                        </div>
+                        <div class="alert alert-warning alert-verification" id="alert-verification-email">
+                            <p>Please verify your account</p>
+                            <button class="btn btn-secondary btn-verify-email">Send Verification Email</button>
+                        </div>
+                        <div class="alert alert-success alert-verification" id="alert-verification-email-sent">
+                            <h4>Verification link sent!</h4>
+                            <p>Follow the instructions in the email to verify your account.</p>
+                        </div>
 
                     </div>
                     <div class="tab-pane fade {{ goto == 'favorites' ? 'show active' : '' }}"

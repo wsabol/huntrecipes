@@ -10,12 +10,16 @@
     <!--row-->
     <div class="row">
         <div class="col-lg-4 offset-lg-4">
-
-            <div class="alert alert-{{ alert }}" >
-                <h4>{{ heading }}</h4>
-                <p>{{ message }}</p>
+            <div class="card">
+                <h5 class="card-header text-{{ alert }}">{{ heading }}</h5>
+                <div class="card-body">
+                    <p>{{ message }}</p>
+                </div>
+                <div class="card-footer">
+                    <p><a href="/home/">Go Home</a></p>
+                    <p><a href="/account/">Go to My Account</a></p>
+                </div>
             </div>
-
         </div>
     </div>
     <!--//row-->

@@ -2,6 +2,7 @@
 
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
+use HuntRecipes\User\EmailVerification;
 use HuntRecipes\User\SessionController;
 use HuntRecipes\User\User;
 
@@ -47,30 +48,31 @@ class Account_User_Endpoint extends Common_Endpoint {
 
             $conn = new SqlController();
             $user = new User($request->user_id, $conn);
-            $user->name = $request->name;
-            $user->save_to_db();
 
+            $data = $user->toObject();
             $is_new_email = ($user->email != $request->email);
 
             if (!$user->is_safe_to_change_email_to($request->email)) {
+                $data->is_new_email = false;
                 throw new Exception("This email is already in use by another account");
             }
 
+            $user->name = $request->name;
             $user->email = $request->email;
             $user->save_to_db();
 
             if ($is_new_email) {
                 $user->is_email_verified = false;
                 $user->save_to_db();
-
-                // send_email_verification
-                $user->send_email_verification();
             }
 
             $sess = new SessionController();
             $sess->start();
             $sess->set_user($user);
             $sess->close();
+
+            $data = $user->toObject();
+            $data->is_new_email = $is_new_email;
 
             $message = "Successfully updated account";
             $code = 200;

@@ -48,35 +48,41 @@ $breadcrumbs = array(
 
 $page = new Page_Controller();
 $request = (object)$_GET;
-$stoken = (string)@$request->stoken;
+$hashed_token = (string)@$request->hash;
 
 try {
 
-    if (empty($stoken)) {
-        $context['alert'] = 'warning';
+    if (empty($hashed_token)) {
+        $context['alert'] = 'error';
         $context['heading'] = "How did you get here?";
         throw new Exception("If you feel you were brought here by mistake, please contact us and we'll figure out what happened.");
     }
 
     $conn = new SqlController();
-    $ev = EmailVerification::from_secure_token($stoken, $conn);
+    $ev = EmailVerification::from_hashed_token($hashed_token, $conn);
 
     if ($ev === false) {
-        $context['alert'] = 'info';
+        $context['alert'] = 'error';
         $context['heading'] = "Hmm... Something is wrong with your link";
         throw new Exception("Sign in to your account and try sending a new verification.");
     }
 
     if ($ev->is_used) {
-        $context['alert'] = 'warning';
-        $context['heading'] = "This link has already been verified";
-        throw new Exception("");
+        $context['alert'] = 'error';
+        $context['heading'] = "This link was already used";
+        throw new Exception("Check your account to see if you are already verified.");
     }
 
     if ($ev->is_expired()) {
         $context['alert'] = 'error';
         $context['heading'] = "This link has expired";
         throw new Exception("Sign in to your account and send a new verification.");
+    }
+
+    if ($ev->email != $sess->user()->email) {
+        $context['alert'] = 'error';
+        $context['heading'] = "This link has expired";
+        throw new Exception("Your email has changed. Sign in to your account and send a new verification.");
     }
 
     $ev->is_used = true;
@@ -100,7 +106,7 @@ try {
 
 }
 catch (Exception $e) {
-    $context['alert'] = $context['alert'] ?? 'warning';
+    $context['alert'] = $context['alert'] ?? 'error';
     $context['heading'] = $context['heading'] ?? 'Something went wrong';
     $context['message'] = $e->getMessage();
 }

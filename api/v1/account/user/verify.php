@@ -42,6 +42,9 @@ class Account_User_Verify_Endpoint extends Common_Endpoint {
             if (!$user->is_enabled()) {
                 throw new Exception("Account is not enabled");
             }
+            if ($user->is_email_verified) {
+                throw new Exception("Account is already verified");
+            }
 
             $user->send_email_verification();
 

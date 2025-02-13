@@ -320,3 +320,45 @@
     border: 1px solid $gray-300;
     border-radius: 4px;
 }
+
+// account
+
+#my-account-content {
+    .alert-verification, .email-verified, .email-unverified {
+        display: none;
+    }
+}
+
+#my-account-content.email-alert-email {
+    .email-unverified {
+        display: block;
+    }
+    #alert-verification-email {
+        display: block;
+    }
+}
+
+#my-account-content.email-alert-wait {
+    .email-unverified {
+        display: block;
+    }
+    #alert-verification-wait {
+        display: block;
+    }
+}
+
+#my-account-content.email-alert-email-sent {
+    .email-unverified {
+        display: block;
+    }
+    #alert-verification-email-sent {
+        display: block;
+    }
+}
+
+#my-account-content.email-alert-none {
+    .email-verified {
+        display: block;
+    }
+}
+
