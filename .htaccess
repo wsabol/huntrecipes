@@ -8,6 +8,9 @@ RedirectMatch 403 ^/.git/.*$
 
 # 404
 ErrorDocument 404 /error/404/
+<If "%{REQUEST_URI} =~ m#^/api/v1/#">
+    ErrorDocument 404 /api/v1/system/errors/404.php?request_uri=%{REQUEST_URI}
+</If>
 
 ####################
 # MAINTENANCE MODE
