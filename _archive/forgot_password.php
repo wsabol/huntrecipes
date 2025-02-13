@@ -5,8 +5,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 @session_write_close();
 
-require_once('_user_contact.php');
-
 if ( @$_SESSION['Login']['id'] > 0 ) {
   // you are already logged in
   header('Location: /');

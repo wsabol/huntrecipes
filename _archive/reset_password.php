@@ -5,7 +5,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 @session_write_close();
 
-require_once('_user_contact.php');
 
 /*
 resetDisplayCode
