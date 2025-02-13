@@ -32,7 +32,7 @@ while ( $row = $result->fetch_assoc() ) {
         <?php
         for ( $i = 0; $i < count($Ingr); $i++ ) {
           ?>
-          <tr><td><?=$Ingr[$i]['amount']?></td><td><?=$Ingr[$i]['measure']?></td><td><a href="/recipes/recipe/?id=<?=$Ingr[$i]['recipe_id']?>" target="_blank"><?=$Ingr[$i]['recipe_id']?></a></td></tr>
+          <tr><td><?=$Ingr[$i]['amount']?></td><td><?=$Ingr[$i]['measure']?></td><td><a href="/recipes/recipe?id=<?=$Ingr[$i]['recipe_id']?>" target="_blank"><?=$Ingr[$i]['recipe_id']?></a></td></tr>
           <?php
         }
         ?>
