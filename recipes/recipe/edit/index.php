@@ -52,8 +52,7 @@ try {
         throw new Exception();
     }
 
-    $chef = new Chef($recipe->chef_id, $conn);
-    if ($chef->user_id !== $sess->user()->id) {
+    if ($recipe->chef_id !== $sess->user()->chef_id) {
         $render_access_denied = true;
         throw new Exception();
     }
@@ -149,7 +148,8 @@ else {
 }
 
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
-    'recipe' => (array)$data
+    'recipe' => (array)$data,
+    'chef_id' => $sess->user()->chef_id
 ]);
 
 // Render view.

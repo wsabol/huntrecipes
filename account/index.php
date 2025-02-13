@@ -3,6 +3,8 @@
 use HuntRecipes\Base\Page_Controller;
 use HuntRecipes\Chef;
 use HuntRecipes\Database\SqlController;
+use HuntRecipes\User\ChefApplication;
+use HuntRecipes\User\ChefRelation;
 use HuntRecipes\User\SessionController;
 use HuntRecipes\User\User;
 
@@ -37,8 +39,7 @@ $breadcrumbs = array(
     ),
 );
 
-// todo reset password
-// todo Chef application
+// todo reset password. 1. Send OTP. 2. Input it along with new password. 3. Done
 // todo dev utilities
 
 $conn = new SqlController();
@@ -47,20 +48,36 @@ $conn = new SqlController();
 $user_controller = new User($sess->user()->id, $conn);
 $sess->set_user($user_controller);
 
+// get chef
 $chef = false;
-
 if ($sess->user()->is_chef) {
-    $chef = Chef::from_user($sess->user()->id, $conn);
+    $chef = new Chef($sess->user()->chef_id, $conn);
 }
 
+// get user
 $user = $sess->user()->toObject();
 $user->has_open_email_verification = $sess->user()->has_open_email_verification();
+
+// get chef application
+$chef_app = false;
+if ($user->chef_application_id > 0) {
+    $app = new ChefApplication($sess->user()->chef_application_id, $conn);
+    if (!$app->is_deleted) {
+        $chef_app = $app->toObject();
+        $chef_app->relationship_name = ChefRelation::get_name($chef_app->relationship);
+    }
+}
+
+// get relationships
+$relationships = ChefRelation::list();
 
 // Template variables.
 $page = new Page_Controller();
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
     'user' => $user,
     'chef' => $chef,
+    'chef_app' => $chef_app,
+    'relationships' => $relationships,
     'goto' => @$_GET['goto'] ?? ""
 ]);
 

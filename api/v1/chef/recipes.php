@@ -4,6 +4,7 @@ use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
 use HuntRecipes\Chef;
 use HuntRecipes\User\SessionController;
+use HuntRecipes\User\User;
 
 require '../../../includes/common.php';
 
@@ -40,7 +41,11 @@ class Chef_Recipes_Endpoint extends Common_Endpoint {
                 $chef = new Chef($request->chef_id, $conn);
             }
             elseif (isset($request->user_id)) {
-                $chef = Chef::from_user($request->user_id, $conn);
+                $user = new User($request->user_id, $conn);
+                if (!$user->is_chef || $user->chef_id === 0) {
+                    throw new Exception('User is not a chef');
+                }
+                $chef = new Chef($user->chef_id, $conn);
             }
 
             if (!$chef) {

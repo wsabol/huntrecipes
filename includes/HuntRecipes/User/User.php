@@ -16,10 +16,11 @@ class User extends Common_Object {
     public string $email;
     public int $account_status_id;
     public string $profile_picture;
-    public int $chef_app_pending;
-    public bool $is_chef;
+    public int $chef_application_id = 0;
+    public int $chef_id = 0;
+    public bool $is_chef = false;
     public bool $is_developer = false;
-    public bool $is_email_verified;
+    public bool $is_email_verified = false;
     public DateTimeImmutable $date_created;
 
     private string $password;
@@ -43,7 +44,8 @@ class User extends Common_Object {
             $this->email = $row->email;
             $this->account_status_id = $row->account_status_id;
             $this->profile_picture = $row->profile_picture;
-            $this->chef_app_pending = $row->chef_app_pending;
+            $this->chef_application_id = $row->chef_application_id;
+            $this->chef_id = $row->chef_id;
             $this->is_chef = (bool)$row->is_chef;
             $this->is_developer = (bool)$row->is_developer;
             $this->is_email_verified = (bool)$row->is_email_verified;
@@ -99,7 +101,8 @@ class User extends Common_Object {
                          password,
                          account_status_id,
                          profile_picture,
-                         chef_app_pending,
+                         chef_application_id,
+                         chef_id,
                          is_chef,
                         is_developer,
                         is_email_verified
@@ -109,7 +112,8 @@ class User extends Common_Object {
                   '" . $this->conn->escape_string($this->password) . "',
                   {$this->account_status_id},
                   '{$this->profile_picture}',
-                  {$this->chef_app_pending},
+                  {$this->chef_application_id},
+                  {$this->chef_id},
                   " . ($this->is_chef ? 1 : 0) .",
                   " . ($this->is_developer ? 1 : 0) .",
                   " . ($this->is_email_verified ? 1 : 0) ."
@@ -125,7 +129,8 @@ class User extends Common_Object {
                 email = '" . $this->conn->escape_string($this->email) . "',
                 account_status_id = {$this->account_status_id},
                 profile_picture = '{$this->profile_picture}',
-                chef_app_pending = {$this->chef_app_pending},
+                chef_application_id = {$this->chef_application_id},
+                chef_id = {$this->chef_id},
                 is_chef = " . ($this->is_chef ? 1 : 0) .",
                 is_developer = " . ($this->is_developer ? 1 : 0) .",
                 is_email_verified = " . ($this->is_email_verified ? 1 : 0) ."
@@ -248,9 +253,12 @@ class User extends Common_Object {
     }
 
     public function send_email_verification(): void {
-        $mailer = new Email_Controller();
-        $ev = EmailVerification::new_token($this->id, $this->conn);
+        $ev = new EmailVerification(0, $this->conn);
+        $ev->user_id = $this->id;
+        $ev->email = $this->email;
+        $ev->save_to_db();
 
+        $mailer = new Email_Controller();
         $mailer->add_address($this->email);
         $mailer->set_subject("New HuntRecipes Email Verification");
 
@@ -259,7 +267,7 @@ class User extends Common_Object {
         $mailer->set_message_context([
             'subject' => $mailer->get_subject(),
             'pre_text' => 'Please Verify Your Account',
-            'stoken' => $ev->get_secure_token()
+            'hashed_token' => $ev->get_hashed_token()
         ]);
 
         // send
@@ -267,6 +275,6 @@ class User extends Common_Object {
     }
 
     public function has_open_email_verification(): bool {
-        return !empty(EmailVerification::list_active_tokens_for_user($this->id, $this->conn));
+        return !empty(EmailVerification::list_active_tokens_for_user($this->id, $this->email, $this->conn));
     }
 }

@@ -49,8 +49,8 @@ class Recipe_Endpoint extends Common_Endpoint {
 
             $request = $this->get_request_data();
 
-            if (!isset($request->current_user_id)) {
-                throw new Exception("current_user_id is not set");
+            if (!isset($request->chef_id)) {
+                throw new Exception("chef_id is not set");
             }
             if (!isset($request->recipe_id)) {
                 throw new Exception("recipe_id is not set");
@@ -83,7 +83,7 @@ class Recipe_Endpoint extends Common_Endpoint {
             }
 
             if (!isset($request->instructions)) {
-                throw new Exception("current_user_id is not set");
+                throw new Exception("instructions is not set");
             }
             $instructions = json_decode($request->instructions);
             if (empty($instructions)) {
@@ -99,14 +99,7 @@ class Recipe_Endpoint extends Common_Endpoint {
             $recipe->serving_count = (new Fraction($request->serving_count))->decimal;
             $recipe->serving_measure_id = (int)$request->serving_measure_id;
             $recipe->instructions = implode("\n", array_values(array_filter($instructions, 'strlen')));
-
-            if ($recipe->id === 0) {
-                $chef = Chef::from_user((int)$request->current_user_id, $conn);
-                if (!$chef) {
-                    throw new Exception("Current user is not a chef");
-                }
-                $recipe->chef_id = $chef->id;
-            }
+            $recipe->chef_id = (int)$request->chef_id;
 
             // handle file upload
             if (isset($_FILES['recipe_image'])) {

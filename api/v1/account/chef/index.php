@@ -2,7 +2,6 @@
 
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
-use HuntRecipes\User\SessionController;
 use HuntRecipes\Chef;
 
 require '../../../../includes/common.php';
@@ -33,8 +32,8 @@ class Account_Chef_Endpoint extends Common_Endpoint {
 
             $request = json_decode(file_get_contents('php://input'));
 
-            if (!isset($request->user_id)) {
-                throw new Exception("user_id is not set");
+            if (!isset($request->chef_id)) {
+                throw new Exception("chef_id is not set");
             }
             if (!isset($request->name)) {
                 throw new Exception("name is not set");
@@ -53,7 +52,8 @@ class Account_Chef_Endpoint extends Common_Endpoint {
             }
 
             $conn = new SqlController();
-            $chef = Chef::from_user($request->user_id, $conn);
+            $chef = new Chef(0, $conn);
+            $chef->id = $request->chef_id;
             $chef->name = $request->name;
             $chef->is_male = $request->is_male;
             $chef->favorite_foods = $request->favorite_foods;

@@ -52,7 +52,7 @@ class Account_User_Register_Endpoint extends Common_Endpoint {
             // defaults
             $user->account_status_id = 1;
             $user->profile_picture = "/assets/images/users/generic_avatar.jpg";
-            $user->chef_app_pending = 0;
+            $user->chef_application_id = 0;
             $user->is_chef = false;
             $user->is_email_verified = false;
             $user->date_created = new DateTimeImmutable();

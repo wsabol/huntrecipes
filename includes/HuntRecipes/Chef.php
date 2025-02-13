@@ -11,7 +11,6 @@ class Chef extends Common_Object {
     private SqlController $conn;
     public int $id;
     public string $name;
-    public int $user_id = 0;
     public bool $is_male = false;
     public string $wisdom = '';
     public string $story = '';
@@ -32,7 +31,6 @@ class Chef extends Common_Object {
         if (!!$result) {
             $row = $result->fetch_object();
             $this->name = $row->name;
-            $this->user_id = $row->login_id;
             $this->is_male = (bool)$row->male_flag; // todo change in db
             $this->wisdom = $row->wisdom;
             $this->story = $row->story;
@@ -55,34 +53,6 @@ class Chef extends Common_Object {
         }
 
         return $data;
-    }
-
-    /**
-     * @param int $user_id
-     * @param SqlController $conn
-     * @return Chef|false
-     */
-    public static function from_user(int $user_id, SqlController $conn) {
-        $sel_query = "
-        select r.*
-        from Chef r
-        WHERE login_id = $user_id
-        ";
-        $result = $conn->query($sel_query);
-        if ($result->num_rows === 0) {
-            return false;
-        }
-
-        $row = $result->fetch_object();
-        $chef = new self(0, $conn);
-        $chef->id = $row->id;
-        $chef->name = $row->name;
-        $chef->user_id = $row->login_id;
-        $chef->is_male = (bool)$row->male_flag; // todo change in db
-        $chef->wisdom = $row->wisdom;
-        $chef->story = $row->story;
-        $chef->favorite_foods = $row->favorite_cuisine; // todo change this in db
-        return $chef;
     }
 
     public static function set_new_chef_of_the_day(DateTimeImmutable $date, SqlController $conn) {
@@ -142,14 +112,12 @@ class Chef extends Common_Object {
         $save_query = "
         INSERT INTO Chef(
                          name,
-                         login_id,
                          male_flag,
                          wisdom,
                          story,
                          favorite_cuisine
         ) VALUES (
                   '" . $this->conn->escape_string($this->name) . "'
-                  $this->user_id,
                   " . (int)$this->is_male . ",
                   '" . $this->conn->escape_string($this->wisdom) . "',
                   '" . $this->conn->escape_string($this->story) . "',
@@ -163,7 +131,6 @@ class Chef extends Common_Object {
             $save_query = "
             UPDATE Chef
             SET name = '" . $this->conn->escape_string($this->name) . "',
-                login_id = $this->user_id,
                 male_flag = " . (int)$this->is_male . ",
                 wisdom = '" . $this->conn->escape_string($this->wisdom) . "',
                 story = '" . $this->conn->escape_string($this->story) . "',
