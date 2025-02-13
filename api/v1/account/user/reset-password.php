@@ -6,7 +6,7 @@ use HuntRecipes\User\User;
 
 require '../../../../includes/common.php';
 
-class Account_User_Verify_Endpoint extends Common_Endpoint {
+class Account_User_ResetPassword_Endpoint extends Common_Endpoint {
 
     public function __construct() {
         $this->restrict_access();
@@ -15,7 +15,7 @@ class Account_User_Verify_Endpoint extends Common_Endpoint {
 
         switch ($method) {
             case 'POST':
-                $this->verify_account();
+                $this->send_reset_link();
                 break;
 
             default:
@@ -23,7 +23,7 @@ class Account_User_Verify_Endpoint extends Common_Endpoint {
         }
     }
 
-    public function verify_account(): bool {
+    public function send_reset_link(): bool {
         $data = array();
         $code = 400;
         $message = '';
@@ -42,13 +42,10 @@ class Account_User_Verify_Endpoint extends Common_Endpoint {
             if (!$user->is_enabled()) {
                 throw new Exception("Account is not enabled");
             }
-            if ($user->is_email_verified) {
-                throw new Exception("Account is already verified");
-            }
 
-            $user->send_email_verification();
+            $user->send_reset_password();
 
-            $message = "Successfully send verification link";
+            $message = "Successfully sent reset password link";
             $code = 200;
 
         } catch (Exception $e) {
@@ -60,4 +57,4 @@ class Account_User_Verify_Endpoint extends Common_Endpoint {
     }
 }
 
-new Account_User_Verify_Endpoint();
+new Account_User_ResetPassword_Endpoint();

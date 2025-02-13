@@ -482,3 +482,29 @@ figure:has(> .blockquote) {
 .basic dt.grey {
     background: $gray;
 }
+
+// 6-digit input
+
+.digit-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 40px 20px;
+}
+.digit-input {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    border: 1px solid $gray-300;
+    border-radius: 4px;
+}
+
+// custom alerts
+
+.alert-danger-zone {
+    --bs-alert-color: $body-color;
+    --bs-alert-bg: transparent;
+    --bs-alert-border-color: #{tint-color($error, -1 * $alert-border-scale)};
+    --bs-alert-link-color: #{tint-color($error, -1 * $alert-border-scale)};
+}

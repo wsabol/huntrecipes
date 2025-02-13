@@ -274,6 +274,44 @@ class User extends Common_Object {
         $mailer->send();
     }
 
+    public function send_reset_password(): void {
+        $rp = new ResetPasswordAuth(0, $this->conn);
+        $rp->user_id = $this->id;
+        $rp->save_to_db();
+
+        $mailer = new Email_Controller();
+        $mailer->add_address($this->email);
+        $mailer->set_subject("HuntRecipes Reset Password Request");
+
+        // mail body setup
+        $mailer->set_view('emails/reset-password.twig');
+        $mailer->set_message_context([
+            'subject' => $mailer->get_subject(),
+            'pre_text' => 'We sent you are link to reset your password',
+            'hashed_token' => $rp->get_hashed_token()
+        ]);
+
+        // send
+        $mailer->send();
+    }
+
+    public function send_reset_password_confirmation(): void {
+        $mailer = new Email_Controller();
+        $mailer->add_address($this->email);
+        $mailer->set_subject("Your Password Has Been Changed");
+
+        // mail body setup
+        $mailer->set_view('emails/reset-password-confirmation.twig');
+        $mailer->set_message_context([
+            'subject' => $mailer->get_subject(),
+            'pre_text' => 'Your HuntRecipes Password Has Been Changed',
+            'date_changed' => date('Y-m-d H:i:s')
+        ]);
+
+        // send
+        $mailer->send();
+    }
+
     public function has_open_email_verification(): bool {
         return !empty(EmailVerification::list_active_tokens_for_user($this->id, $this->email, $this->conn));
     }

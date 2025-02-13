@@ -81,7 +81,7 @@ class Common_Endpoint {
         return $json;
     }
 
-    public function method_not_allowed(): string {
-        return $this->response([], 405, "Method not allowed.");
+    public function method_not_allowed(): void {
+        echo $this->response([], 405, "Method not allowed.");
     }
 }

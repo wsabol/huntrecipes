@@ -41,7 +41,12 @@ class Auth_OTP_Login_Endpoint extends Common_Endpoint {
                 throw new Exception('elogin not set');
             }
 
-            $dLogin = explode(";", base64_decode($request->elogin), 2);
+            $decoded = base64_decode($request->elogin);
+            if (!$decoded) {
+                throw new Exception('elogin not valid');
+            }
+
+            $dLogin = explode(";", $decoded, 2);
             $email = $dLogin[0];
             $otp_code = @$dLogin[1];
 

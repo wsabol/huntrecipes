@@ -2,7 +2,6 @@
 
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
-use HuntRecipes\User\EmailVerification;
 use HuntRecipes\User\SessionController;
 use HuntRecipes\User\User;
 
@@ -18,6 +17,10 @@ class Account_User_Endpoint extends Common_Endpoint {
         switch ($method) {
             case 'PUT':
                 $this->update_account();
+                break;
+
+            case 'PATCH':
+                $this->handle_patch();
                 break;
 
             default:
@@ -75,6 +78,69 @@ class Account_User_Endpoint extends Common_Endpoint {
             $data->is_new_email = $is_new_email;
 
             $message = "Successfully updated account";
+            $code = 200;
+
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        echo $this->response($data, $code, $message);
+        return true;
+    }
+
+    private function handle_patch(): void {
+        $request = json_decode(file_get_contents('php://input'));
+
+        if (!isset($request->action)) {
+            echo $this->response([], 400, "action is not set");
+            return;
+        }
+
+        match ($request->action) {
+            'reset-pwd' => $this->reset_password(),
+            default => (function($a) {
+                echo $this->response([], 400, "action is not recognized: $a");
+            })($request->action)
+        };
+    }
+
+    public function reset_password(): bool {
+        $data = array();
+        $code = 400;
+        $message = '';
+
+        try {
+
+            $request = json_decode(file_get_contents('php://input'));
+
+            if (!isset($request->user_id)) {
+                throw new Exception("user_id is not set");
+            }
+            if (!isset($request->password)) {
+                throw new Exception("password is not set");
+            }
+
+            $user_id = (int)$request->user_id;
+            $encoded_password = (string)$request->password;
+            $password = base64_decode($encoded_password);
+
+            if (!$password) {
+                throw new Exception("password is invalid");
+            }
+
+            $conn = new SqlController();
+            $user = new User($user_id, $conn);
+
+            if (!$user->is_enabled()) {
+                throw new Exception("Account is not enabled");
+            }
+
+            $user->set_password($password);
+            $user->save_to_db();
+
+            $user->send_reset_password_confirmation();
+
+            $message = "Successfully sent reset password link";
             $code = 200;
 
         } catch (Exception $e) {

@@ -71,6 +71,16 @@
                                 aria-controls="recipes-tab-pane"
                                 aria-selected="{{ goto == 'recipes' ? 'true' : 'false' }}">My Recipes</button>
                     </li>
+                    <li class="nav-item">
+                        <button class="nav-link {{ goto == 'security' ? 'active' : '' }}"
+                                id="security-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#security-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="security-tab-pane"
+                                aria-selected="{{ goto == 'security' ? 'true' : 'false' }}">Security</button>
+                    </li>
                 </ul>
 
                 <div class="tab-content" >
@@ -293,6 +303,31 @@
 
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="recipes-container">
                         </div>
+                    </div>
+                    <div class="tab-pane fade {{ goto == 'security' ? 'show active' : '' }}"
+                         id="security-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="security-tab"
+                         tabindex="0">
+
+                        <h4>Reset Password</h4>
+
+                        <p>Click the button below to receive a secure link to reset your password. For security reasons, the link will expire in 24 hours.</p>
+                        <button class="btn btn-outline-primary btn-reset-pwd">Reset Password</button>
+
+                        <div class="alert alert-success" id="alert-reset-pwd" style="display:none">
+                            <h5>Secure link sent to your email</h5>
+                            <p>Follow the instructions in the email to reset your password.</p>
+                        </div>
+
+                        <h4 class="text-error mt-5">Danger Zone</h4>
+
+                        <div class="alert alert-danger-zone">
+                            <strong>Delete my account</strong>
+                            <p>Once deleted, it will be gone forever. We'd hate to see you go!</p>
+                            <button class="btn btn-outline-error">Delete my Account</button>
+                        </div>
+
                     </div>
                 </div>
 

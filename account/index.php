@@ -39,8 +39,7 @@ $breadcrumbs = array(
     ),
 );
 
-// todo reset password. 1. Send OTP. 2. Input it along with new password. 3. Done
-// todo dev utilities
+// todo Admin utilities: servings redux, ingredients redux, chef approval
 
 $conn = new SqlController();
 
