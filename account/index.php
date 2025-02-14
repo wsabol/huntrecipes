@@ -39,7 +39,7 @@ $breadcrumbs = array(
     ),
 );
 
-// todo Admin utilities: servings redux, ingredients redux, chef approval
+// todo chef approval
 
 $conn = new SqlController();
 

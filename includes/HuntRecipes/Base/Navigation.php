@@ -34,8 +34,8 @@ class Navigation {
                 "is_active" => false,
             ],
             [
-                "title" => "Developer",
-                "a_href" => "/developer/",
+                "title" => "Admin",
+                "a_href" => "/admin/",
                 "is_active" => false,
                 "permission" => function(){
                     if (isset($_SESSION)) {
@@ -47,12 +47,8 @@ class Navigation {
                 },
                 "submenu" => [
                     [
-                        "title" => "Servings Redux",
-                        "href" => "/API/v0/recipe_process/servings_redux.php"
-                    ],
-                    [
-                        "title" => "Ingredients Redux",
-                        "href" => "/API/v0/recipe_process/ingredients_redux.php"
+                        "title" => "Chef Approval",
+                        "href" => "/admin/chef-approval/"
                     ],
                 ]
             ],
