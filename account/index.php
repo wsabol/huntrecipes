@@ -39,8 +39,6 @@ $breadcrumbs = array(
     ),
 );
 
-// todo chef approval
-
 $conn = new SqlController();
 
 // set new user just in case
