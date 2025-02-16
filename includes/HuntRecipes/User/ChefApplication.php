@@ -44,10 +44,17 @@ class ChefApplication extends Common_Object {
     }
 
     public static function list(SqlController $conn, array $props): array {
+        $status_id = @$props['chef_application_status_id'] ?? 0;
+
         $sel_query = "
-        select r.*
+        select r.*, u.name, u.email, u.is_email_verified
         from ChefApplication r
-        WHERE is_deleted = 0
+        JOIN User u
+        ON u.id = r.user_id
+        WHERE u.is_deleted = 0
+        AND u.is_chef = 0
+        AND u.account_status_id = 1
+        " . ($status_id > 0 ? "AND r.chef_application_status_id = {$status_id}" : '') . "
         order by r.id
         ";
         $data = [];

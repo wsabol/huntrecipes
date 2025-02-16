@@ -315,4 +315,25 @@ class User extends Common_Object {
     public function has_open_email_verification(): bool {
         return !empty(EmailVerification::list_active_tokens_for_user($this->id, $this->email, $this->conn));
     }
+
+    public function send_chef_application_notification(bool $approved): void {
+        $mailer = new Email_Controller();
+        $mailer->add_address($this->email);
+        $mailer->set_subject("An update on your HuntRecipes Chef Application");
+
+        // mail body setup
+        if ($approved) {
+            $mailer->set_view('emails/chef-app-approval.twig');
+        } else {
+            $mailer->set_view('emails/chef-app-denial.twig');
+        }
+
+        $mailer->set_message_context([
+            'subject' => $mailer->get_subject(),
+            'pre_text' => 'Your HuntRecipes Password Has Been Changed'
+        ]);
+
+        // send
+        $mailer->send();
+    }
 }

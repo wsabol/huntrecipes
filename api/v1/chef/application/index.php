@@ -1,5 +1,6 @@
 <?php
 
+use HuntRecipes\Chef;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
 use HuntRecipes\User\ChefApplication;
@@ -8,7 +9,7 @@ use HuntRecipes\User\User;
 
 require '../../../../includes/common.php';
 
-class Account_Chef_Apply_Endpoint extends Common_Endpoint {
+class Account_Chef_Application_Endpoint extends Common_Endpoint {
 
     public function __construct() {
         $this->restrict_access();
@@ -18,6 +19,10 @@ class Account_Chef_Apply_Endpoint extends Common_Endpoint {
         switch ($method) {
             case 'POST':
                 $this->save_application();
+                break;
+
+            case 'PATCH':
+                $this->handle_patch();
                 break;
 
             case 'DELETE':
@@ -161,6 +166,93 @@ class Account_Chef_Apply_Endpoint extends Common_Endpoint {
         echo $this->response($data, $code, $message);
         return true;
     }
+
+    private function handle_patch(): void {
+        $request = json_decode(file_get_contents('php://input'));
+
+        if (!isset($request->action)) {
+            echo $this->response([], 400, "action is not set");
+            return;
+        }
+
+        match ($request->action) {
+            'approve' => $this->set_approval(),
+            default => (function($a) {
+                echo $this->response([], 400, "action is not recognized: $a");
+            })($request->action)
+        };
+    }
+
+    public function set_approval(): bool {
+        $data = array();
+        $code = 400;
+        $message = '';
+
+        try {
+
+            $request = json_decode(file_get_contents('php://input'));
+
+            if (!isset($request->chef_application_id)) {
+                throw new Exception("chef_application_id is not set");
+            }
+            if (!isset($request->status)) {
+                throw new Exception("status is not set");
+            }
+            $status = filter_var($request->status, FILTER_VALIDATE_BOOLEAN);
+
+            $conn = new SqlController();
+            $app = new ChefApplication($request->chef_application_id, $conn);
+
+            if (!in_array($app->chef_application_status_id, [ChefApplicationStatus::PENDING, ChefApplicationStatus::NONE])) {
+                throw new Exception("Application status is already set");
+            }
+
+            $user = new User($app->user_id, $conn);
+            if (!$user->is_enabled()) {
+                throw new Exception("This user is not valid");
+            }
+            if ($user->is_chef) {
+                throw new Exception("This user is already a chef");
+            }
+
+            if (!$status) {
+                // deny
+                $app->chef_application_status_id = ChefApplicationStatus::DENIED;
+                $app->save_to_db();
+
+                $user->send_chef_application_notification(false);
+
+                $code = 200;
+                throw new Exception("Denied chef application and notified user");
+            }
+
+            // approve
+
+            // create chef
+            $chef_id = (int)@$request->chef_id;
+            $chef = new Chef($chef_id, $conn);
+            if (empty($chef->name)) {
+                $chef->name = $user->name;
+            }
+            $chef->story = $app->story;
+            $chef->save_to_db();
+
+            // link to user
+            $user->is_chef = true;
+            $user->chef_id = $chef->id;
+            $user->save_to_db();
+            $user->send_chef_application_notification(true);
+
+            $message = "Approved chef application and updated user";
+            $code = 200;
+
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        echo $this->response($data, $code, $message);
+        return true;
+    }
 }
 
-new Account_Chef_Apply_Endpoint();
+new Account_Chef_Application_Endpoint();
