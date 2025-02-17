@@ -45,25 +45,32 @@ class ChefApplication extends Common_Object {
 
     public static function list(SqlController $conn, array $props): array {
         $status_id = @$props['chef_application_status_id'] ?? 0;
+        $user_id = @$props['user_id'] ?? 0;
+        $date_from = @$props['date_from'] ?? '';
+        $date_to = @$props['date_to'] ?? '';
 
         $sel_query = "
         select r.*, u.name, u.email, u.is_email_verified
         from ChefApplication r
         JOIN User u
         ON u.id = r.user_id
-        WHERE u.is_deleted = 0
-        AND u.is_chef = 0
-        AND u.account_status_id = 1
+        WHERE r.is_deleted = 0
         " . ($status_id > 0 ? "AND r.chef_application_status_id = {$status_id}" : '') . "
+        " . ($user_id > 0 ? "AND r.user_id = {$user_id}" : '') . "
+        " . ($date_from != '' ? "AND CAST(r.date_created AS DATE) >= '{$date_from}'" : '') . "
+        " . ($date_to != '' ? "AND CAST(r.date_created AS DATE) <= '{$date_to}'" : '') . "
         order by r.id
         ";
         $data = [];
 
         $result = $conn->query($sel_query);
+        if ($result === false) {
+            throw new SqlException("Error retrieving Chef Application list: " . $conn->last_message());
+        }
 
         while ($row = $result->fetch_object()) {
             $row->chef_application_status = ChefApplicationStatus::get_name($row->chef_application_status_id);
-            $row->relation_name = ChefRelation::get_name($row->relation);
+            $row->relation_name = ChefRelation::get_name($row->relationship);
 
             $data[] = $row;
         }

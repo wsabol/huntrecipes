@@ -1,9 +1,7 @@
 <?php
 
 use HuntRecipes\Base\Page_Controller;
-use HuntRecipes\Database\SqlController;
-use HuntRecipes\User\ChefApplication;
-use HuntRecipes\User\ChefApplicationStatus;
+use HuntRecipes\User\ChefRelation;
 use HuntRecipes\User\SessionController;
 
 require_once("../../includes/common.php");
@@ -48,15 +46,13 @@ $breadcrumbs = array(
     ),
 );
 
-$conn = new SqlController();
-$pending_apps = ChefApplication::list($conn, [
-    'chef_application_status_id' => ChefApplicationStatus::PENDING
-]);
+// get relationships
+$relationships = ChefRelation::list();
 
 // Template variables.
 $page = new Page_Controller();
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
-    'pending_apps' => $pending_apps
+    'relationships' => $relationships
 ]);
 
 // Render view.

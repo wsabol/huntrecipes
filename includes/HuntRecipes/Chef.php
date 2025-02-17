@@ -40,7 +40,7 @@ class Chef extends Common_Object {
 
     public static function list(SqlController $conn, array $props): array {
         $sel_query = "
-        select r.*
+        select r.*, CASE WHEN EXISTS(SELECT * FROM User u where u.chef_id = r.id) THEN 1 ELSE 0 END is_linked_to_user
         from Chef r
         order by r.name
         ";
@@ -117,7 +117,7 @@ class Chef extends Common_Object {
                          story,
                          favorite_cuisine
         ) VALUES (
-                  '" . $this->conn->escape_string($this->name) . "'
+                  '" . $this->conn->escape_string($this->name) . "',
                   " . (int)$this->is_male . ",
                   '" . $this->conn->escape_string($this->wisdom) . "',
                   '" . $this->conn->escape_string($this->story) . "',

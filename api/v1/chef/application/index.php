@@ -227,6 +227,8 @@ class Account_Chef_Application_Endpoint extends Common_Endpoint {
             }
 
             // approve
+            $app->chef_application_status_id = ChefApplicationStatus::APPROVED;
+            $app->save_to_db();
 
             // create chef
             $chef_id = (int)@$request->chef_id;

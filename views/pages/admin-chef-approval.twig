@@ -5,20 +5,191 @@
 
     <!--row-->
     <div class="row">
-        <div class="content pb-5">
-
+        <div class="content pb-3">
             <h2>Pending Applications</h2>
-            <div id="pending-app-container"></div>
+            <p>Review each of the following chef applications. To approve or deny the application, click View and follow the prompts.</p>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="pending-container" >
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Relation</th>
+                                <th>Status</th>
+                                <th>Date Submitted</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
 
+                        <div id="no-pending" style="display:none" class="alert alert-info">There are no pending chef applications at this time</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="content pb-5">
-
+        <div class="content pb-3">
             <h2>Search</h2>
-            <div id="search-results"></div>
+            <div class="d-flex flex-row justify-content-start gap-3">
+                <div class="mb-3" style="width:200px">
+                    <label for="user_id" class="form-label">Applicant</label>
+                    <select class="form-select" id="user_id" >
+                        <option selected value="0">Any User</option>
+                    </select>
+                </div>
+                <div class="mb-3" style="width:200px">
+                    <label for="status_id" class="form-label">Status</label>
+                    <select class="form-select" id="status_id" >
+                        <option selected value="0">Any Status</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Approved</option>
+                        <option value="3">Denied</option>
+                    </select>
+                </div>
+                <div class="mb-3" style="width:150px">
+                    <label for="date_from" class="form-label">From</label>
+                    <input type="date" class="form-control" id="date_from" name="date_from" value="" >
+                </div>
+                <div class="mb-3" style="width:150px">
+                    <label for="date_to" class="form-label">To</label>
+                    <input type="date" class="form-control" id="date_to" name="date_to" value="" >
+                </div>
+                <div class="mb-3 align-self-end">
+                    <button class="btn btn-secondary" id="btn-app-search">Search</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="search-results" >
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Relation</th>
+                                <th>Status</th>
+                                <th>Date Submitted</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
 
+                        <div id="first-search" class="alert alert-info">Apply your filters and click search</div>
+                        <div id="no-search" style="display:none" class="alert alert-info">No results match the filter</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!--//row-->
+
+    <div class="modal fade" id="mdl-app-view" tabindex="-1" aria-labelledby="mdl-app-view-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdl-app-view-title">View Application</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form id="frm-chef-app">
+                    <input type="hidden" name="chef_application_id" value="">
+
+                    <div class="modal-body">
+                        <p>
+                            <span class="text-muted">Applicant:</span> <span class="submitted-by"></span> <br>
+                            <span class="text-muted">Current Status:</span> <span class="status"></span> <br>
+                            <span class="text-muted">Submitted on:</span> <span class="submitted-on"></span>
+                        </p>
+
+                        <hr>
+
+                        <div class="mb-3">
+                            <label for="relationship" class="form-label">How are you related to the Hunts?</label>
+                            <select class="form-select" id="relationship" name="relationship" readonly disabled>
+                                <option disabled selected value="">Choose...</option>
+                                {% for rel in relationships %}
+                                    <option value="{{ rel.value }}">{{ rel.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Do you already see your recipes on this site?</label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" value="1" type="radio" name="already_exists" id="exists-yes" readonly disabled>
+                                <label class="form-check-label" for="exists-yes">
+                                    Yes, link my account to a Chef that already exists
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" value="0" type="radio" name="already_exists" id="exists-no" readonly disabled>
+                                <label class="form-check-label" for="exists-no">
+                                    No, I'm new to the site
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="story" class="form-label">Tell us more about your connection</label>
+                            <textarea class="form-control" id="story" name="story" rows="3" maxlength="1000" readonly disabled
+                                      placeholder="Example: I'm Bill's daughter from his first marriage, or I'm married to Sarah Hunt since 1980"></textarea>
+                        </div>
+
+                        <div class="div-app-approval-tools">
+                            <hr>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label mb-0">Set New Status</label>
+
+                                        <div class="form-check h5">
+                                            <input class="form-check-input" value="1" type="radio" name="approval_status" id="status-approve" required>
+                                            <label class="form-check-label" for="status-approve">
+                                                Approve
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check h5">
+                                            <input class="form-check-input" value="0" type="radio" name="approval_status" id="status-deny" required>
+                                            <label class="form-check-label" for="status-deny">
+                                                Deny
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3 chef-link-container">
+                                        <label for="chef_id" class="form-label">Link to Existing Chef</label>
+                                        <select class="form-select" id="chef_id" name="chef_id" required>
+                                            <option disabled selected value="">Choose...</option>
+                                            <option value="0">- Create New -</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="alert" style="display:none" id="alert-approval"></div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="submit" class="btn btn-primary" id="btn-app-approve-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
