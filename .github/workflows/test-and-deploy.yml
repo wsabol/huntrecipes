@@ -34,6 +34,7 @@ jobs:
           # Set the output named "libs_changed"
           Write-Host "::set-output name=libs_changed::$HasDiff"
 
+
 #  test:
 #    name: Test
 #    runs-on: ubuntu-latest
@@ -123,10 +124,10 @@ jobs:
           target: ${{ secrets.PATH_TO_REPO }}
 
   deploy:
-    name: Deploy
+    name: Trigger Pull
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: needs.conditional_check_lib_files.outputs.libs_changed != 'True'
     steps:
 
       - name: Trigger pull
