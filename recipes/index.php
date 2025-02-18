@@ -17,8 +17,6 @@ $twig = new \Twig\Environment(
     )
 );
 
-// todo add photo to recipe modal
-
 // Page title
 $page_title = "Recipes";
 
