@@ -7,6 +7,7 @@ use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\HuntRecipesException;
 use HuntRecipes\Exception\SqlException;
+use HuntRecipes\Measure\Measure;
 use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
@@ -537,9 +538,11 @@ class Recipe extends Common_Object {
                 END measure,
             m.measure_type_id,
             CASE WHEN m.abbr = ''
-                THEN (CASE WHEN ri.amount > 1
-                THEN m.name_plural
-                ELSE m.name END)
+                THEN (
+                    CASE WHEN ri.amount > 1
+                    THEN m.name_plural
+                    ELSE m.name END
+                )
                 ELSE m.abbr
                 END measure_abbr,
             ri.amount * m.general_unit_conversion as general_measure_amount,
@@ -668,40 +671,6 @@ class Recipe extends Common_Object {
         }
 
         return $children;
-/*
-        $RecipeChildren = array();
-        if ( $Recipe['child_count'] > 0 ) {
-            $par_query = "
-		SELECT id FROM Recipe WHERE parent_recipe_id = ".$App->R['recipe_id'].";
-	";
-            $pResult = $App->oDBMY->query($par_query);
-            while ( $pRow = $pResult->fetch_assoc() ) {
-                $chl_query = "
-			Call spSelectRecipe(".$pRow['id'].", ".(@$_SESSION['Login']['id']*1).");
-		";
-                $cResult = $App->oDBMY->query($chl_query);
-                if ( !!$cResult ) {
-                    $cRow = $cResult->fetch_assoc();
-                    $cResult->free();
-
-                    $cRow['ingredients'] = array();
-                    $ching_query = "
-				Call spSelectRecipeIngredients(".$pRow['id'].");
-			";
-                    $ciResult = $App->oDBMY->query($ching_query);
-                    if ( !!$ciResult ) {
-                        while ( $ciRow = $ciResult->fetch_array() ) {
-                            array_push($cRow['ingredients'], $ciRow);
-                        }
-                        array_push($RecipeChildren, $cRow);
-                        $Recipe['ingredient_count'] += $cRow['ingredient_count'];
-                    }
-                }
-            }
-            $pResult->free();
-            $Recipe['child_count'] = count($RecipeChildren);
-        }*/
-
     }
 
     public function is_liked_by_user(int $user_id): bool {

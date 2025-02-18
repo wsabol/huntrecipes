@@ -32,10 +32,10 @@ class Chef extends Common_Object {
         if (!!$result) {
             $row = $result->fetch_object();
             $this->name = $row->name;
-            $this->is_male = (bool)$row->male_flag; // todo change in db
+            $this->is_male = (bool)$row->is_male; // todo change in db
             $this->wisdom = $row->wisdom;
             $this->story = $row->story;
-            $this->favorite_foods = $row->favorite_cuisine; // todo change this in db
+            $this->favorite_foods = $row->favorite_foods; // todo change this in db
         }
     }
 
@@ -113,10 +113,10 @@ class Chef extends Common_Object {
         $save_query = "
         INSERT INTO Chef(
                          name,
-                         male_flag,
+                         is_male,
                          wisdom,
                          story,
-                         favorite_cuisine
+                         favorite_foods
         ) VALUES (
                   '" . $this->conn->escape_string($this->name) . "',
                   " . (int)$this->is_male . ",
@@ -132,10 +132,10 @@ class Chef extends Common_Object {
             $save_query = "
             UPDATE Chef
             SET name = '" . $this->conn->escape_string($this->name) . "',
-                male_flag = " . (int)$this->is_male . ",
+                is_male = " . (int)$this->is_male . ",
                 wisdom = '" . $this->conn->escape_string($this->wisdom) . "',
                 story = '" . $this->conn->escape_string($this->story) . "',
-                favorite_cuisine = '" . $this->conn->escape_string($this->favorite_foods) . "'
+                favorite_foods = '" . $this->conn->escape_string($this->favorite_foods) . "'
             WHERE id = {$this->id};
             
             SELECT {$this->id} as id;

@@ -4,10 +4,9 @@ namespace HuntRecipes\User;
 
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
-use Random\RandomException;
-use Throwable;
 
 class Authenticator {
+    public const DAYS_LOGIN_PERSISTS = 30;
     public SqlController $conn;
 
     public function __construct() {
@@ -69,7 +68,7 @@ class Authenticator {
 
     public function setPersistentLogin(int $login_id) {
         $validator = security_token();
-        $expires = time() + 3600 * 24 * 7;
+        $expires = time() + 3600 * 24 * self::DAYS_LOGIN_PERSISTS;
 
         $uname_token = @$_COOKIE['uname_auth'];
         $selector = security_token(16);
