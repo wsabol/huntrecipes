@@ -32,6 +32,7 @@ jobs:
           $HasDiff = $SourceDiff.Length -gt 0
 
           # Set the output named "libs_changed"
+          echo "libs_changed={$HasDiff} \n"
           echo "libs_changed={$HasDiff}" >> $GITHUB_OUTPUT
 
 #  test:
@@ -68,7 +69,7 @@ jobs:
 #    needs: test
     needs: conditional_check_lib_files
     runs-on: ubuntu-latest
-    if: needs.conditional_check_lib_files.outputs.libs_changed == 'True'
+    if: needs.conditional_check_lib_files.outputs.libs_changed == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -126,7 +127,7 @@ jobs:
     name: Trigger Pull
     needs: conditional_check_lib_files
     runs-on: ubuntu-latest
-    if: needs.conditional_check_lib_files.outputs.libs_changed != 'True'
+    if: needs.conditional_check_lib_files.outputs.libs_changed == false
     steps:
 
       - name: Trigger pull
