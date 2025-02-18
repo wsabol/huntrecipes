@@ -33,11 +33,11 @@ jobs:
       - name: Check for changes in lib/*
         id: diff
         run: |
-          git diff --raw ${{ env.base_commit }} HEAD
-          
           if git diff --quiet ${{ env.base_commit }} HEAD -- lib/; then
+            echo "nothing found in lib, trigger pull"
             echo "found-changes=false" >> "$GITHUB_OUTPUT"
           else
+            echo "changes found in lib, run build and deploy"
             echo "found-changes=true" >> "$GITHUB_OUTPUT"
           fi
 
