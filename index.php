@@ -6,7 +6,7 @@ require_once("includes/common.php");
 
 $sess = new SessionController();
 $sess->start();
-
+// test
 http_response_code(302);
 
 if ($sess->has_user()) {
