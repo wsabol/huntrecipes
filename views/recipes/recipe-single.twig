@@ -127,6 +127,21 @@
 
             <hr class="d-print-none">
 
+            {% if recipe.liked_by|length > 0 %}
+                <div class="boxed-widget liked-by-widget d-print-none">
+                    <h5>Users who like this recipe</h5>
+                    <ul class="boxed">
+                        {% for item in recipe.liked_by %}
+                            <li style="background-image: url({{ item.profile_picture }})">
+                                <a href="javascript:">
+                                    <span>{{ item.name }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
             <div class="d-grid gap-2 mb-3 d-print-none">
                 <button class="btn {{ recipe.is_liked ? 'btn-favorite' : 'btn-outline-favorite' }} btn-save-to-favorites" >
                     <i class="fa fa-heart"></i>
@@ -144,24 +159,9 @@
 
             {% if recipe.i_am_the_chef %}
                 <div class="d-grid gap-2 mb-3 d-print-none">
-                    <a class="btn btn-primary" href="/recipes/recipe/edit/?id={{ recipe.id }}" >
+                    <a class="btn btn-warning" href="/recipes/recipe/edit/?id={{ recipe.id }}" >
                         <i class="fa fa-pencil"></i> Edit Recipe
                     </a>
-                </div>
-            {% endif %}
-
-            {% if recipe.liked_by|length > 0 %}
-                <div class="boxed-widget liked-by-widget d-print-none">
-                    <h5>Users who like this recipe</h5>
-                    <ul class="boxed">
-                        {% for item in recipe.liked_by %}
-                            <li style="background-image: url({{ item.profile_picture }})">
-                                <a href="javascript:">
-                                    <span>{{ item.name }}</span>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
                 </div>
             {% endif %}
 

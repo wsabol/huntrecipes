@@ -107,8 +107,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="image-upload" class="form-label">Upload Image</label>
-                        <input type="file" class="form-control" id="image-upload" accept="image/*">
+                        <button class="btn btn-primary btn-recipe-image">Choose an Image</button>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -149,6 +148,41 @@
                 <strong>Oops!</strong> <span class="error-message"></span>
             </div>
         </form>
+    </div>
+
+    <!-- Photo Upload Modal -->
+    <div class="modal fade" id="photo-upload-modal" tabindex="-1" aria-labelledby="photo-upload-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photo-upload-modal-title">Upload New Recipe Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Initial Upload State -->
+                    <div class="uploadState text-center p-4">
+                        <input type="file" id="photoInput" class="d-none" accept="image/*">
+                        <label for="photoInput" class="btn btn-outline-primary mb-3">
+                            Choose a Photo
+                        </label>
+                        <p class="text-muted">Select a photo to upload. You'll be able to adjust and crop it in the next step.</p>
+                    </div>
+
+                    <!-- Cropping State -->
+                    <div class="cropping-container croppingState" style="display:none">
+                        <div class="img-container mb-3">
+                            <img src="" alt="Upload preview" class="cropImage">
+                        </div>
+                        <p class="text-muted">Drag to reposition and use the corners to resize. Your profile photo will be square.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary me-auto btn-remove-photo" >Remove Photo</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary cropButton" style="display:none">Save Photo</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
