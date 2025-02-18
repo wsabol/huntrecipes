@@ -39,21 +39,23 @@ class Recipe extends Common_Object {
         $sel_query = "select * from Recipe where id = {$this->id}";
         $result = $this->conn->query($sel_query);
         if (!!$result) {
-            $row = $result->fetch_object();
-            $this->course_id = $row->course_id;
-            $this->cuisine_id = $row->cuisine_id;
-            $this->type_id = $row->type_id;
-            $this->chef_id = $row->chef_id;
-            $this->title = $row->title;
-            $this->instructions = $row->instructions;
-            $this->image_filename = $row->image_filename;
-            $this->serving_count = $row->serving_count;
-            $this->serving_measure_id = $row->serving_measure_id;
-            $this->parent_recipe_id = $row->parent_recipe_id;
-            $this->published_flag = (bool)$row->published_flag;
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_object();
+                $this->course_id = $row->course_id;
+                $this->cuisine_id = $row->cuisine_id;
+                $this->type_id = $row->type_id;
+                $this->chef_id = $row->chef_id;
+                $this->title = $row->title;
+                $this->instructions = $row->instructions;
+                $this->image_filename = $row->image_filename;
+                $this->serving_count = $row->serving_count;
+                $this->serving_measure_id = $row->serving_measure_id;
+                $this->parent_recipe_id = $row->parent_recipe_id;
+                $this->published_flag = (bool)$row->published_flag;
 
-            if (!str_starts_with($row->image_filename, "/")) {
-                $this->image_filename = "/" . $this->image_filename;
+                if (!str_starts_with($row->image_filename, "/")) {
+                    $this->image_filename = "/" . $this->image_filename;
+                }
             }
         }
     }

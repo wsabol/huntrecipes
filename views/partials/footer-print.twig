@@ -1,0 +1,21 @@
+<!--footer-->
+<footer class="foot d-print-none">
+
+    <div class="container">
+        <div class="bottom">
+            <div class="row row-cols-auto">
+                <p class="copy">Copyright {{ current_year }} <a href="//www.willsabol.com/" target="_blank" >Will Sabol</a>. All rights reserved</p>
+
+                <nav class="foot-nav">
+                    <ul>
+                        {% for item in footer_nav %}
+                            <li><a href="{{ item.a_href }}">{{ item.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</footer>
+<!--//footer-->

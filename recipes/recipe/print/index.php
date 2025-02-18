@@ -5,7 +5,7 @@ use HuntRecipes\Database\SqlController;
 use HuntRecipes\Recipe;
 use HuntRecipes\User\SessionController;
 
-require_once("../../includes/common.php");
+require_once("../../../includes/common.php");
 
 $sess = new SessionController();
 $sess->validate();
@@ -26,9 +26,9 @@ $recipe = new Recipe(0, $conn);
 
 if (isset($_GET['id'])) {
 
-    $recipe = new Recipe((int)$_GET['id'], $conn);
+    $recipe = new Recipe($_GET['id'], $conn);
 
-    if (empty($recipe->title)) {
+    if (!isset($recipe->title)) {
         $render_not_found = true;
     }
 }
@@ -68,18 +68,13 @@ $page_title = $recipe->title;
 // Breadcrumbs.
 $breadcrumbs = array(
     array(
-        'name' => 'Home',
-        'link' => '/home/',
-        'current_page' => false,
-    ),
-    array(
-        'name' => 'Recipes',
-        'link' => '/recipes/',
+        'name' => 'Back to Recipe',
+        'link' => '/recipes/recipe/?id=' . $_GET['id'],
         'current_page' => false,
     ),
     array(
         'name' => $page_title,
-        'link' => $recipe->get_link(),
+        'link' => '#',
         'current_page' => true,
     ),
 );
@@ -100,10 +95,6 @@ $data->ingredient_columns = [];
 $data->liked_by = $recipe->get_users_who_liked_this();
 $data->children = [];
 
-if ($sess->has_user()) {
-    $data->i_am_the_chef = $recipe->chef_id === $sess->user()->chef_id;
-}
-
 $children = $recipe->get_child_recipes();
 foreach ($children as $child) {
     $child_obj = $child->toObject();
@@ -121,13 +112,9 @@ $data->ingredient_columns = Recipe::organize_ingredients_into_columns(
 
 $data->ingredient_col_num = 12 / count($data->ingredient_columns);
 
-if ($sess->has_user()) {
-    $data->is_liked = $recipe->is_liked($sess->user()->id);
-}
-
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
     'recipe' => (array)$data
 ]);
 
 // Render view.
-echo $twig->render('recipes/recipe-single.twig', $context);
+echo $twig->render('recipes/recipe-print.twig', $context);

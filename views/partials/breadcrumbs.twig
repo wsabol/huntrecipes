@@ -1,6 +1,6 @@
 {% if breadcrumbs %}
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb d-print-none">
         {% for breadcrumb in breadcrumbs %}
             {% if breadcrumb.current_page %}
                 <li class="breadcrumb-item active" aria-current="page">{{ breadcrumb.name }}</li>

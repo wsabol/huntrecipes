@@ -29,7 +29,7 @@
                 </ol>
             </nav>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4 d-print-none">
             <img id="recipe-image"
                  class="img-thumbnail rounded mb-4 {{ recipe.image_filename == '/assets/images/recipes/generic_recipe.jpg' ? 'd-none' : '' }}"
                  style="width: 100%" src="{{ recipe.image_filename }}" alt="{{ recipe.title }}" />
@@ -38,6 +38,7 @@
     <!--//row-->
 
     <div class="row gx-4" style="margin-bottom: 30px">
+        <h2 class="d-none d-print-block">Ingredients</h2>
 
         {% for column in recipe.ingredient_columns %}
             <div class="col-lg-{{ recipe.ingredient_col_num }}">
@@ -68,6 +69,7 @@
     <div class="row gx-4">
         <div class="col-lg-9">
             <div class="recipe-instructions">
+                <h2 class="d-none d-print-block">Instructions</h2>
                 <ol>
                     {% for item in recipe.instructions %}
                         <li>{{ item }}</li>
@@ -123,9 +125,9 @@
 
             </dl>
 
-            <hr>
+            <hr class="d-print-none">
 
-            <div class="d-grid gap-2 mb-3">
+            <div class="d-grid gap-2 mb-3 d-print-none">
                 <button class="btn {{ recipe.is_liked ? 'btn-favorite' : 'btn-outline-favorite' }} btn-save-to-favorites" >
                     <i class="fa fa-heart"></i>
                     {{ recipe.is_liked ? 'My Favorite' : 'Save to my favorites' }}
@@ -133,7 +135,7 @@
             </div>
 
             {% if recipe.i_am_the_chef or recipe.image_filename == '/assets/images/recipes/generic_recipe.jpg' %}
-                <div class="d-grid gap-2 mb-3">
+                <div class="d-grid gap-2 mb-3 d-print-none">
                     <button class="btn btn-primary btn-recipe-image" >
                         <i class="fa fa-upload"></i> Add Recipe Picture
                     </button>
@@ -141,7 +143,7 @@
             {% endif %}
 
             {% if recipe.i_am_the_chef %}
-                <div class="d-grid gap-2 mb-3">
+                <div class="d-grid gap-2 mb-3 d-print-none">
                     <a class="btn btn-primary" href="/recipes/recipe/edit/?id={{ recipe.id }}" >
                         <i class="fa fa-pencil"></i> Edit Recipe
                     </a>
@@ -149,8 +151,8 @@
             {% endif %}
 
             {% if recipe.liked_by|length > 0 %}
-                <div class="boxed-widget liked-by-widget">
-                    <h5>Users who liked this recipe</h5>
+                <div class="boxed-widget liked-by-widget d-print-none">
+                    <h5>Users who like this recipe</h5>
                     <ul class="boxed">
                         {% for item in recipe.liked_by %}
                             <li style="background-image: url({{ item.profile_picture }})">
@@ -163,8 +165,8 @@
                 </div>
             {% endif %}
 
-            <div class="d-grid gap-2 mb-4">
-                <button class="btn btn-secondary" >View Print Friendly</button>
+            <div class="d-grid gap-2 mb-4 d-print-none">
+                <a href="/recipes/recipe/print/?id={{ recipe.id }}" class="btn btn-secondary" >View Print Friendly</a>
             </div>
 
         </aside>

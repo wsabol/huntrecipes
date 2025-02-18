@@ -10,40 +10,42 @@
     height: 100vh;
 }
 
-.welcome .intro {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    /* margin: 0 0 30px; */
-    overflow: hidden;
-    min-height: 740px;
-}
+.welcome {
+    .intro {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        /* margin: 0 0 30px; */
+        overflow: hidden;
+        min-height: 740px;
+    }
 
-.welcome .main {
-    margin-top: 2.5rem;
-}
+    .main {
+        margin-top: 2.5rem;
+    }
 
-.welcome .hero {
-    text-align: center;
-}
+    .hero {
+        text-align: center;
+    }
 
-.welcome .hero h1 {
-    font-size: 3.125rem;
-    color: $white;
-    line-height: 1.2;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, .1);
-}
+    .hero h1 {
+        font-size: 3.125rem;
+        color: $white;
+        line-height: 1.2;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+    }
 
-.welcome .hero p {
-    color: $white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
-}
+    .hero p {
+        color: $white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    }
 
-@include media-breakpoint-up(lg) {
-    .welcome .hero {
-        text-align: left;
+    @include media-breakpoint-up(lg) {
+        .hero {
+            text-align: left;
+        }
     }
 }
 
@@ -349,5 +351,17 @@
 #mdl-app-view {
     .form-check-input, .form-check-label {
         opacity: 1 !important;
+    }
+}
+
+// print view
+
+.body-print {
+    background: $white;
+}
+
+.body-print {
+    .page-title {
+        margin-bottom: 30px;
     }
 }
