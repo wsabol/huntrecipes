@@ -258,8 +258,10 @@
                                     <textarea class="form-control" rows="3" name="story" id="story" maxlength="1000" >{{ chef.story }}</textarea>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary mb-3">Update Chef Profile</button>
-
+                                <div class="d-flex mb-3">
+                                    <button type="submit" class="btn btn-primary">Update Chef Profile</button>
+                                    <a href="/chef/?id={{ chef.id }}" class="btn btn-outline-info ms-auto">View Chef Profile</a>
+                                </div>
                             </form>
                         {% endif %}
 

@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\SqlException;
+use HuntRecipes\User\User;
 
 class Chef extends Common_Object {
     private SqlController $conn;
@@ -218,5 +219,23 @@ class Chef extends Common_Object {
         }
 
         return $recipes;
+    }
+
+    public function get_user(SqlController $conn): false|User {
+        $sel_query = "
+        select u.id
+        from User u
+        WHERE chef_id = {$this->id}
+        AND u.is_chef = 1
+        order by account_status_id, id
+        ";
+
+        $result = $conn->query($sel_query);
+        if ($result->num_rows === 0) {
+            return false;
+        }
+
+        $row = $result->fetch_object();
+        return new User($row->id, $this->conn);
     }
 }

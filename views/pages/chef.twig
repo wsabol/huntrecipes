@@ -17,6 +17,13 @@
                     <div class="d-grid gap-2">
                         <a href="/recipes/?chef_id={{ chef.id }}" class="btn btn-primary">See {{ chef.is_male ? 'His' : 'Her' }} Recipes</a>
                     </div>
+
+                    {% if chef.user_id == current_user_id %}
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <a href="/account/?goto=chef" class="btn btn-outline-secondary">Edit Chef Profile</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -3,7 +3,6 @@
 use HuntRecipes\Base\Page_Controller;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Chef;
-use HuntRecipes\User\User;
 use HuntRecipes\User\SessionController;
 
 require_once("../includes/common.php");
@@ -77,18 +76,24 @@ $breadcrumbs = array(
 
 $data = $chef->toObject();
 $data->profile_picture = "/assets/images/users/generic_avatar.jpg";
-$data->favorites = [];
+$data->user_id = 0;
 
-if ($data->user_id > 0) {
-    $user = new User($data->user_id, $conn);
+$user = $chef->get_user($conn);
+if ($user) {
     $data->profile_picture = $user->profile_picture;
+    $data->user_id = $user->id;
 }
 
+$current_user_id = 0;
+if ($sess->has_user()) {
+    $current_user_id = $sess->user()->id;
+}
 
 // Template variables.
 $page = new Page_Controller();
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
-    "chef" => $data
+    "chef" => $data,
+    "current_user_id" => $current_user_id
 ]);
 
 // Render view.
