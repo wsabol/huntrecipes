@@ -36,7 +36,7 @@ class Recipe_Chef_OfTheDay_Endpoint extends Common_Endpoint {
             Recipe::set_new_recipe_of_the_day($date, $conn);
             Chef::set_new_chef_of_the_day($date, $conn);
 
-            $message = "Success";
+            $message = "Set new recipe and chef successfully";
             $code = 200;
 
         } catch (Exception $e) {

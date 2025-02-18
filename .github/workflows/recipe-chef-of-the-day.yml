@@ -4,6 +4,7 @@
 name: Set Recipe & Chef of the day
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/15 * * * *'
 
@@ -20,11 +21,11 @@ jobs:
 
       - name: Hit API Endpoint
         run: |
-          curl -X POST -s --write-out '%{http_code}' -o '/tmp/output.txt' --url ${{ secrets.PROJECT_DOMAIN }}/api/v1/system/ops/set-recipe-chef-of-the-day.php
+          curl -X POST -s -o '/tmp/output.txt' --url ${{ secrets.PROJECT_DOMAIN }}/api/v1/system/ops/set-recipe-chef-of-the-day.php
           #cat /tmp/output.txt
           MESSAGE=$(echo $(cat /tmp/output.txt) | jq -r '.message')
           CODE=$(echo $(cat /tmp/output.txt) | jq -r '.response_code')
-          echo $MESSAGE
+          echo "Response: $MESSAGE"
           
           if [ $CODE != "200" ]; then
             echo "FAILURE";
