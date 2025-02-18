@@ -93,7 +93,7 @@ class Navigation {
                 $this->_user_nav[] = [
                     "title" => "Submit a recipe",
                     "a_href" => "/recipes/recipe/edit/?id=new",
-                    "icon" => "icon icon-themeenergy_fork-spoon",
+                    "icon" => "icon-themeenergy_fork-spoon",
                     "li_class" => "dark"
                 ];
             }
