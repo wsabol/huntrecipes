@@ -64,7 +64,7 @@ jobs:
     name: Build & Deploy
 #    needs: test
     needs: check_lib_changes
-    if: needs.check_lib_changes.outputs.build == 'True'
+    if: needs.check_lib_changes.outputs.build == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -123,7 +123,7 @@ jobs:
   deploy:
     name: Trigger Pull
     needs: check_lib_changes
-    if: needs.check_lib_changes.outputs.build == 'False'
+    if: needs.check_lib_changes.outputs.build == 'false'
     runs-on: ubuntu-latest
 
     steps:
