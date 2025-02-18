@@ -42,7 +42,10 @@ class Ingredient extends Common_Object {
 
     public function save_to_db(): bool {
         if ($this->id === 0) {
-            $dup_check = "select * from Ingredient where name = {$this->name} OR name_plural = {$this->name_plural}";
+            $sql_name = $this->conn->escape_string($this->name);
+            $sql_name_plural = $this->conn->escape_string($this->name_plural);
+
+            $dup_check = "select * from Ingredient where name = '$sql_name' OR name_plural = '$sql_name_plural'";
             $result = $this->conn->query($dup_check);
             if ($result !== false) {
                 if ($result->num_rows > 0) {
