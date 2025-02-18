@@ -12,7 +12,7 @@ on:
 jobs:
 
   check_lib_changes:
-    name: Check lib/ changes
+    name: Check lib/* changes
     runs-on: ubuntu-latest
     # Declare outputs for next jobs
     outputs:
@@ -22,7 +22,7 @@ jobs:
         with:
           # Checkout as many commits as needed for the diff
           fetch-depth: 2
-      - shell: pwsh
+      - shell: bash
         id: diff
         run: |
           # Diff HEAD with the previous commit
@@ -30,11 +30,11 @@ jobs:
 
           # Check if a file under lib/
           $SourceDiff = $diff | Where-Object { $_ -match '^lib/' }
-          HasDiff = $SourceDiff.Length -gt 0
+          $HasDiff = $SourceDiff.Length -gt 0
 
           # Set the output named "libs_changed"
-          echo "found-changes=${HasDiff}"
-          echo "found-changes=${HasDiff}" >> $GITHUB_OUTPUT
+          echo "found-changes={$HasDiff}"
+          echo "found-changes={$HasDiff}" >> $GITHUB_OUTPUT
 
 #  test:
 #    name: Test
