@@ -124,7 +124,7 @@ jobs:
 
   deploy:
     name: Trigger Pull
-    needs: build
+    needs: conditional_check_lib_files
     runs-on: ubuntu-latest
     if: needs.conditional_check_lib_files.outputs.libs_changed != 1
     steps:
