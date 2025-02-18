@@ -33,8 +33,8 @@ jobs:
           $HasDiff = $SourceDiff.Length -gt 0
 
           # Set the output named "libs_changed"
-          echo "BUILD={$HasDiff}"
-          echo "BUILD={$HasDiff}" >> $GITHUB_ENV
+          echo "found-changes={$HasDiff}"
+          echo "found-changes={$HasDiff}" >> $GITHUB_OUTPUT
 
 #  test:
 #    name: Test
@@ -69,7 +69,7 @@ jobs:
     name: Build & Deploy
 #    needs: test
     needs: check_lib_changes
-    if: env.BUILD == 'True'
+    if: needs.check_lib_changes.outputs.build == 'True'
     runs-on: ubuntu-latest
 
     steps:
@@ -128,7 +128,7 @@ jobs:
   deploy:
     name: Trigger Pull
     needs: check_lib_changes
-    if: env.BUILD == 'False'
+    if: needs.check_lib_changes.outputs.build == 'False'
     runs-on: ubuntu-latest
 
     steps:
