@@ -33,8 +33,8 @@ jobs:
           $HasDiff = $SourceDiff.Length -gt 0
 
           # Set the output named "libs_changed"
-          echo "found-changes=${$HasDiff}"
-          echo "found-changes=${$HasDiff}" >> $GITHUB_OUTPUT
+          echo "found-changes=$HasDiff"
+          echo "found-changes=$HasDiff" >> $GITHUB_OUTPUT
 
 #  test:
 #    name: Test
