@@ -33,7 +33,7 @@ jobs:
       - name: Check for changes in lib/*
         id: diff
         run: |
-          if git diff --quiet ${{ env.base-commit }} HEAD -- lib/; then
+          if git diff --quiet ${{ env.base-commit }}~1 HEAD -- lib/; then
             echo "nothing found in lib, trigger pull"
             echo "found-changes=false" >> "$GITHUB_OUTPUT"
           else
