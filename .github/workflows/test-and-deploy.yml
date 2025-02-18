@@ -28,12 +28,12 @@ jobs:
         id: base_commit
         run: |
           BASE_COMMIT=$(git merge-base origin/${{ github.event.repository.default_branch }} HEAD)
-          echo "base_commit=$BASE_COMMIT" >> "$GITHUB_ENV"
+          echo "base-commit=$BASE_COMMIT" >> "$GITHUB_ENV"
 
       - name: Check for changes in lib/*
         id: diff
         run: |
-          if git diff --quiet ${{ env.base_commit }} HEAD -- lib/; then
+          if git diff --quiet ${{ env.base-commit }} HEAD -- lib/; then
             echo "nothing found in lib, trigger pull"
             echo "found-changes=false" >> "$GITHUB_OUTPUT"
           else
