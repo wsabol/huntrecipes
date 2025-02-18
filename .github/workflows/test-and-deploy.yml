@@ -33,7 +33,7 @@ jobs:
       - name: Check for changes in lib/*
         id: diff
         run: |
-          git diff --name-only ${{ env.base_commit }} HEAD -- lib/
+          git diff --raw ${{ env.base_commit }} HEAD
           
           if git diff --quiet ${{ env.base_commit }} HEAD -- lib/; then
             echo "found-changes=false" >> "$GITHUB_OUTPUT"
