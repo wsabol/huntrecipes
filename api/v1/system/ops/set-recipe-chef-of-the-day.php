@@ -1,11 +1,13 @@
 <?php
 
+use HuntRecipes\Chef;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
+use HuntRecipes\Recipe;
 
-require '../../../../includes/common.php';
+require __DIR__ . '/../../../../includes/common.php';
 
-class System_Ping_Endpoint extends Common_Endpoint {
+class Recipe_Chef_OfTheDay_Endpoint extends Common_Endpoint {
 
     public function __construct() {
         // $this->restrict_access();
@@ -13,8 +15,8 @@ class System_Ping_Endpoint extends Common_Endpoint {
         $method = $_SERVER['REQUEST_METHOD'];
 
         switch ($method) {
-            case 'GET':
-                $this->get_info();
+            case 'POST':
+                $this->set_stuff_of_the_day();
                 break;
 
             default:
@@ -22,20 +24,19 @@ class System_Ping_Endpoint extends Common_Endpoint {
         }
     }
 
-    public function get_info() {
+    public function set_stuff_of_the_day(): true {
         $data = array();
         $code = 400;
         $message = '';
 
         try {
+            $date = new DateTimeImmutable();
+            $conn = new SqlController();
 
-            $data['php_version'] = phpversion();
+            Recipe::set_new_recipe_of_the_day($date, $conn);
+            Chef::set_new_chef_of_the_day($date, $conn);
 
-            new SqlController();
-            $data['is_db_connected'] = true;
-            $data['is_production'] = IS_PRODUCTION;
-
-            $message = "Everything is ok.";
+            $message = "Success";
             $code = 200;
 
         } catch (Exception $e) {
@@ -47,4 +48,4 @@ class System_Ping_Endpoint extends Common_Endpoint {
     }
 }
 
-new System_Ping_Endpoint();
+new Recipe_Chef_OfTheDay_Endpoint();
