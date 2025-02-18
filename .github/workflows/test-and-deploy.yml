@@ -7,9 +7,32 @@ on:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
+
+  conditional_check_lib_files:
+    runs-on: ubuntu-latest
+    # Declare outputs for next jobs
+    outputs:
+      docs_changed: ${{ steps.check_file_changed.outputs.libs_changed }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Checkout as many commits as needed for the diff
+          fetch-depth: 2
+      - shell: pwsh
+        id: check_file_changed
+        run: |
+          # Diff HEAD with the previous commit
+          $diff = git diff --name-only HEAD^ HEAD
+
+          # Check if a file under lib/
+          $SourceDiff = $diff | Where-Object { $_ -match '^lib/' }
+          $HasDiff = $SourceDiff.Length -gt 0
+
+          # Set the output named "libs_changed"
+          Write-Host "::set-output name=libs_changed::$HasDiff"
 
 #  test:
 #    name: Test
@@ -43,8 +66,9 @@ jobs:
   build:
     name: Build
 #    needs: test
+    needs: conditional_job_check_files
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: needs.conditional_check_lib_files.outputs.libs_changed == 'True'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
