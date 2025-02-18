@@ -11,7 +11,21 @@ if ( @$App->R['recipe_id']*1 < 1 ) {
 }
 
 $sel_query = "
-	Call spSelectRecipe(".$App->R['recipe_id'].", ".(@$_SESSION['Login']['id']*1).");
+select r.*
+            ,co.name as course
+            ,cu.name as cuisine
+            ,rt.name as type
+            ,ch.name as chef
+from Recipe r
+LEFT JOIN Course co
+            ON co.id = r.course_id
+        LEFT JOIN Cuisine cu
+            ON cu.id = r.cuisine_id
+        LEFT JOIN RecipeType rt
+            ON rt.id = r.type_id
+        LEFT JOIN Chef ch
+            ON ch.id = r.chef_id
+where id = ".$App->R['recipe_id']."
 ";
 $result = $App->oDBMY->query($sel_query);
 $Recipe = $result->fetch_assoc();
