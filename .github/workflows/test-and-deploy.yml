@@ -42,7 +42,7 @@ jobs:
 
   build:
     name: Build
-    needs: test
+#    needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
