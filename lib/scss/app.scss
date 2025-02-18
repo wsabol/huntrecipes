@@ -46,6 +46,9 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
 @import '~@fortawesome/fontawesome-free/scss/brands';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 
+// theme energy
+@import "themeenergy-icons.css";
+
 // Main
 @import "global";
 @import "header";

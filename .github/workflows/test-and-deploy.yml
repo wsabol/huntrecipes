@@ -64,7 +64,7 @@ jobs:
 #        run: vendor/bin/phpunit tests --do-not-cache-result --colors
 
   build:
-    name: Build
+    name: Build & Deploy
 #    needs: test
     needs: conditional_check_lib_files
     runs-on: ubuntu-latest
