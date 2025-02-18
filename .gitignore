@@ -32,6 +32,8 @@ css/*
 # assets
 /assets/images/recipes/*
 !/assets/images/recipes/index.php
+!/assets/images/recipes/generic_recipe.jpg
 
 /assets/images/users/*
 !/assets/images/users/index.php
+!/assets/images/users/generic_avatar.jpg

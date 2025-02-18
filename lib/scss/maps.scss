@@ -39,29 +39,27 @@
 @each $color, $value in $theme-colors {
     .btn-outline-#{$color} {
 
-        @if $color == "primary" or $color == "success" or $color == "info" or $color == "favorite" {
+        @if $color == "primary" or $color == "success" or $color == "info" {
             @include button-outline-variant(
                 $value,
                 $color-hover: $white,
                 $active-color: $white
             );
+        } @else if $color == "favorite" {
+            --#{$prefix}btn-bg: #{$white};
+            --#{$prefix}btn-color: #{$favorite};
+            --#{$prefix}btn-border-color: #{$favorite};
+            --#{$prefix}btn-hover-color: #{$white};
+            --#{$prefix}btn-hover-bg: #{$favorite};
+            --#{$prefix}btn-hover-border-color: #{shade-color($favorite, $btn-hover-bg-shade-amount)};
+            --#{$prefix}btn-focus-shadow-rgb: #{to-rgb($favorite)};
+            --#{$prefix}btn-active-color: #{$white};
+            --#{$prefix}btn-active-bg: #{$favorite};
+            --#{$prefix}btn-active-border-color: #{shade-color($favorite, $btn-active-bg-shade-amount)};
         } @else {
             @include button-outline-variant($value);
         }
     }
-}
-
-.btn-outline-favorite {
-    background: $white;
-    --#{$prefix}btn-color: #{$favorite};
-    --#{$prefix}btn-border-color: #{$favorite};
-    --#{$prefix}btn-hover-color: #{shade-color($favorite, $btn-hover-bg-shade-amount)};
-    --#{$prefix}btn-hover-bg: #{tint-color($favorite, 95%)};
-    --#{$prefix}btn-hover-border-color: #{shade-color($favorite, $btn-hover-bg-shade-amount)};
-    --#{$prefix}btn-focus-shadow-rgb: #{to-rgb($favorite)};
-    --#{$prefix}btn-active-color: #{shade-color($favorite, $btn-active-bg-shade-amount)};
-    --#{$prefix}btn-active-bg: #{tint-color($favorite, 95%)};
-    --#{$prefix}btn-active-border-color: #{shade-color($favorite, $btn-active-bg-shade-amount)};
 }
 
 // Generate contextual modifier classes for colorizing the alert

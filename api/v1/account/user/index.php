@@ -90,6 +90,9 @@ class Account_User_Endpoint extends Common_Endpoint {
 
     private function handle_patch(): void {
         $request = json_decode(file_get_contents('php://input'));
+        if (empty($request)) {
+            parse_str(file_get_contents('php://input'), $request);
+        }
 
         if (!isset($request->action)) {
             echo $this->response([], 400, "action is not set");
@@ -104,7 +107,7 @@ class Account_User_Endpoint extends Common_Endpoint {
         };
     }
 
-    public function reset_password(): bool {
+    private function reset_password(): bool {
         $data = array();
         $code = 400;
         $message = '';

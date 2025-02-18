@@ -1,6 +1,5 @@
 <?php
 
-use HuntRecipes\Chef;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Endpoint\Common_Endpoint;
 use HuntRecipes\Endpoint\FileUploadController;
@@ -73,6 +72,9 @@ class Recipe_Endpoint extends Common_Endpoint {
             if (!isset($request->serving_measure_id)) {
                 throw new Exception("serving_measure_id is not set");
             }
+            if (!isset($request->published_flag)) {
+                throw new Exception("published_flag is not set");
+            }
 
             if (!isset($request->ingredients)) {
                 throw new Exception("ingredients is not set");
@@ -100,6 +102,7 @@ class Recipe_Endpoint extends Common_Endpoint {
             $recipe->serving_measure_id = (int)$request->serving_measure_id;
             $recipe->instructions = implode("\n", array_values(array_filter($instructions, 'strlen')));
             $recipe->chef_id = (int)$request->chef_id;
+            $recipe->published_flag = filter_var($request->published_flag, FILTER_VALIDATE_BOOL);
 
             // handle file upload
             if (isset($_FILES['recipe_image'])) {
@@ -115,15 +118,9 @@ class Recipe_Endpoint extends Common_Endpoint {
                     throw new Exception("Error handling recipe image: Only image files are allowed");
                 }
 
-                if (empty($errors)) {
-                    // Move file to permanent location
-                    $new_file = $uploader->move(Recipe::IMAGES_DIR);
-                    $recipe->image_filename = "/" . $new_file;
-                }
-            }
-
-            if (!empty($recipe->recipe_image)) {
-                $recipe->image_filename = $recipe->recipe_image;
+                // Move file to permanent location
+                $new_file = $uploader->move(Recipe::IMAGES_DIR);
+                $recipe->image_filename = "/" . $new_file;
             }
 
             $success = $recipe->save_to_db();
@@ -213,6 +210,12 @@ class Recipe_Endpoint extends Common_Endpoint {
         try {
 
             $request = json_decode(file_get_contents('php://input'));
+            if (empty($request)) {
+                parse_str(file_get_contents('php://input'), $request);
+            }
+            if (empty($request)) {
+                $request = (object)$_REQUEST;
+            }
 
             if (!isset($request->recipe_id)) {
                 throw new Exception("recipe_id is not set");

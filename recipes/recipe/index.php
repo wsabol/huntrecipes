@@ -104,8 +104,7 @@ $data->liked_by = $recipe->get_users_who_liked_this();
 $data->children = [];
 
 if ($sess->has_user()) {
-    $chef = new Chef($recipe->chef_id, $conn);
-    $data->i_am_the_chef = $chef->user_id === $sess->user()->id;
+    $data->i_am_the_chef = $recipe->chef_id === $sess->user()->chef_id;
 }
 
 $children = $recipe->get_child_recipes();

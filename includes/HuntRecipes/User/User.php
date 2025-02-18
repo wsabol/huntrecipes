@@ -10,6 +10,8 @@ use HuntRecipes\Exception\SqlException;
 use HuntRecipes\Recipe;
 
 class User extends Common_Object {
+    public const IMAGES_DIR = 'assets/images/users';
+
     private SqlController $conn;
     public int $id;
     public string $name;

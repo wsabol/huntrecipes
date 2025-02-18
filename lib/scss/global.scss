@@ -508,3 +508,14 @@ figure:has(> .blockquote) {
     --bs-alert-border-color: #{tint-color($error, -1 * $alert-border-scale)};
     --bs-alert-link-color: #{tint-color($error, -1 * $alert-border-scale)};
 }
+
+// cropping
+
+.cropping-container .img-container {
+    max-height: 400px;
+    background-color: $gray-50;
+}
+.cropping-container .img-container img {
+    max-width: 100%;
+    max-height: 400px;
+}

@@ -91,14 +91,14 @@ class FileUploadController {
         }
 
         $new_file = "$relative_dir/" . $this->get_name();
-        if (file_exists($new_file)) {
+        if (file_exists(RECIPES_ROOT . "/$new_file")) {
             $i = 1;
 
             // If file exists, add number to its name.
             while (file_exists(RECIPES_ROOT . "/$new_file")) {
                 $new_file = "$relative_dir/" . pathinfo($new_file, PATHINFO_FILENAME)
                     . "-" . $i
-                    . "." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+                    . "." . pathinfo($this->get_name(), PATHINFO_EXTENSION);
 
                 $i++;
             }

@@ -10,7 +10,8 @@ use HuntRecipes\Exception\SqlException;
 use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
-    const IMAGES_DIR = 'assets/images/recipes';
+    public const IMAGES_DIR = 'assets/images/recipes';
+
     private SqlController $conn;
     public int $id;
     public int $course_id = 0;
@@ -351,6 +352,15 @@ class Recipe extends Common_Object {
     }
 
     public function delete_from_db(): bool {
+        $delete_query = "
+        DELETE FROM RecipeIngredient
+        WHERE recipe_id = {$this->id};
+        ";
+        $result = $this->conn->query($delete_query);
+        if ($result === false) {
+            throw new SqlException('Error deleting Recipe: ' . $this->conn->last_message());
+        }
+
         $delete_query = "
         DELETE FROM Recipe
         WHERE id = {$this->id};
