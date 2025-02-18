@@ -11,30 +11,25 @@ on:
 
 jobs:
 
-  check_lib_changes:
-    name: Check lib/* changes
+  check-lib-changes:
+    name: Check for lib/* changes
     runs-on: ubuntu-latest
-    # Declare outputs for next jobs
+
     outputs:
       build: ${{ steps.diff.outputs.found-changes }}
+
     steps:
-      - uses: actions/checkout@v2
-        with:
-          # Checkout as many commits as needed for the diff
-          fetch-depth: 2
-      - shell: pwsh
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for changes in lib/*
         id: diff
         run: |
-          # Diff HEAD with the previous commit
-          $diff = git diff --name-only HEAD^ HEAD
-
-          # Check if a file under lib/
-          $SourceDiff = $diff | Where-Object { $_ -match '^lib/' }
-          $HasDiff = $SourceDiff.Length -gt 0
-
-          # Set the output named "libs_changed"
-          echo "found-changes={$HasDiff}"
-          echo "found-changes={$HasDiff}" >> $env:GITHUB_OUTPUT
+          if git diff --quiet origin/master HEAD -- lib/; then
+            echo "found-changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "found-changes=true" >> "$GITHUB_OUTPUT"
+          fi
 
 #  test:
 #    name: Test
