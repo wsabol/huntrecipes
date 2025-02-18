@@ -30,11 +30,11 @@ jobs:
 
           # Check if a file under lib/
           $SourceDiff = $diff | Where-Object { $_ -match '^lib/' }
-          $HasDiff = $SourceDiff.Length -gt 0
+          HasDiff = $SourceDiff.Length -gt 0
 
           # Set the output named "libs_changed"
-          echo "found-changes=$HasDiff"
-          echo "found-changes={$HasDiff}" >> $GITHUB_OUTPUT
+          echo "found-changes=${HasDiff}"
+          echo "found-changes=${HasDiff}" >> $GITHUB_OUTPUT
 
 #  test:
 #    name: Test
