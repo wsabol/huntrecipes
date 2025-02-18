@@ -34,7 +34,7 @@ jobs:
 
           # Set the output named "libs_changed"
           echo "found-changes=$HasDiff"
-          echo "found-changes=$HasDiff" >> $GITHUB_OUTPUT
+          echo "found-changes={$HasDiff}" >> $GITHUB_OUTPUT
 
 #  test:
 #    name: Test
