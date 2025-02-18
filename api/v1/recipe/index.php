@@ -15,6 +15,9 @@ class Recipe_Endpoint extends Common_Endpoint {
     public function __construct() {
         $this->restrict_access();
 
+        ini_set('upload_max_filesize', '40M');
+        ini_set('post_max_size', '42M');
+
         $method = $_SERVER['REQUEST_METHOD'];
 
         switch ($method) {
