@@ -1,0 +1,27 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="card">
+                <h5 class="card-header text-{{ alert }}">{{ heading }}</h5>
+                <div class="card-body">
+                    <p>{{ message }}</p>
+                </div>
+                <div class="card-footer">
+                    <p><a href="/home/">Go Home</a></p>
+                    <p><a href="/account/">Go to My Account</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

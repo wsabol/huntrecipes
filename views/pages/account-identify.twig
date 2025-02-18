@@ -1,0 +1,47 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4">
+            <form id="frm-user-account-search">
+                <div class="card">
+
+                    <h5 class="card-header">Find your account</h5>
+
+                    <div class="card-body">
+
+                        <p>Please enter your email to search for your account.</p>
+
+                        <div class="alert alert-error" id="alert-account-search" style="display:none">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label d-none">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                <input required type="email" class="form-control" name="email" placeholder="Email" aria-label="Email" value="{{ email }}">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="/account/sign-in/" class="btn btn-light">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

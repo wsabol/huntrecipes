@@ -1,0 +1,367 @@
+@import "settings";
+
+/* WELCOME */
+
+.welcome {
+    width: 100vw;
+    background-image: url('../../assets/images/intro.jpg');
+    background-position: bottom;
+    background-size: cover;
+    height: 100vh;
+}
+
+.welcome {
+    .intro {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        /* margin: 0 0 30px; */
+        overflow: hidden;
+        min-height: 740px;
+    }
+
+    .main {
+        margin-top: 2.5rem;
+    }
+
+    .hero {
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 3.125rem;
+        color: $white;
+        line-height: 1.2;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+    }
+
+    .hero p {
+        color: $white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    }
+
+    @include media-breakpoint-up(lg) {
+        .hero {
+            text-align: left;
+        }
+    }
+}
+
+// RECIPES
+
+#results-container {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#results-container.loading {
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+.form-control-focus {
+    color: $dark;
+    background-color: $white;
+    border-color: $blue-200;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.was-validated :valid + .form-control-focus {
+    border-color: $green-700;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.was-validated :invalid + .form-control-focus {
+    border-color: $red-600;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+// home
+
+.boxed-widget {
+    display: block;
+    width: 100%;
+    margin-bottom: 30px;
+    position: relative;
+    background: $white;
+    border-radius: $border-radius;
+    -webkit-box-shadow: $btn-box-shadow;
+    -moz-box-shadow: $btn-box-shadow;
+    box-shadow: $btn-box-shadow
+}
+
+.boxed-widget h5 {
+    padding: 16px 20px;
+    margin: 0;
+    color: $card-color;
+}
+
+.boxed-widget .boxed {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.boxed-widget .boxed li {
+    width: 33.333333333%;
+    height: 90px;
+    font-size: $font-size-sm;
+    line-height: 1.2;
+    list-style: none;
+    text-transform: uppercase;
+    text-align: center;
+    overflow: hidden;
+    padding: 0 !important;
+    border-top: none !important;
+}
+
+.boxed-widget .boxed li a {
+    display: block;
+    color: $white;
+    width: 100%;
+    height: 100%;
+    font-weight: $font-weight-bold;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+}
+
+.boxed .light a {
+    background: $primary-400;
+}
+
+.boxed .medium a {
+    background: $primary;
+}
+
+.boxed .dark a {
+    background: $primary-600;
+}
+
+.boxed .icon {
+    display: inline-block;
+    font-size: 2.1875rem;
+    margin: 1rem 0 0.375rem;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
+    transition: $transition-base;
+}
+
+.boxed li span {
+    display: inline-block;
+    width: 100%;
+    padding: 0 9px;
+    vertical-align: sub;
+}
+
+.boxed li a:hover {
+    -webkit-box-shadow: inset 0 0 30px rgba(0, 0, 0, .2);
+    -moz-box-shadow: inset 0 0 30px rgba(0, 0, 0, .2);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, .2);
+}
+
+.boxed li a:hover .icon {
+    transform: rotate(360deg);
+}
+
+// ERROR PAGE
+
+.error-container {
+    margin-bottom: 30px;
+}
+
+.error-container .error_type {
+    color: $white;
+    // height: 140px;
+    background: $gray-400;
+    text-align: center;
+    font-size: 94px;
+    line-height: 140px;
+    font-weight: 600;
+    vertical-align: bottom;
+}
+
+.error-container .error_text {
+    color: $white;
+    background: $gray-800;
+    text-align: center;
+    font-size: 22px;
+    line-height: 57px;
+    font-weight: 600;
+    text-shadow: 0 0 1px rgba(0, 0, 0, .15);
+}
+
+// RECIPE SINGLE
+
+.recipe-ingredients dt.no-amount{
+    background:none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.recipe-instructions ol {
+    margin: 0;
+    padding: 0;
+    counter-reset: li;
+}
+
+.recipe-instructions li {
+    position: relative;
+    background: $white;
+    font-size: $font-size-xlg;
+    padding: 15px 20px;
+    margin: 0 0 30px 50px;
+    line-height: $line-height-lg;
+    -webkit-box-shadow: $dl-box-shadow;
+    -moz-box-shadow: $dl-box-shadow;
+    box-shadow: $dl-box-shadow;
+    border-radius: 0 $border-radius-sm $border-radius-sm $border-radius-sm;
+}
+
+.recipe-instructions li::before {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -50px;
+    top: 0;
+    background: $primary;
+    color: $white;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 33px;
+    text-shadow: $dl-box-shadow;
+    border-radius: $border-radius-sm 0 0 $border-radius-sm;
+}
+
+.recipe-instructions li::after {
+    position: absolute;
+    content: '';
+    border: .5em solid transparent;
+    left: 0;
+    top: 20px;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+}
+
+.recipe-instructions li:hover:after {
+    left: 0;
+    border-left-color: $primary;
+}
+
+.boxed-widget.liked-by-widget li {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.boxed-widget.liked-by-widget li a[href="javascript:"] {
+    cursor: default;
+}
+
+.boxed-widget.liked-by-widget li span {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    font-weight: 400;
+    color: $body-color;
+    background: $white;
+    border: none;
+    -webkit-transition: $transition-base;
+    -moz-transition: $transition-base;
+    -o-transition: $transition-base;
+    -ms-transition: $transition-base;
+    transition: $transition-base;
+    padding: 6px 10px;
+    text-transform: none;
+}
+
+.boxed-widget.liked-by-widget li:hover span {
+    opacity: 1;
+}
+
+// login page
+
+.content.sign-in-box {
+    margin-top: 40px;
+    padding: 20px 30px;
+}
+
+// recipe edit
+
+.btn-ingredient-remove,
+.btn-instruction-remove {
+    padding: 4px 8px;
+}
+
+// account
+
+#my-account-content {
+    .alert-verification, .email-verified, .email-unverified {
+        display: none;
+    }
+}
+
+#my-account-content.email-alert-email {
+    .email-unverified {
+        display: block;
+    }
+    #alert-verification-email {
+        display: block;
+    }
+}
+
+#my-account-content.email-alert-wait {
+    .email-unverified {
+        display: block;
+    }
+    #alert-verification-wait {
+        display: block;
+    }
+}
+
+#my-account-content.email-alert-email-sent {
+    .email-unverified {
+        display: block;
+    }
+    #alert-verification-email-sent {
+        display: block;
+    }
+}
+
+#my-account-content.email-alert-none {
+    .email-verified {
+        display: block;
+    }
+}
+
+// admin approve app
+#mdl-app-view {
+    .form-check-input, .form-check-label {
+        opacity: 1 !important;
+    }
+}
+
+// print view
+
+.body-print {
+    background: $white;
+}
+
+.body-print {
+    .page-title {
+        margin-bottom: 30px;
+    }
+}

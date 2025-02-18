@@ -1,0 +1,53 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="content sign-in-box">
+
+                <div class="row mb-5">
+                    <div class="col-lg-8 offset-lg-2">
+                        <img style="width:100%" src="/assets/images/ico/huntr_logo_transparent_scale.png" alt="HuntRecipes">
+                    </div>
+                </div>
+
+                <h5 class="text-center mb-4">One-time Password Sign In</h5>
+
+                {% if render_error %}
+
+                    <div class="alert alert-error" id="alert-sign-in">
+                        {{ message }}
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-success" id="alert-sign-in">
+                        {{ message }}
+                    </div>
+
+                    <form id="frm-user-sign-in">
+                        <input type="hidden" name="email" value="{{ email }}">
+
+                        <div id="otp-input"></div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary mb-4">Sign In</button>
+                        </div>
+                    </form>
+
+                {% endif %}
+
+                <p class="pt-3">Remember your password? <a class="text-bold" href="/account/sign-in/?email={{ email }}">Go Back</a></p>
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

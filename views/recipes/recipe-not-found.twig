@@ -1,0 +1,24 @@
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="error-container">
+                <div class="error_type">🤔</div>
+                <div class="error_text">Something is wrong here...</div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="content">
+                <p>Hrm. The recipe you are looking for does not exist.</p>
+                <p class="mb-4">If you believe that this is an error, please <a href="/contact/">contact us</a>. Thank you!</p>
+                <a href="/recipes/" class="btn btn-primary btn-lg">Back to Recipes</a>
+                <a href="/home/" class="btn btn-outline-primary btn-lg">Back Home</a>
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+{% endblock %}

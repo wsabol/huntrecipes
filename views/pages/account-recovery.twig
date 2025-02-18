@@ -1,0 +1,44 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="card">
+
+                <h5 class="card-header">We found your account!</h5>
+
+                <div class="card-body">
+
+                    <p>We will send a code to your email address:
+                        <strong id="email"
+                                data-user_id="{{ user.id }}"
+                                data-email="{{ user.email }}"
+                        >{{ user.email }}</strong>
+                    </p>
+
+                    <p>You can use this code as a one-time password to Sign In.</p>
+
+                    <div class="alert alert-error" id="alert-account-recover" style="display:none">
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="d-flex gap-2">
+                        <a href="/account/sign-in/?email={{ user.email }}" class="text-bold align-self-center me-auto">Sign in with Password</a>
+                        <button id="btnSendOTP" class="btn btn-primary">Continue</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

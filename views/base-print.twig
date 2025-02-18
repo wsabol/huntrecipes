@@ -1,0 +1,21 @@
+
+{% include 'partials/head.twig' %}
+
+<body class="body-print" data-current-user-id={{ current_user_id }}>
+
+    <main class="main" role="main">
+        <div class="container">
+            {% include 'partials/breadcrumbs.twig' %}
+
+            {% block page_title %}
+                <h1 class="page-title">{{ page_title }}</h1>
+            {% endblock %}
+
+            {% block main_content %}{% endblock %}
+        </div>
+    </main>
+
+    {% include 'partials/footer-print.twig' %}
+
+</body>
+{% include 'partials/foot.twig' %}

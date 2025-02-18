@@ -1,0 +1,54 @@
+{% set show_footer = true %}
+{% set hide_call_to_action = true %}
+
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+
+{% block main_content %}
+
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4">
+            <div class="content sign-in-box">
+
+                <h5 class=" mb-4">Sign Up</h5>
+
+                <div class="alert alert-error" id="alert-sign-up" style="display:none">
+
+                </div>
+
+                <form id="frm-user-sign-up">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input required type="text" class="form-control" name="name" placeholder="Name" aria-label="Name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input required type="email" class="form-control" name="email" placeholder="Email" aria-label="Email">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input required type="password" class="form-control" name="password" placeholder="Password" aria-label="Password" autocomplete="new-password">
+                    </div>
+
+                    <p class="alert alert-info">After sign-up, you'll receive a message to verify your account. </p>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mb-4">Sign up</button>
+                    </div>
+                </form>
+
+                <p>Have an account? <a class="text-bold" href="/account/sign-in/">Sign in.</a></p>
+
+                <p>Don't want an account? <a class="text-bold" href="/home/">Browse without an account</a></p>
+
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+
+{% endblock %}

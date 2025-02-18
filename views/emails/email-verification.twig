@@ -1,0 +1,26 @@
+
+{% extends 'emails/email-base.twig' %}
+
+{% block content %}
+
+    <div class="spacer-md">&nbsp;</div>
+    <div class="h2">Please verify your account below</div>
+
+    <div class="spacer-sm">&nbsp;</div>
+
+    <div style="padding: 30px 50px; background: #e4e4e4">
+        <a class="btn btn-block" href="https://huntrecipes.willsabol.com/account/verification/?hash={{ hashed_token }}">Verify my account</a>
+    </div>
+
+    <div class="spacer">&nbsp;</div>
+
+    <div class="p">HuntRecipes requires a verified email address, so you can safely recover your account in the future. <em>This link will expire in 24 hours.</em></div>
+
+    <div class="p">If you didn't recently attempt to create a new account with this email address, you can safely disregard this email.</div>
+
+    <div class="spacer-sm">&nbsp;</div>
+    <div class="p">Cheers,</div>
+    <div class="p">The HuntRecipes Team</div>
+    <div class="spacer-sm">&nbsp;</div>
+
+{% endblock %}

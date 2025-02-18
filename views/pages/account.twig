@@ -1,0 +1,449 @@
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+
+    {% set email_alert = user.is_email_verified == 0
+        ? user.has_open_email_verification ? 'wait' : 'email'
+        : 'none' %}
+
+    <div class="row">
+
+        <!--profile left part-->
+        <div class="col-lg-3">
+
+            <div class="card" >
+                <img src="{{ user.profile_picture }}" class="card-img-top" alt="{{ user.name }}" id="profile-picture">
+                <div class="card-body">
+                    <h2 class="card-title mb-3">{{ user.name }}</h2>
+                    <p class="card-text mb-4">User since: {{ user.date_created|date("d M, Y") }}</p>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary btn-new-picture">Change Photo</button>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-secondary btn-logout">Sign Out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--//profile left part-->
+
+        <div class="col-lg-9">
+
+            <div class="content email-alert-{{ email_alert }}" id="my-account-content">
+
+                <ul class="nav nav-pills nav-fill mb-4">
+                    <li class="nav-item">
+                        <button class="nav-link {{ goto == '' or goto == 'settings' ? 'active' : '' }}"
+                                id="settings-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#settings-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="settings-tab-pane"
+                                aria-selected="{{ goto == '' or goto == 'settings' ? 'true' : 'false' }}">Account Settings</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link {{ goto == 'favorites' ? 'active' : '' }}"
+                                id="favorites-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#favorites-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="favorites-tab-pane"
+                                aria-selected="{{ goto == 'favorites' ? 'true' : 'false' }}">Favorites</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link {{ goto == 'chef' ? 'active' : '' }}"
+                                id="chef-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#chef-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="chef-tab-pane"
+                                aria-selected="{{ goto == 'chef' ? 'true' : 'false' }}">Chef Profile</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link {{ goto == 'recipes' ? 'active' : '' }}"
+                                id="recipes-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#recipes-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="recipes-tab-pane"
+                                aria-selected="{{ goto == 'recipes' ? 'true' : 'false' }}">My Recipes</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link {{ goto == 'security' ? 'active' : '' }}"
+                                id="security-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#security-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="security-tab-pane"
+                                aria-selected="{{ goto == 'security' ? 'true' : 'false' }}">Security</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" >
+                    <div class="tab-pane fade {{ goto == '' or goto == 'settings' ? 'show active' : '' }}"
+                         id="settings-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="settings-tab"
+                         tabindex="0">
+
+                        <div class="alert" style="display:none" id="alert-settings"></div>
+
+                        <form id="frm-settings">
+                            <input type="hidden" name="user_id" value="{{ current_user_id }}">
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input required type="text" class="form-control" name="name" placeholder="Name" aria-label="Name" value="{{ user.name }}">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="name" class="form-label">Email</label>
+                                <input required type="email" class="form-control" name="email" placeholder="Email" aria-label="Email" value="{{ user.email }}">
+                                <div class="text-success m-1 email-verified"><i class="fa fa-check"></i> Verified</div>
+                                <div class="text-warning m-1 email-unverified"><i class="fa fa-warning"></i> Unverified</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mb-3">Update Account</button>
+                        </form>
+
+                        <div class="alert alert-success alert-verification" id="alert-verification-wait">
+                            <h4>Please check your email</h4>
+                            <p>We emailed you a link to verify your account.</p>
+                            <button class="btn btn-secondary btn-verify-email">Send Another Verification Email</button>
+                        </div>
+                        <div class="alert alert-warning alert-verification" id="alert-verification-email">
+                            <p>Please verify your account</p>
+                            <button class="btn btn-secondary btn-verify-email">Send Verification Email</button>
+                        </div>
+                        <div class="alert alert-success alert-verification" id="alert-verification-email-sent">
+                            <h4>Verification link sent!</h4>
+                            <p>Follow the instructions in the email to verify your account.</p>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade {{ goto == 'favorites' ? 'show active' : '' }}"
+                         id="favorites-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="favorites-tab"
+                         tabindex="0">
+
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container">
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade {{ goto == 'chef' ? 'show active' : '' }}"
+                         id="chef-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="chef-tab"
+                         tabindex="0">
+
+                        <div class="alert" style="display:none" id="alert-chef"></div>
+
+                        {% if user.is_chef == 0 %}
+
+                            {% if chef_app == false or chef_app.chef_application_status_id == 0 %}
+                                <article>
+                                    <h4>Become a HuntRecipes Chef!</h4>
+                                    <p>
+                                        Sharing recipes on this platform is available only to our approved family chefs.
+                                        Whether you're a Hunt by birth, marriage, or chosen family, gaining access is simple.
+                                    </p>
+                                    <p>
+                                        Once you complete this quick application, we'll set up your chef profile and notify you by email when it's ready.
+                                        Then you can start sharing all those delicious family recipes you've been perfecting!
+                                    </p>
+                                    <p>
+                                        Click "Become a Chef" below to tell us about yourself and your connection to the Hunts. We'd love to have your recipes join our collection!
+                                    </p>
+                                </article>
+
+                                <div class="alert alert-warning email-unverified">
+                                    <p>You must verify your account before becoming a chef</p>
+                                    <a href="/account/?goto=settings" class="btn btn-primary">Go to Account Settings</a>
+                                </div>
+                                <button class="btn btn-primary mt-2 mb-3 btn-start-application email-verified">Become a Chef</button>
+
+                            {% elseif chef_app.chef_application_status_id == 1 %}
+
+                                <article class="alert alert-light">
+                                    <p>Thank you for applying to join HuntRecipes as a chef! </p>
+                                    <p class="lead">Your application status is pending</p>
+                                    <p>We've received your application and will review it as soon as possible. You'll receive an email at
+                                        the address you provided once we've made a decision.</p>
+                                    <p>In the meantime, feel free to browse our collection of family favorites - you'll be able to add your own recipes soon!</p>
+                                    <a class="btn btn-primary" href="/recipes/">Browse Recipes</a>
+                                </article>
+
+                                <hr>
+
+                                <h5>Your application</h5>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Your Story</th>
+                                            <td>{{ chef_app.story }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Relation</th>
+                                            <td>{{ chef_app.relationship_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Link to Existing</th>
+                                            <td>{{ chef_app.already_exists ? 'Yes, link to existing chef' : 'No, I\'m new to the site' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date Submitted</th>
+                                            <td>{{ chef_app.date_created.date|date('F j, Y g:iA') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <button class="btn btn-outline-warning btn-withdraw-app" data-user-id="{{ user.id }}" data-chef-application-id="{{ chef_app.id }}">Withdraw Application</button>
+
+                            {% elseif chef_app.chef_application_status_id == 2 %}
+
+                                <div class="alert alert-error">
+                                    Something is wrong. <a href="/contact/">Contact us to get this fixed</a>
+                                </div>
+
+                            {% elseif chef_app.chef_application_status_id == 3 %}
+
+                                <article class="alert alert-light">
+                                    <p>Thank you for your interest in joining HuntRecipes as a chef. After reviewing your application, we weren't able to verify your connection to the Hunt family at this time.</p>
+                                    <p>If you believe this was a mistake or if you'd like to provide additional information about your connection to the family, please <a href="/contact/">contact us</a>.</p>
+                                </article>
+
+                            {% endif %}
+
+                        {% else %}
+                            <form id="frm-chef">
+                                <input type="hidden" name="chef_id" value="{{ chef.id }}">
+
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Chef Name</label>
+                                    <input required type="text" class="form-control" name="name" placeholder="Chef Name" aria-label="Chef Name" value="{{ chef.name }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Gender</label>
+                                    <select required class="form-select" name="is_male" aria-label="Gender" >
+                                        <option value="0" {{ not chef.is_male ? 'selected' : '' }}>Female (she/her)</option>
+                                        <option value="1" {{ chef.is_male ? 'selected' : '' }}>Male (he/him)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="favorite_foods" class="form-label">Favorite Food</label>
+                                    <textarea class="form-control" rows="2" name="favorite_foods" id="favorite_foods" maxlength="255" >{{ chef.favorite_foods }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="wisdom" class="form-label">Favorite Quote</label>
+                                    <textarea class="form-control" rows="2" name="wisdom" id="wisdom" maxlength="255" >{{ chef.wisdom }}</textarea>
+                                </div>
+
+                                <h4>Your Story</h4>
+                                <div class="mb-3">
+                                    <label id="story" for="story" class="form-label">How do you related to the Hunt's? How did you get here?</label>
+                                    <textarea class="form-control" rows="3" name="story" id="story" maxlength="1000" >{{ chef.story }}</textarea>
+                                </div>
+
+                                <div class="d-flex mb-3">
+                                    <button type="submit" class="btn btn-primary">Update Chef Profile</button>
+                                    <a href="/chef/?id={{ chef.id }}" class="btn btn-outline-info ms-auto">View Chef Profile</a>
+                                </div>
+                            </form>
+                        {% endif %}
+
+                    </div>
+                    <div class="tab-pane fade {{ goto == 'recipes' ? 'show active' : '' }}"
+                         id="recipes-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="recipes-tab"
+                         tabindex="0">
+
+                        {% if user.is_chef == 0 %}
+
+                            {% if chef_app == false or chef_app.chef_application_status_id == 0 %}
+                                <div class="alert alert-info">
+                                    <p>Hey there! This feature is currently only available to our approved family chefs.</p>
+                                    <p class="mb-0">Want to share your own recipes? Click below to submit a quick application and start sharing your family favorites.</p>
+                                </div>
+                                <button class="btn btn-primary mt-2 mb-3 btn-start-application">Become a Chef</button>
+
+                            {% elseif chef_app.chef_application_status_id == 1 %}
+
+                                <div class="alert alert-info">
+                                    <p>Hey there! This feature is currently only available to our approved family chefs.</p>
+                                    <p class="mb-0">Your application is pending. <a href="/account/?goto=chef">Click for more info</a></p>
+                                </div>
+
+                            {% elseif chef_app.chef_application_status_id == 2 %}
+
+                                <div class="alert alert-error">
+                                    Something is wrong. <a href="/contact/">Contact us to get this fixed</a>
+                                </div>
+
+                            {% elseif chef_app.chef_application_status_id == 3 %}
+
+                                <article class="alert alert-light">
+                                    <p>Thank you for your interest in joining HuntRecipes as a chef. After reviewing your application, we weren't able to verify your connection to the Hunt family at this time.</p>
+                                    <p>If you believe this was a mistake or if you'd like to provide additional information about your connection to the family, please <a href="/contact/">contact us</a>.</p>
+                                </article>
+                                <div class="alert alert-info">
+                                    <p>Hey there! This feature is currently only available to our approved family chefs.</p>
+                                    <p class="mb-0"><a href="/account/?goto=chef">Click for more info</a></p>
+                                </div>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="recipes-container">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade {{ goto == 'security' ? 'show active' : '' }}"
+                         id="security-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="security-tab"
+                         tabindex="0">
+
+                        <h4>Reset Password</h4>
+
+                        <p>Click the button below to receive a secure link to reset your password. For security reasons, the link will expire in 24 hours.</p>
+                        <button class="btn btn-outline-primary btn-reset-pwd">Reset Password</button>
+
+                        <div class="alert alert-success" id="alert-reset-pwd" style="display:none">
+                            <h5>Secure link sent to your email</h5>
+                            <p>Follow the instructions in the email to reset your password.</p>
+                        </div>
+
+                        <h4 class="text-error mt-5">Danger Zone</h4>
+
+                        <div class="alert alert-danger-zone">
+                            <strong>Delete my account</strong>
+                            <p>Once deleted, it will be gone forever. We'd hate to see you go!</p>
+                            <button class="btn btn-outline-error">Delete my Account</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="mdl-chef-app" tabindex="-1" aria-labelledby="mdl-chef-app-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdl-chef-app-title">Become a Chef - Apply</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form id="frm-chef-app">
+                    <div class="modal-body">
+                        <p class="text-muted">We're excited that you're interested in sharing your favorite dishes with us. Once you
+                            complete this quick application, we'll set up your chef profile and notify you by
+                            email when it's ready.</p>
+
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+
+                        <div class="mb-3">
+                            <label for="relationship" class="form-label">How are you related to the Hunts?</label>
+                            <select class="form-select" id="relationship" name="relationship" required>
+                                <option disabled selected value="">Choose...</option>
+                                {% for rel in relationships %}
+                                    <option value="{{ rel.value }}">{{ rel.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Do you already see your recipes on this site?</label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" value="1" type="radio" name="already_exists" id="exists-yes" required>
+                                <label class="form-check-label" for="exists-yes">
+                                    Yes, link my account to a Chef that already exists
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" value="0" type="radio" name="already_exists" id="exists-no" required>
+                                <label class="form-check-label" for="exists-no">
+                                    No, I'm new to the site
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" value="0" type="radio" name="already_exists" id="exists-na" required>
+                                <label class="form-check-label" for="exists-na">
+                                    Not Sure
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="story" class="form-label">Tell us more about your connection</label>
+                            <textarea class="form-control" id="story" name="story" rows="3" maxlength="1000" required
+                                      placeholder="Example: I'm Bill's daughter from his first marriage, or I'm married to Sarah Hunt since 1980"></textarea>
+                        </div>
+
+                        <div class="alert" style="display:none" id="alert-chef-app"></div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" id="btn-chef-app-close" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="submit" class="btn btn-primary" id="btn-chef-app-submit">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Upload Modal -->
+    <div class="modal fade" id="photo-upload-modal" tabindex="-1" aria-labelledby="photo-upload-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photo-upload-modal-title">Update Profile Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Initial Upload State -->
+                    <div class="uploadState text-center p-4">
+                        <input type="file" id="photoInput" class="d-none" accept="image/*">
+                        <label for="photoInput" class="btn btn-outline-primary mb-3">
+                            Choose a Photo
+                        </label>
+                        <p class="text-muted">Select a photo to upload. You'll be able to adjust and crop it in the next step.</p>
+                    </div>
+
+                    <!-- Cropping State -->
+                    <div class="cropping-container croppingState" style="display:none">
+                        <div class="img-container mb-3">
+                            <img src="" alt="Upload preview" class="cropImage">
+                        </div>
+                        <p class="text-muted">Drag to reposition and use the corners to resize. Your profile photo will be square.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary cropButton" style="display:none">Save Photo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+    <!--row-->
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="error-container">
+                <div class="error_type">🤔</div>
+                <div class="error_text">Uh Oh! There's nothing here...</div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="content">
+                <p>We've rummaged in the pantry but can't find the page you are looking for. </p>
+                <p class="mb-4">If you believe that this is an error, please <a href="/contact/">contact us</a>!
+                    We'll head to the grocery store and see what we can find. Thank you!</p>
+                <a href="/home/" class="btn btn-primary btn-lg">Back Home</a>
+            </div>
+        </div>
+    </div>
+    <!--//row-->
+{% endblock %}

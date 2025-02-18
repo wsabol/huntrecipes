@@ -1,0 +1,44 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Set Recipe/Chef of the day
+
+on:
+  schedule:
+    # Late at night
+    - cron: '1 1 * * *'
+
+jobs:
+
+  set-stuff-of-the-day:
+
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Setup PHP Action
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mysqli, http, json
+          tools: composer
+        id: php
+
+      - name: Write env file
+        run: |
+          touch .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "MAIL_HOST=MAIL_HOST" >> .env
+          echo "MAIL_USERNAME=MAIL_USERNAME" >> .env
+          echo "MAIL_PASSWORD=MAIL_PASSWORD" >> .env
+          echo "PRODUCTION=1" >> .env
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run
+        run: php automation/set-recipe-chef-of-the-day.php

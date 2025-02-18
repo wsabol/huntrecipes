@@ -1,0 +1,59 @@
+<!--header-->
+<header role="banner">
+    <div class="container d-print-none">
+
+        <nav class="main-header navbar navbar-expand-lg bg-white">
+            <div class="container-fluid">
+                <a href="/home/" title="HuntRecipes" class="logo navbar-brand">
+                    <img src="/assets/images/ico/huntr_logo_transparent_scale.png" alt="HuntRecipes" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#top-nav-bar" aria-controls="top-nav-bar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="top-nav-bar">
+                    <ul class="navbar-nav gap-2">
+                        {% for item in main_nav %}
+                            {% if item.submenu %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle {{ item.is_active ? 'active' : '' }}" {{ item.is_active ? 'aria-current="page"' : '' }} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ item.title }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% for sub_item in item.submenu %}
+                                            <li>
+                                                <a class="dropdown-item" href="{{ sub_item.href }}">
+                                                    {{ sub_item.title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ item.is_active ? 'active' : '' }}" {{ item.is_active ? 'aria-current="page"' : '' }} href="{{ item.a_href }}">
+                                        {{ item.title }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <nav class="user-nav" role="navigation">
+                    <ul>
+                        {% for item in user_nav %}
+                            <li class="{{ item.li_class }}">
+                                <a href="{{ item.a_href }}" title="{{ item.title }}">
+                                    <i class="icon {{ item.icon }}"></i>
+                                    <span>{{ item.title }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </nav>
+
+    </div>
+</header>
+<!--//header-->

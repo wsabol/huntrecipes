@@ -27,4 +27,4 @@ jobs:
           script: |
             cd ${{ secrets.PATH_TO_REPO }}
             git pull
-            composer install --no-dev --ignore-platform-req=ext-http
+            composer install --no-dev

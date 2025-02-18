@@ -1,0 +1,75 @@
+{% set show_footer = true %}
+
+{% extends 'base.twig' %}
+
+{% block main_content %}
+
+    <div class="row">
+
+        <!--content-->
+        <section class="col-lg-9">
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="recipe-card card mb-5" id="divRecipeOfTheDay" >
+                        <h2 class="ribbon">Recipe of the Day</h2>
+                        <img src="/assets/images/recipes/generic_recipe.jpg" class="card-img-top" alt="loading">
+                        <div class="card-body">
+                            <h5 class="card-title recipe-title">...</h5>
+                            <p class="card-text">...</p>
+                            <a href="#" class="btn btn-primary btn-link-to-recipes">See this full recipe</a>
+                            <a href="/recipes/" class="ml-5 btn btn-outline-primary">Browse all recipes</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="chef-card card mb-5" id="divChefOfTheDay">
+                        <h2 class="ribbon star">Featured Chef</h2>
+                        <img src="/assets/images/users/generic_avatar.jpg" class="card-img-top" alt="loading">
+                        <div class="card-body">
+                            <h5 class="card-title chef-name">...</h5>
+                            <blockquote class="chef-quote-wrapper" style="display:none;">
+                                <i class="fa fa-quote-left"></i>
+                                <span class="chef-quote">...</span>
+                            </blockquote>
+                            <a href="#" class="btn btn-primary btn-link-to-chef">...</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- top recipes -->
+
+            <div class="col-lg-12">
+                <h2 class="ribbon bright">Top Recipes</h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="top-recipes-container">
+
+                </div>
+            </div>
+
+        </section>
+
+        <section class="col-lg-3">
+
+            <div class="boxed-widget">
+                <h5>Browse Recipes by Category</h5>
+                <ul class="boxed">
+                    {% for item in top_categories %}
+                        <li class="{{ item.class }}">
+                            <a href="/recipes/?{{ item.ctype }}_id={{ item.entity_id }}">
+                                <i class="icon {{ item.icon }}"></i>
+                                <span>{{ item.name }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+    </div>
+    <!--//cwrap-->
+
+{% endblock %}

@@ -17,3 +17,23 @@ vendor
 vendor/*
 /vendor
 /vendor/*
+
+# npm
+lib/node_modules
+lib/node_modules/*
+js/*
+/js/app.dev.js
+/js/*.js
+/js/*.txt
+/js/*.map
+css/*
+/css/*.css
+
+# assets
+/assets/images/recipes/*
+!/assets/images/recipes/index.php
+!/assets/images/recipes/generic_recipe.jpg
+
+/assets/images/users/*
+!/assets/images/users/index.php
+!/assets/images/users/generic_avatar.jpg

@@ -1,0 +1,48 @@
+
+{% include 'partials/head.twig' %}
+
+<body class="{{ body_class }}" data-current-user-id={{ current_user_id }}>
+
+    {% include 'partials/header.twig' %}
+
+    <main class="main" role="main">
+        <div class="container">
+            {% include 'partials/breadcrumbs.twig' %}
+
+            {% block page_title %}
+                <h1 class="page-title">{{ page_title }}</h1>
+            {% endblock %}
+
+            {% block main_content %}{% endblock %}
+        </div>
+    </main>
+
+    <div id="mdl-account-cta" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Get more when you sign up for an account.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        This feature is only available with an account.
+                        Membership is free forever, and we will never spam you. Sign up now!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <a href="/account/join/" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if show_footer %}
+
+        {% include 'partials/footer.twig' %}
+
+    {% endif %}
+
+</body>
+{% include 'partials/foot.twig' %}

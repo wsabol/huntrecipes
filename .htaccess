@@ -1,20 +1,29 @@
+php_value upload_max_filesize 40M
+php_value post_max_size 42M
+
 AddHandler application/x-httpd-php74 .php .php5 .php4 .php3 .html
 
 # git expoit fix
 RedirectMatch 403 ^/.git/.*$
 
+# 404
+ErrorDocument 404 /error/404/
+<If "%{REQUEST_URI} =~ m#^/api/v1/#">
+    ErrorDocument 404 /api/v1/system/errors/404.php?request_uri=%{REQUEST_URI}
+</If>
+
 ####################
 # MAINTENANCE MODE
 ####################
-ErrorDocument 503 /maintenance.html
+ErrorDocument 503 /error/maintenance/
 <If "-e '%{DOCUMENT_ROOT}/site_maintenance_on'">
     RewriteEngine On
 
-    RewriteCond %{REQUEST_URI} !/maintenance [NC]
+    RewriteCond %{REQUEST_URI} !/error [NC]
 	RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg) [NC]
 
 	# serve default 503 response
-	RewriteRule .* /maintenance.html [R=503,L]
+	RewriteRule .* /error/maintenance/ [R=503,L]
 </If>
 
 #############
