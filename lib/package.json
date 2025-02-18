@@ -26,7 +26,6 @@
         "luxon": "^1.28.1",
         "slicknav": "^1.0.8",
         "stylelint-config-standard-scss": "^13.1.0",
-        "stylelint-webpack-plugin": "^5.0.1",
         "webpack-remove-empty-scripts": "^1.0.4"
     },
     "devDependencies": {
