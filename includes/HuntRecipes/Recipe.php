@@ -7,7 +7,6 @@ use HuntRecipes\Base\Common_Object;
 use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\HuntRecipesException;
 use HuntRecipes\Exception\SqlException;
-use HuntRecipes\Measure\Measure;
 use HuntRecipes\User\SessionController;
 
 class Recipe extends Common_Object {
