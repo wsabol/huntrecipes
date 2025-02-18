@@ -11,18 +11,19 @@ on:
 
 jobs:
 
-  conditional_check_lib_files:
+  check_lib_changes:
+    name: Check lib/ changes
     runs-on: ubuntu-latest
     # Declare outputs for next jobs
     outputs:
-      libs_changed: ${{ steps.check_file_changed.outputs.libs_changed }}
+      build: ${{ steps.diff.outputs.found-changes }}
     steps:
       - uses: actions/checkout@v2
         with:
           # Checkout as many commits as needed for the diff
           fetch-depth: 2
       - shell: pwsh
-        id: check_file_changed
+        id: diff
         run: |
           # Diff HEAD with the previous commit
           $diff = git diff --name-only HEAD^ HEAD
@@ -32,8 +33,8 @@ jobs:
           $HasDiff = $SourceDiff.Length -gt 0
 
           # Set the output named "libs_changed"
-          echo "libs_changed={$HasDiff} \n"
-          echo "libs_changed={$HasDiff}" >> $GITHUB_OUTPUT
+          echo "found-changes={$HasDiff} \n"
+          echo "found-changes={$HasDiff}" >> $GITHUB_OUTPUT
 
 #  test:
 #    name: Test
@@ -67,9 +68,10 @@ jobs:
   build:
     name: Build & Deploy
 #    needs: test
-    needs: conditional_check_lib_files
+    needs: check_lib_changes
+    if: needs.check_lib_changes.outputs.build == 'True'
     runs-on: ubuntu-latest
-    if: needs.conditional_check_lib_files.outputs.libs_changed == true
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -125,10 +127,15 @@ jobs:
 
   deploy:
     name: Trigger Pull
-    needs: conditional_check_lib_files
+    needs: check_lib_changes
+    if: needs.check_lib_changes.outputs.build != 'True'
     runs-on: ubuntu-latest
-    if: needs.conditional_check_lib_files.outputs.libs_changed == false
+
     steps:
+
+      - name: Early exit
+        if: needs.check_lib_changes.outputs.build == 'True'
+        run: exit 1
 
       - name: Trigger pull
         uses: appleboy/ssh-action@master
