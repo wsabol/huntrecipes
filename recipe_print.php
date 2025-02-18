@@ -25,7 +25,7 @@ LEFT JOIN Course co
             ON rt.id = r.type_id
         LEFT JOIN Chef ch
             ON ch.id = r.chef_id
-where id = ".$App->R['recipe_id']."
+where r.id = ".$App->R['recipe_id']."
 ";
 $result = $App->oDBMY->query($sel_query);
 $Recipe = $result->fetch_assoc();
