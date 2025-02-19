@@ -2,8 +2,9 @@
 {% extends 'emails/email-base.twig' %}
 
 {% block content %}
+    <div class="spacer-md">&nbsp;</div>
     <div class="p">Name: {{ name }}</div>
     <div class="p">Email: {{ email }}</div>
     <div class="p">Message: {{ message }}</div>
-    <div class="spacer-xs">&nbsp;</div>
+    <div class="spacer-sm">&nbsp;</div>
 {% endblock %}
