@@ -187,10 +187,6 @@ figure:has(> .blockquote) {
     }
 }
 
-.img-thumbnail {
-    background-color: $primary-600;
-}
-
 // breadcrumbs
 
 .breadcrumb {
@@ -387,6 +383,35 @@ figure:has(> .blockquote) {
 
 .card-actions .likes.liked:hover i {
     color: $red-400 !important;
+}
+
+// recipe thumbnail
+
+.recipe-thumbnail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    background-color: $pink-600;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    height: auto;
+}
+
+.recipe-thumbnail.with-border {
+    padding: 0.25em;
+}
+
+.recipe-thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 // basic dl styling
