@@ -255,6 +255,9 @@ class Recipe_Endpoint extends Common_Endpoint {
             case 'set-favorite-recipe':
                 return $this->set_favorite_recipe($request);
 
+            case 'set-image-filename':
+                return $this->set_image_filename($request);
+
             default:
                 echo $this->response(message: "action not handled: {$request->action}");
                 return false;
@@ -291,6 +294,44 @@ class Recipe_Endpoint extends Common_Endpoint {
             $data->likes_count = $recipe->get_likes_count();
 
             $message = "Successfully updated user favorite";
+            $code = 200;
+
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        echo $this->response($data, $code, $message);
+        return true;
+    }
+
+    private function set_image_filename(object $request): bool {
+        $data = array();
+        $code = 400;
+        $message = '';
+
+        try {
+
+            if (!isset($request->recipe_id)) {
+                throw new Exception("recipe_id is not set");
+            }
+            if (!isset($request->value)) {
+                throw new Exception("value is not set");
+            }
+            if (!file_exists(RECIPES_ROOT . $request->value)) {
+                throw new Exception("file does not exist");
+            }
+
+            $conn = new SqlController();
+            $recipe = new Recipe($request->recipe_id, $conn);
+            $recipe->image_filename = $request->value;
+            $recipe->save_to_db();
+
+            $data = $recipe->toObject();
+            if (!$_ENV['PRODUCTION']) {
+                $data->image_filename = 'https://huntrecipes.willsabol.com' . $recipe->image_filename;
+            }
+
+            $message = "Successfully updated image filename";
             $code = 200;
 
         } catch (Exception $e) {
