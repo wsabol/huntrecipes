@@ -100,8 +100,10 @@ $data->ingredient_columns = [];
 $data->liked_by = $recipe->get_users_who_liked_this();
 $data->children = [];
 
+$is_developer = false;
 if ($sess->has_user()) {
-    $data->i_am_the_chef = $recipe->chef_id === $sess->user()->chef_id;
+    $data->i_am_the_chef = $recipe->chef_id > 0 && $recipe->chef_id === $sess->user()->chef_id;
+    $is_developer = $sess->user()->is_developer;
 }
 
 $children = $recipe->get_child_recipes();
@@ -126,7 +128,8 @@ if ($sess->has_user()) {
 }
 
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
-    'recipe' => (array)$data
+    'recipe' => (array)$data,
+    'is_developer' => $is_developer,
 ]);
 
 // Render view.
