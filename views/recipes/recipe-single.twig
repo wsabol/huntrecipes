@@ -31,7 +31,7 @@
         </div>
         <div class="col-lg-4 d-print-none">
             <img id="recipe-image"
-                 class="img-thumbnail rounded mb-4 {{ recipe.image_filename == '/assets/images/recipes/generic_recipe.jpg' ? 'd-none' : '' }}"
+                 class="img-thumbnail rounded mb-4 {{ 'generic_recipe' in recipe.image_filename ? 'd-none' : '' }}"
                  style="width: 100%" src="{{ recipe.image_filename }}" alt="{{ recipe.title }}" />
         </div>
     </div>
@@ -149,7 +149,7 @@
                 </button>
             </div>
 
-            {% if recipe.i_am_the_chef or recipe.image_filename == '/assets/images/recipes/generic_recipe.jpg' %}
+            {% if recipe.i_am_the_chef or 'generic_recipe' in recipe.image_filename %}
                 <div class="d-grid gap-2 mb-3 d-print-none">
                     <button class="btn btn-primary btn-recipe-image" >
                         <i class="fa fa-upload"></i> Add Recipe Picture

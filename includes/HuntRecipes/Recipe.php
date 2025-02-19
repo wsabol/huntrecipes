@@ -56,6 +56,10 @@ class Recipe extends Common_Object {
                 if (!str_starts_with($row->image_filename, "/")) {
                     $this->image_filename = "/" . $this->image_filename;
                 }
+
+                if (!$_ENV['PRODUCTION']) {
+                    $this->image_filename = "https://huntrecipes.willsabol.com$this->image_filename";
+                }
             }
         }
     }
@@ -138,6 +142,9 @@ class Recipe extends Common_Object {
         while ($row = $result->fetch_object()) {
             if (!str_starts_with($row->image_filename, "/")) {
                 $row->image_filename = "/" . $row->image_filename;
+            }
+            if (!$_ENV['PRODUCTION']) {
+                $row->image_filename = "https://huntrecipes.willsabol.com$row->image_filename";
             }
 
             $row->link = "/recipes/recipe/?id=" . $row->id;
