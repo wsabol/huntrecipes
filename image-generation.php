@@ -60,7 +60,8 @@ foreach ($recipes as $r) {
         ]);
     }
     catch (Exception $e) {
-        echo "Image gen failed: " . $e->getMessage();
+        echo "\n\nImage gen failed: " . $e->getMessage();
+        echo "\n\n\n";
         sleep(5);
         continue;
     }
