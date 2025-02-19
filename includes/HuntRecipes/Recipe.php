@@ -8,6 +8,7 @@ use HuntRecipes\Database\SqlController;
 use HuntRecipes\Exception\HuntRecipesException;
 use HuntRecipes\Exception\SqlException;
 use HuntRecipes\User\SessionController;
+use OpenAI;
 
 class Recipe extends Common_Object {
     public const IMAGES_DIR = 'assets/images/recipes';
@@ -20,7 +21,7 @@ class Recipe extends Common_Object {
     public int $chef_id = 0;
     public string $title;
     public string $instructions;
-    public string $image_filename = 'assets/images/recipes/generic_recipe.jpg';
+    public string $image_filename = '/assets/images/recipes/generic_recipe.jpg';
     public float $serving_count = 0;
     public int $serving_measure_id = 0;
     public int $parent_recipe_id = 0;
@@ -58,6 +59,16 @@ class Recipe extends Common_Object {
                 }
             }
         }
+    }
+
+    public function toObject(): object {
+        $data = parent::toObject();
+
+        if (!$_ENV['PRODUCTION']) {
+            $data->image_filename = 'https://huntrecipes.willsabol.com' . $data->image_filename;
+        }
+
+        return $data;
     }
 
     public static function list(SqlController $conn, array $props): array {
@@ -138,6 +149,10 @@ class Recipe extends Common_Object {
         while ($row = $result->fetch_object()) {
             if (!str_starts_with($row->image_filename, "/")) {
                 $row->image_filename = "/" . $row->image_filename;
+            }
+
+            if (!$_ENV['PRODUCTION']) {
+                $row->image_filename = 'https://huntrecipes.willsabol.com' . $row->image_filename;
             }
 
             $row->link = "/recipes/recipe/?id=" . $row->id;
@@ -714,5 +729,113 @@ class Recipe extends Common_Object {
         $this->conn->query($del_query);
 
         return true;
+    }
+
+    private function build_ai_image_prompt(): string {
+        if (!$this->exists_in_db()) {
+            trigger_error('Save recipe to DB before using image generation');
+            return "";
+        }
+
+        $initial_prompt = "Title: $this->title\nIngredients:\n";
+        $ingredients = $this->get_ingredients();
+        foreach ($ingredients as $ingredient) {
+            $initial_prompt .= $ingredient->value_formatted . "   " . $ingredient->name_formatted . "\n";
+        }
+
+        $initial_prompt .= "Instructions:\n" . $this->instructions;
+        return $initial_prompt;
+    }
+
+    public function get_ai_recipe_image_prompt(): string {
+        $initial_prompt = $this->build_ai_image_prompt();
+        if (empty($initial_prompt)) {
+            return "";
+        }
+
+        $ingredients = $this->get_ingredients();
+        foreach ($ingredients as $ingredient) {
+            $initial_prompt .= $ingredient->value_formatted . "   " . $ingredient->name_formatted . "\n";
+        }
+
+        $api_key = $_ENV['OPENAI_API_KEY'];
+        if (empty($api_key)) {
+            throw new HuntRecipesException('Missing Open AI API Key');
+        }
+
+        $client = OpenAI::client($api_key);
+
+        $result = $client->chat()->create([
+            'model' => 'gpt-4o',
+            'messages' => [[
+                'role' => 'assistant',
+                'content' => "In 1000 characters or less, create a realistic image generation prompt focused on the visual and aesthetic aspects of the prepared food given this recipe: " . $initial_prompt
+            ]],
+        ]);
+
+        $choices = $result->choices;
+        if (empty($choices)) {
+            return "";
+        }
+
+        $image_prompt = $result->choices[0]->message->content;
+        $image_prompt = str_replace("**Prompt for a Realistic Image Generation:**", "", $image_prompt);
+
+        return trim($image_prompt);
+    }
+
+    public function generate_ai_recipe_image(string $image_prompt = ""): false|string {
+        if (empty($image_prompt)) {
+            $image_prompt = $this->get_ai_recipe_image_prompt();
+        }
+
+        if (empty($image_prompt)) {
+            trigger_error('Unable to generate image prompt');
+            return false;
+        }
+
+        $api_key = $_ENV['OPENAI_API_KEY'];
+        if (empty($api_key)) {
+            throw new HuntRecipesException('Missing Open AI API Key');
+        }
+
+        $client = OpenAI::client($api_key);
+
+        $result = $client->images()->create([
+            'model' => "dall-e-2",
+            'prompt' => $image_prompt,
+            'n' => 1,
+            'size' => "512x512"
+        ]);
+
+        $result = $result->data;
+        if (count($result) === 0) {
+            trigger_error('OpenAI did not respond with any data');
+            return false;
+        }
+
+        $image_url = $result[0]->url;
+
+        preg_match('/img-[a-zA-Z0-9]+\.png/', $image_url, $matches);
+        $base = $matches[0] ?? null;
+        if (empty($base)) {
+            trigger_error('Unable to get filename from image generation response');
+            return false;
+        }
+
+        $dir = "/assets/images/recipes/generated";
+        if (!is_dir(RECIPES_ROOT . $dir)) {
+            mkdir(RECIPES_ROOT . $dir, 0775);
+        }
+
+        $image_path = "$dir/$base";
+        $write_success = file_put_contents(RECIPES_ROOT . $image_path, file_get_contents($image_url));
+
+        if (!$write_success) {
+            trigger_error('Unable to write to generated image directory');
+            return false;
+        }
+
+        return $image_path;
     }
 }

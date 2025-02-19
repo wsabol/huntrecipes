@@ -1,0 +1,47 @@
+<!-- Generate Photo Modal -->
+<div class="modal fade" id="{{ modal_image_gen_name }}" tabindex="-1" aria-labelledby="{{ modal_image_gen_name }}-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{ modal_image_gen_name }}-title">Generate Recipe Photo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Loading State -->
+                <div class="loadingState text-center py-5 mt-3 mb-5">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="text-muted">Generating your recipe photo...</p>
+                    <div class="text-muted"><i class="fa-solid fa-circle-notch fa-spin fa-xl"></i></div>
+                </div>
+
+                <!-- Results State -->
+                <div class="row justify-content-center resultsState"  style="display:none">
+                    <div class="col-md-6">
+                        <img src="" alt="Generated recipe photo" class="generatedImage img-fluid mb-3">
+                    </div>
+                </div>
+                <div class="mb-3 blurbState" style="display:none">
+                    <div class="d-flex">
+                        <label for="{{ modal_image_gen_name }}-blurb" class="form-label">Photo Prompt</label>
+                        <div class="form-check ms-auto">
+                            <input class="form-check-input chk-prompt-new" type="checkbox" value="" id="{{ modal_image_gen_name }}-prompt-edit" checked>
+                            <label class="form-check-label" for="{{ modal_image_gen_name }}-prompt-edit" >
+                                Always Generate New Prompt from Recipe
+                            </label>
+                        </div>
+                    </div>
+                    <textarea id="{{ modal_image_gen_name }}-blurb" class="form-control generatedBlurb" rows="8" maxlength="1000" disabled ></textarea>
+                </div>
+
+                <div class="alert" style="display:none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-primary regenerateButton" style="display:none" >Generate Another</button>
+                <button type="button" class="btn btn-primary usePhotoButton" style="display:none" >Use This Photo</button>
+            </div>
+        </div>
+    </div>
+</div>
