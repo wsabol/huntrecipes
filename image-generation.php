@@ -22,7 +22,7 @@ foreach ($recipes as $r) {
         $recipe->save_to_db();
     }
 
-    if (!str_contains($recipe->image_filename, 'generic')) {
+    if (!str_contains($recipe->image_filename, 'generic_recipe')) {
         continue;
     }
 
@@ -67,6 +67,8 @@ foreach ($recipes as $r) {
 
     $result = $result->data;
     if (count($result) === 0) {
+        echo "No results: \n\n\n";
+        sleep(5);
         continue;
     }
 
@@ -78,6 +80,8 @@ foreach ($recipes as $r) {
     $base = $matches[0] ?? null;
 
     if (empty($base)) {
+        echo "Could not parse url: $image_url \n\n\n";
+        sleep(5);
         continue;
     }
 
@@ -88,6 +92,7 @@ foreach ($recipes as $r) {
     $recipe->save_to_db();
 
     echo "Success!!! \n\n\n";
+    sleep(5);
 
     // exit;
 }
