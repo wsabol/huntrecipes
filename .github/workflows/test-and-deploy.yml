@@ -11,8 +11,38 @@ on:
 
 jobs:
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Setup PHP Action
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: json, mysqli
+          tools: composer
+        id: php
+
+      - name: Write env file
+        run: |
+          touch .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_USERNAME=testuser" >> .env
+          echo "DB_PASSWORD=testpsw" >> .env
+          echo "PRODUCTION=1" >> .env
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run Tests
+        run: vendor/bin/phpunit tests --do-not-cache-result --colors
+
   check-lib-changes:
     name: Check for lib/* changes
+    needs: test
     runs-on: ubuntu-latest
 
     outputs:
@@ -41,38 +71,8 @@ jobs:
             echo "found-changes=true" >> "$GITHUB_OUTPUT"
           fi
 
-#  test:
-#    name: Test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout project
-#        uses: actions/checkout@v4
-#
-#      - name: Setup PHP Action
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.2'
-#          extensions: json, mysqli
-#          tools: composer
-#        id: php
-#
-#      - name: Write env file
-#        run: |
-#          touch .env
-#          echo "DB_HOST=127.0.0.1" >> .env
-#          echo "DB_USERNAME=testuser" >> .env
-#          echo "DB_PASSWORD=testpsw" >> .env
-#          echo "PRODUCTION=1" >> .env
-#
-#      - name: Install dependencies
-#        run: composer install
-#
-#      - name: Run Tests
-#        run: vendor/bin/phpunit tests --do-not-cache-result --colors
-
   build:
     name: Build & Deploy
-#    needs: test
     needs: check-lib-changes
     if: needs.check-lib-changes.outputs.build == 'true'
     runs-on: ubuntu-latest

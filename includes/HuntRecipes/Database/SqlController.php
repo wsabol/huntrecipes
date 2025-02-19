@@ -17,7 +17,7 @@ class SqlController {
     /**
      * MySQL Database Resource object
      *
-     * @var mysqli|bool
+     * @var mysqli
      */
     public mysqli $db;
 
@@ -57,7 +57,7 @@ class SqlController {
             if (!$success) {
                 return false;
             }
-        } catch (mysqli_sql_exception $e) {
+        } catch (mysqli_sql_exception) {
             return false;
         }
 
@@ -77,7 +77,7 @@ class SqlController {
     }
 
     public function __destruct() {
-        if (gettype($this->db) === 'resource') {
+        if (isset($this->db)) {
             $this->db->close();
         }
     }

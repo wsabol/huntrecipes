@@ -16,12 +16,12 @@ class Recipe extends Common_Object {
     public int $id;
     public int $course_id = 0;
     public int $cuisine_id = 0;
-    public int $type_id;
+    public int $type_id = 0;
     public int $chef_id = 0;
     public string $title;
     public string $instructions;
     public string $image_filename = 'assets/images/recipes/generic_recipe.jpg';
-    public float $serving_count;
+    public float $serving_count = 0;
     public int $serving_measure_id = 0;
     public int $parent_recipe_id = 0;
     public bool $published_flag = false;
@@ -192,11 +192,10 @@ class Recipe extends Common_Object {
     }
 
     public static function organize_ingredients_into_columns(array $ingredients, array $child1_ingredients, array $child2_ingredients): array {
-        $columns = [[
-            'items' => []
-        ], [
-            'items' => []
-        ]];
+        $columns = [
+            ['items' => []],
+            ['items' => []]
+        ];
 
         if (!empty($child1_ingredients) && !empty($child2_ingredients)) {
             $columns[0]['items'] = $ingredients;
@@ -213,15 +212,14 @@ class Recipe extends Common_Object {
 
         if (count($ingredients) < 12) {
             $columns[0]['items'] = $ingredients;
-        }
-        else {
+        } else {
             $main_column_count = 2;
             $breakpoint = ceil(2 * count($ingredients) / 3);
             $columns[0]['items'] = array_slice($ingredients, 0, $breakpoint);
             $columns[1]['items'] = array_slice($ingredients, $breakpoint);
         }
 
-        if (!empty($child1_ingredients))  {
+        if (!empty($child1_ingredients)) {
 
             if ($main_column_count === 1) {
                 $columns[1]['items'] = $child1_ingredients;

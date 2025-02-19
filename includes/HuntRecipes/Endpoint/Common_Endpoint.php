@@ -42,7 +42,6 @@ class Common_Endpoint {
 
             case 'PUT':
             case 'PATCH':
-            case 'DELETE':
                 $request = json_decode(file_get_contents('php://input'));
                 if (!empty($request)) {
                     return $request;
@@ -50,6 +49,19 @@ class Common_Endpoint {
 
                 parse_str(file_get_contents('php://input'), $request);
                 return (object)$request;
+
+            case 'DELETE':
+                $request = json_decode(file_get_contents('php://input'));
+                if (!empty($request)) {
+                    return $request;
+                }
+
+                parse_str(file_get_contents('php://input'), $request);
+                if (!empty($request)) {
+                    return $request;
+                }
+
+                return (object)$_REQUEST;
 
             default:
                 trigger_error("request method not recognized: $method", E_USER_ERROR);
@@ -59,12 +71,12 @@ class Common_Endpoint {
     /**
      * A common response.
      *
-     * @param mixed $data
+     * @param object|array|null $data
      * @param int $code
      * @param string $message
      * @return string
      */
-    public function response($data = array(), int $code = 400, string $message = ''): string {
+    public function response(object|array|null $data = [], int $code = 400, string $message = ''): string {
         http_response_code($code);
 
         $response = array(

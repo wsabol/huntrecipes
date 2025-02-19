@@ -38,7 +38,7 @@ class Autoloader {
             require_once RECIPES_INCLUDES . '/HuntRecipes/_functions.php';
 
             /* load environment vars */
-            $dotenv = \Dotenv\Dotenv::createImmutable(RECIPES_ROOT);
+            $dotenv = Dotenv::createImmutable(RECIPES_ROOT);
             $dotenv->load();
             $dotenv->required(['DB_HOST', 'DB_USERNAME', 'DB_PASSWORD']);
             unset($dotenv);
