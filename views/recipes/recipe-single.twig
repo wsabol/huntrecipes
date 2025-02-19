@@ -157,6 +157,14 @@
                 </div>
             {% endif %}
 
+            {% if is_developer and ('generic_recipe' in recipe.image_filename or '/generated/' in recipe.image_filename) %}
+                <div class="d-grid gap-2 mb-3 d-print-none">
+                    <button class="btn btn-dark btn-ai-recipe-image" >
+                        <i class="fa fa-magic-wand-sparkles"></i> Generate AI Recipe Image
+                    </button>
+                </div>
+            {% endif %}
+
             {% if recipe.i_am_the_chef %}
                 <div class="d-grid gap-2 mb-3 d-print-none">
                     <a class="btn btn-warning" href="/recipes/recipe/edit/?id={{ recipe.id }}" >
@@ -206,5 +214,8 @@
             </div>
         </div>
     </div>
+
+    {% set modal_image_gen_name = 'mdl-image-gen' %}
+    {% include 'partials/modal-image-gen.twig' %}
 
 {% endblock %}
