@@ -2,6 +2,8 @@
 
 namespace HuntRecipes\Measure;
 
+use JetBrains\PhpStorm\NoReturn;
+
 class Fraction {
 
     /**
@@ -22,6 +24,7 @@ class Fraction {
      * @param mixed $denominator optional
      */
     public function __construct(mixed $numerator, mixed $denominator = null) {
+        $_numerator = $numerator;
 
         if ($numerator !== null && $denominator !== null) {
             // double argument invocation
@@ -48,14 +51,13 @@ class Fraction {
             return;
         }
 
-        $org_numerator = $numerator;
-
         if (empty($numerator)) {
-            $numerator = 0;
+            $this->decimal = 0;
+            $this->normalize();
+            return;
         }
 
         $numerator = str_replace(",", "", $numerator);
-
         if (is_numeric($numerator)) {
             $this->decimal = floatval($numerator);
             $this->normalize();
@@ -69,7 +71,7 @@ class Fraction {
         }
 
         if (!is_numeric(substr($numerator, 0, 1))) {
-            throw new \InvalidArgumentException("Unable to parse numerator ($org_numerator)");
+            throw new \InvalidArgumentException("Unable to parse numerator ($_numerator)");
         }
 
         // hold the first and second part of the fraction, e.g. a = '1' and b = '2/3' in 1 2/3
@@ -79,7 +81,7 @@ class Fraction {
         $b = isset($arr[1]) ? @$arr[1] : null;
 
         if ((int)$a == $a && $b !== null && str_contains($b, '/')) {
-            // compound fraction e.g. 'A B/C'
+            // compound fraction e.g. 'A-B/C'
             $this->decimal = floatval($a);
             $a = $this->add(new Fraction($b));
             $this->decimal = $a->decimal;
@@ -88,16 +90,20 @@ class Fraction {
             // simple fraction e.g. 'A/B'
             $f = explode("/", $a, 2);
             $this->decimal = floatval($f[0]) / floatval($f[1]);
+
         } elseif ($a !== null && $b === null) {
             // just passed a number as a string
             $this->decimal = floatval($a);
         }
 
+        if ($sign === -1) {
+            $this->decimal = -1 * $this->decimal;
+        }
+
         $this->normalize();
-        $this->sign = $sign;
     }
 
-    public function __set($name, $value) {
+    #[NoReturn] public function __set($name, $value) {
         trigger_error("this is a readonly function", E_USER_ERROR);
     }
 
@@ -129,7 +135,7 @@ class Fraction {
         return $this;
     }
 
-    private function recurs($x, $stack = 0) {
+    private function recurs($x, $stack = 0): array {
         $stack++;
         $integer = floor($x); // get the integer part of the number
         $dec = ($x - $integer); // get the decimal part of the number
@@ -146,12 +152,27 @@ class Fraction {
      * @return string
      */
     public function toString(bool $improper = false, string $sep = '-'): string {
+        if ($this->decimal == 0) {
+            return '0';
+        }
+
+        if ($improper) {
+            return $this->numerator . '/' . $this->denominator;
+        }
+
         $sign = $this->sign === -1 ? '-' : '';
-        $flooredDec = floor($this->decimal);
-        $whole = !$improper ? ($this->sign * abs($flooredDec)) . $sep : '';
-        if ($whole == '0' . $sep) $whole = '';
-        $numerator = !$improper ? $this->numerator - ($flooredDec * $this->denominator) : $this->numerator;
-        if ($numerator == 0) return $flooredDec;
+        $floored_decimal = floor(abs($this->decimal));
+        $whole = '';
+
+        if ($floored_decimal > 0) {
+            $whole = (int)$floored_decimal . '-';
+        }
+
+        $numerator = abs($this->numerator) - ($floored_decimal * $this->denominator);
+        if ($numerator == 0) {
+            return '' . $floored_decimal;
+        }
+
         return $sign . $whole . $numerator . '/' . $this->denominator;
     }
 

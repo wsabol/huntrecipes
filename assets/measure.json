@@ -174,7 +174,7 @@
         "name": "sprig",
         "name_plural": "sprigs",
         "abbr": "",
-        "abbr_alt": null,
+        "abbr_alt": "",
         "measure_type": 0,
         "base_unit_conversion": 0.00000000,
         "is_metric": false,
