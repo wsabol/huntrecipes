@@ -313,18 +313,20 @@ figure:has(> .blockquote) {
 }
 
 .recipe-card figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    aspect-ratio: 4 / 3;
     position: relative;
+    width: 100%;
     overflow: hidden;
 }
 
 .recipe-card figcaption {
-    opacity: 0;
     position: absolute;
     top: 0;
     left: 0;
-    // z-index: 10;
     text-align: center;
-    background: rgba($primary-300, 0.8);
     width: 100%;
     height: 100%;
     border-radius: $border-radius $border-radius 0 0;
@@ -333,6 +335,7 @@ figure:has(> .blockquote) {
     -o-transition: $transition-base;
     -ms-transition: $transition-base;
     transition: $transition-base;
+    opacity: 0;
 }
 
 .recipe-card figcaption a {
@@ -341,22 +344,16 @@ figure:has(> .blockquote) {
     color: $white;
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
-    -webkit-transition: $transition-base;
-    -moz-transition: $transition-base;
-    -o-transition: $transition-base;
-    -ms-transition: $transition-base;
-    transition: $transition-base;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: hsla(3, 88%, 71%, .8);
+    border-radius: 5px 5px 0 0;
 }
 
 .recipe-card figcaption .icon {
-    display: inline-block;
-    margin: 27% 0 3px;
     font-size: 30px;
-}
-
-.recipe-card figcaption span {
-    width: 100%;
-    display: inline-block;
 }
 
 .recipe-card figure:hover figcaption {
