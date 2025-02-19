@@ -134,8 +134,10 @@ class Recipe extends Common_Object {
         AND CASE WHEN $course_id = 0 THEN 1 WHEN $course_id = r.course_id THEN 1 ELSE 0 END = 1
         AND CASE WHEN $cuisine_id = 0 THEN 1 WHEN $cuisine_id = r.cuisine_id THEN 1 ELSE 0 END = 1
         AND CASE WHEN $chef_id = 0 THEN 1 WHEN $chef_id = r.chef_id THEN 1 ELSE 0 END = 1
-        AND CASE WHEN '$keyword' = '' THEN 1 WHEN r.title like '%$keyword%' THEN 1 ELSE 0 END = 1
-        AND CASE WHEN '$keyword' = '' THEN 1 WHEN r.instructions like '%$keyword%' THEN 1 ELSE 0 END = 1
+        AND CASE WHEN '$keyword' = '' THEN 1 
+            WHEN r.title like '%$keyword%' THEN 1
+            WHEN r.instructions like '%$keyword%' THEN 1 
+            ELSE 0 END = 1
         order by r.title
         ";
         // echo $sel_query;
