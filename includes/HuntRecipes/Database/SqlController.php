@@ -17,9 +17,9 @@ class SqlController {
     /**
      * MySQL Database Resource object
      *
-     * @var mysqli
+     * @var false|mysqli
      */
-    public mysqli $db;
+    public false|mysqli $db = false;
 
     public function __construct() {
         $database = "saboldru_recipes";
@@ -77,7 +77,7 @@ class SqlController {
     }
 
     public function __destruct() {
-        if (isset($this->db)) {
+        if (gettype($this->db) === 'resource') {
             $this->db->close();
         }
     }
