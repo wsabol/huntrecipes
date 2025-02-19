@@ -17,7 +17,7 @@ class Common_Endpoint {
         }
     }
 
-    public function get_request_data($method = null): object {
+    public function get_request_data(string $method = ''): object {
         if (empty($method)) {
             $method = $_SERVER['REQUEST_METHOD'];
         }
