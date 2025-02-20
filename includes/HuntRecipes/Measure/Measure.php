@@ -65,20 +65,22 @@ class Measure {
     }
 
     public static function format_name(int $measure_id, float $serving_count): string {
-        try {
-            $measure = self::create($measure_id);
-        } catch (HuntRecipesException) {
-            $measure = new Measure(
-                0,
-                'serving',
-                'servings',
-                '',
-                '',
-                MeasureType::COUNT,
-                1,
-                false,
-                ['1/4', '1/2', '3/4'],
-            );
+        $measure = new Measure(
+            0,
+            'serving',
+            'servings',
+            '',
+            '',
+            MeasureType::COUNT,
+            1,
+            false,
+            ['1/4', '1/2', '3/4'],
+        );
+
+        if ($measure_id > 0) {
+            try {
+                $measure = self::create($measure_id);
+            } catch (HuntRecipesException) {}
         }
 
         if ($serving_count > 1.0 || $serving_count === 0.0) {

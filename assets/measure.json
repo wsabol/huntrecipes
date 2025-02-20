@@ -1,8 +1,8 @@
 [
     {
         "id": 0,
-        "name": "serving",
-        "name_plural": "servings",
+        "name": "",
+        "name_plural": "",
         "abbr": "",
         "abbr_alt": "",
         "measure_type": 0,
