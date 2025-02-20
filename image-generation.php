@@ -62,14 +62,14 @@ foreach ($recipes as $r) {
     catch (Exception $e) {
         echo "\n\nImage gen failed: " . $e->getMessage();
         echo "\n\n\n";
-        sleep(5);
+        sleep(10);
         continue;
     }
 
     $result = $result->data;
     if (count($result) === 0) {
         echo "No results: \n\n\n";
-        sleep(5);
+        sleep(10);
         continue;
     }
 
@@ -82,7 +82,7 @@ foreach ($recipes as $r) {
 
     if (empty($base)) {
         echo "Could not parse url: $image_url \n\n\n";
-        sleep(5);
+        sleep(10);
         continue;
     }
 
