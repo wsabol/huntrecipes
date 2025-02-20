@@ -619,6 +619,11 @@ class Recipe extends Common_Object {
             if (!str_starts_with($row->profile_picture, "/")) {
                 $row->profile_picture = "/" . $row->profile_picture;
             }
+
+            if (!$_ENV['PRODUCTION']) {
+                $row->profile_picture = 'https://huntrecipes.willsabol.com' . $row->profile_picture;
+            }
+
             $users[] = $row;
         }
 

@@ -74,8 +74,27 @@ class User extends Common_Object {
 
         while ($row = $result->fetch_object()) {
             unset($row->password);
+
+            if (!str_starts_with($row->profile_picture, "/")) {
+                $row->profile_picture = "/$row->profile_picture";
+            }
+
+            if (!$_ENV['PRODUCTION']) {
+                $row->profile_picture = 'https://huntrecipes.willsabol.com' . $row->profile_picture;
+            }
+
             $data[] = $row;
         }
+        return $data;
+    }
+
+    public function toObject(): object {
+        $data = parent::toObject();
+
+        if (!$_ENV['PRODUCTION']) {
+            $data->profile_picture = 'https://huntrecipes.willsabol.com' . $data->profile_picture;
+        }
+
         return $data;
     }
 
