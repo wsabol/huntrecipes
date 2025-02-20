@@ -781,7 +781,13 @@ class Recipe extends Common_Object {
         }
 
         $image_prompt = $result->choices[0]->message->content;
+        $image_prompt = trim($image_prompt);
+        $image_prompt = trim(trim($image_prompt, '"'));
         $image_prompt = str_replace("**Prompt for a Realistic Image Generation:**", "", $image_prompt);
+
+        if (str_starts_with($image_prompt, "Prompt:")) {
+            $image_prompt = substr($image_prompt, strlen("Prompt:"));
+        }
 
         return trim($image_prompt);
     }
