@@ -1,14 +1,17 @@
 [
     {
         "id": 0,
-        "name": "",
-        "name_plural": "",
+        "name": "serving",
+        "name_plural": "servings",
         "abbr": "",
         "abbr_alt": "",
         "measure_type": 0,
         "base_unit_conversion": 1.00000000,
         "is_metric": false,
         "fractions_allowed": [
+            "1\/4",
+            "1\/2",
+            "3\/4"
         ]
     },
     {

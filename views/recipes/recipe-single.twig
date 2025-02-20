@@ -88,9 +88,7 @@
                     </ol>
                 </div>
             {% endfor %}
-
         </div>
-
 
         <aside class="col-lg-3">
 
@@ -98,6 +96,7 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text">Makes <i class="fa fa-edit" style="margin-left: 10px;"></i></span>
                     <input id="input-serving" type="text" class="form-control" placeholder="{{ recipe.serving_count }}" aria-label="Serving count" data-org-serving="{{ recipe.serving_count }}" value="{{ recipe.serving_count }}" >
+                    <span class="input-group-text">{{ recipe.serving_measure_name }}</span>
                 </div>
             {% endif %}
 

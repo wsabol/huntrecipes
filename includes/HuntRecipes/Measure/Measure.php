@@ -36,19 +36,19 @@ class Measure {
 
     private const JSON_PATH = __DIR__ . "/../../../assets/measure.json";
 
-    public static function create(int $measure_type): self {
+    public static function create(int $measure_id): self {
         $measures = json_decode(file_get_contents(self::JSON_PATH));
 
         $data = null;
         foreach ($measures as $m) {
-            if ($m->id == $measure_type) {
+            if ($m->id == $measure_id) {
                 $data = $m;
                 break;
             }
         }
 
         if (empty($data)) {
-            throw new HuntRecipesException("measure does not exist: $measure_type");
+            throw new HuntRecipesException("measure does not exist: $measure_id");
         }
 
         return new Measure(
@@ -62,6 +62,29 @@ class Measure {
             $data->is_metric,
             $data->fractions_allowed,
         );
+    }
+
+    public static function format_name(int $measure_id, float $serving_count): string {
+        try {
+            $measure = self::create($measure_id);
+        } catch (HuntRecipesException) {
+            $measure = new Measure(
+                0,
+                'serving',
+                'servings',
+                '',
+                '',
+                MeasureType::COUNT,
+                1,
+                false,
+                ['1/4', '1/2', '3/4'],
+            );
+        }
+
+        if ($serving_count > 1.0 || $serving_count === 0.0) {
+            return $measure->name_plural;
+        }
+        return $measure->name;
     }
 
     public function __construct(

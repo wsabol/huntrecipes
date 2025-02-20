@@ -2,6 +2,7 @@
 
 use HuntRecipes\Base\Page_Controller;
 use HuntRecipes\Database\SqlController;
+use HuntRecipes\Measure\Measure;
 use HuntRecipes\Recipe;
 use HuntRecipes\User\SessionController;
 
@@ -99,6 +100,8 @@ $data->i_am_the_chef = false;
 $data->ingredient_columns = [];
 $data->liked_by = $recipe->get_users_who_liked_this();
 $data->children = [];
+
+$data->serving_measure_name = Measure::format_name($recipe->serving_measure_id, $recipe->serving_count);
 
 $is_developer = false;
 if ($sess->has_user()) {
