@@ -17,6 +17,8 @@ class Email_Controller {
 
     public function __construct() {
         $this->view = "emails/email-base.twig";
+        $this->subject = '';
+        $this->body = '';
 
         // Create a new PHPMailer instance
         $this->mailer = new PHPMailer();
