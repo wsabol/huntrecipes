@@ -46,7 +46,7 @@ foreach ($recipes as $r) {
         }
 
 
-        $recipe->image_filename = $image_path;
+        $recipe->image_filename = $generated_image;
         $recipe->save_to_db();
 
         echo "Success!!! \n\n\n";
