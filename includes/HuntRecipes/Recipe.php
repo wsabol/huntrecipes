@@ -72,14 +72,14 @@ class Recipe extends Common_Object {
     }
 
     public static function list(SqlController $conn, array $props): array {
-        $props = (object)$props;
 
-        $keyword = $conn->escape_string(@$props->keyword ?? '');
-        $recipe_type_id = @$props->recipe_type_id ?? 0;
-        $course_id = @$props->course_id ?? 0;
-        $cuisine_id = @$props->cuisine_id ?? 0;
-        $chef_id = @$props->chef_id ?? 0;
-        $ingredients = @$props->ingredients ?? [];
+        $limit = (int)@$props['limit'] ?? 0;
+        $keyword = $conn->escape_string(@$props['keyword'] ?? '');
+        $recipe_type_id = (int)@$props['recipe_type_id'] ?? 0;
+        $course_id = (int)@$props['course_id'] ?? 0;
+        $cuisine_id = (int)@$props['cuisine_id'] ?? 0;
+        $chef_id = (int)@$props['chef_id'] ?? 0;
+        $ingredients = (array)@$props['ingredients'] ?? [];
 
         $current_user_id = 0;
         $sess = new SessionController();
@@ -87,6 +87,22 @@ class Recipe extends Common_Object {
 
         if ($sess->has_user()) {
             $current_user_id = $sess->user()->id;
+        }
+
+        $order_sql = "ORDER BY r.title";
+        if (empty($keyword)
+            && $recipe_type_id === 0
+            && $course_id === 0
+            && $cuisine_id === 0
+            && $chef_id === 0
+            && empty($ingredients)
+            ) {
+            $order_sql = "ORDER BY RAND()";
+        }
+
+        $limit_sql = "";
+        if ($limit > 0) {
+            $limit_sql = "LIMIT {$limit}";
         }
 
         $ingredient_sql = "";
@@ -138,8 +154,8 @@ class Recipe extends Common_Object {
             WHEN r.title like '%$keyword%' THEN 1
             WHEN r.instructions like '%$keyword%' THEN 1 
             ELSE 0 END = 1
-        order by r.title
-        ";
+        $order_sql
+        $limit_sql";
         // echo $sel_query;
         $data = [];
 
