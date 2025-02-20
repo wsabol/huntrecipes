@@ -149,7 +149,8 @@ else {
 
 $context = $page->get_page_context($sess, $page_title, $breadcrumbs, [
     'recipe' => (array)$data,
-    'chef_id' => $sess->user()->chef_id
+    'chef_id' => $sess->user()->chef_id,
+    'show_success' => filter_var(@$_GET['success'], FILTER_VALIDATE_BOOL),
 ]);
 
 // Render view.
