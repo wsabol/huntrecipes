@@ -36,8 +36,8 @@ $breadcrumbs = array(
         'current_page' => false,
     ),
     array(
-        'name' => 'My Account',
-        'link' => '/account/',
+        'name' => 'Sign In',
+        'link' => '/account/sign-in/',
         'current_page' => false,
     ),
     array(
