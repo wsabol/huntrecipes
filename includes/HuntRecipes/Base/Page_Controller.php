@@ -24,12 +24,13 @@ class Page_Controller {
             'page_title' => $page_title,
             'breadcrumbs' => $breadcrumbs,
             'current_user_id' => 0,
-            'current_user_is_chef' => false,
+            'is_developer' => false,
             'is_production' => IS_PRODUCTION
         );
 
         if ($sess->has_user()) {
             $context['current_user_id'] = $user_id;
+            $context['is_developer'] = $sess->user()->is_developer;
         }
 
         if (!empty($additional)) {
