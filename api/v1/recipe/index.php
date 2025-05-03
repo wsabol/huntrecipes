@@ -125,6 +125,9 @@ class Recipe_Endpoint extends Common_Endpoint {
                 $new_file = $uploader->move(Recipe::IMAGES_DIR);
                 $recipe->image_filename = "/" . $new_file;
             }
+            elseif (isset($request->image_filename)) {
+                $recipe->image_filename = $request->image_filename;
+            }
 
             $success = $recipe->save_to_db();
 
