@@ -30,10 +30,11 @@ class System_Ping_Endpoint extends Common_Endpoint {
         try {
 
             $data['php_version'] = phpversion();
+            $data['is_production'] = IS_PRODUCTION;
+            $data['is_db_connected'] = false;
 
             new SqlController();
             $data['is_db_connected'] = true;
-            $data['is_production'] = IS_PRODUCTION;
 
             $message = "Everything is ok.";
             $code = 200;
