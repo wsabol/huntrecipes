@@ -10,8 +10,7 @@ require '../../../includes/common.php';
 class Account_Recipe_Photo_Endpoint extends Common_Endpoint {
 
     public function __construct() {
-        // $this->restrict_access();
-        // todo restore restrict_access
+        $this->restrict_access();
         // todo set new photo from OpenAI
 
         ini_set('upload_max_filesize', '40M');
