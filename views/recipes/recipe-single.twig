@@ -148,14 +148,6 @@
                 </button>
             </div>
 
-            {% if recipe.i_am_the_chef or 'generic_recipe' in recipe.image_filename %}
-                <div class="d-grid gap-2 mb-3 d-print-none">
-                    <button class="btn btn-primary btn-recipe-image" >
-                        <i class="fa fa-upload"></i> Add Recipe Picture
-                    </button>
-                </div>
-            {% endif %}
-
             {% if is_developer and ('generic_recipe' in recipe.image_filename or '/generated/' in recipe.image_filename) %}
                 <div class="d-grid gap-2 mb-3 d-print-none">
                     <button class="btn btn-dark btn-ai-recipe-image" >
