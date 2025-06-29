@@ -32,10 +32,10 @@ class Chef extends Common_Object {
         if (!!$result) {
             $row = $result->fetch_object();
             $this->name = $row->name;
-            $this->is_male = (bool)$row->is_male; // todo change in db
+            $this->is_male = (bool)$row->is_male;
             $this->wisdom = $row->wisdom;
             $this->story = $row->story;
-            $this->favorite_foods = $row->favorite_foods; // todo change this in db
+            $this->favorite_foods = $row->favorite_foods;
         }
     }
 
