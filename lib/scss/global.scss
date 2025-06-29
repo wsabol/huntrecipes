@@ -59,32 +59,32 @@ acronym {
 /* TYPOGRAPHY */
 
 h1 {
-    margin: 24px 0 12px 0;
+    margin: 24px 0 12px;
 }
 
 h2 {
-    margin: 18px 0 12px 0;
+    margin: 18px 0 12px;
 }
 
 h3 {
-    margin: 14px 0 12px 0;
+    margin: 14px 0 12px;
 }
 
 h4 {
-    margin: 10px 0 12px 0;
+    margin: 10px 0 12px;
 }
 
 h5 {
-    margin: 8px 0 10px 0;
+    margin: 8px 0 10px;
 }
 
 h6 {
-    margin: 8px 0 10px 0;
+    margin: 8px 0 10px;
 }
 
 p {
     line-height: 1.6;
-    margin: 0 0 12px 0;
+    margin: 0 0 12px;
 }
 
 p:empty {
@@ -92,12 +92,12 @@ p:empty {
 }
 
 .hero h1 {
-    margin: 10px 0 40px 0;
+    margin: 10px 0 40px;
 }
 
 .hero p {
     font-size: $font-size-lg;
-    margin: 0 0 15px 0;
+    margin: 0 0 15px;
 }
 
 .btn {
@@ -109,6 +109,7 @@ p:empty {
     border-color: transparent;
     border-radius: 0;
 }
+
 .btn-link:hover {
     text-decoration: underline;
     background-color: transparent;
@@ -175,7 +176,7 @@ h2.ribbon.bright {
 
 figure:has(> .blockquote) {
     border-left: 2px solid $gray-700;
-    padding: 10px 15px 1px 15px;
+    padding: 10px 15px 1px;
 }
 
 .alert {
@@ -183,6 +184,7 @@ figure:has(> .blockquote) {
         color: unset;
         border-color: unset;
     }
+
     .blockquote {
         color: unset;
     }
@@ -253,9 +255,11 @@ figure:has(> .blockquote) {
     .foot .foot-nav {
         display: block;
     }
+
     .foot .footer-about {
         display: block;
     }
+
     .foot .footer-about article {
         padding-right: 60px;
     }
@@ -345,7 +349,7 @@ figure:has(> .blockquote) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: hsla(3, 88%, 71%, .8);
+    background: hsla(3deg, 88%, 71%, .8);
     border-radius: 5px 5px 0 0;
 }
 
@@ -418,7 +422,7 @@ figure:has(> .blockquote) {
 // basic dl styling
 
 .basic {
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
 }
 
 .basic dt {
@@ -451,7 +455,7 @@ figure:has(> .blockquote) {
     list-style: none;
     *list-style: decimal;
     padding: 0;
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
 }
 
 .basic.light dt {
@@ -467,8 +471,8 @@ figure:has(> .blockquote) {
 }
 
 .basic.success dt {
-     background: $success;
- }
+    background: $success;
+}
 
 .basic.warning dt {
     background: $warning;
@@ -518,6 +522,7 @@ figure:has(> .blockquote) {
     justify-content: center;
     margin: 40px 20px;
 }
+
 .digit-input {
     width: 40px;
     height: 40px;
@@ -542,6 +547,7 @@ figure:has(> .blockquote) {
     max-height: 400px;
     background-color: $gray-50;
 }
+
 .cropping-container .img-container img {
     max-width: 100%;
     max-height: 400px;

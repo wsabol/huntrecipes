@@ -107,7 +107,7 @@
 }
 
 .boxed-widget .boxed li {
-    width: 33.333333333%;
+    width: 33.3333%;
     height: 90px;
     font-size: $font-size-sm;
     line-height: 1.2;
@@ -221,7 +221,7 @@
     -webkit-box-shadow: $dl-box-shadow;
     -moz-box-shadow: $dl-box-shadow;
     box-shadow: $dl-box-shadow;
-    border-radius: 0 $border-radius-sm $border-radius-sm $border-radius-sm;
+    border-radius: 0 $border-radius-sm $border-radius-sm;
 }
 
 .recipe-instructions li::before {
@@ -254,7 +254,7 @@
     transition: $transition-base;
 }
 
-.recipe-instructions li:hover:after {
+.recipe-instructions li:hover::after {
     left: 0;
     border-left-color: $primary;
 }
@@ -318,6 +318,7 @@
     .email-unverified {
         display: block;
     }
+
     #alert-verification-email {
         display: block;
     }
@@ -327,6 +328,7 @@
     .email-unverified {
         display: block;
     }
+
     #alert-verification-wait {
         display: block;
     }
@@ -336,6 +338,7 @@
     .email-unverified {
         display: block;
     }
+
     #alert-verification-email-sent {
         display: block;
     }

@@ -155,7 +155,6 @@ header > .container {
 
 // lg screens
 @include media-breakpoint-up(lg) {
-
     .main-header .nav-link {
         border-radius: $border-radius-sm;
     }

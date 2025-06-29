@@ -139,7 +139,7 @@ $link-hover-color:         shade-color($link-color, 20%);
 $link-hover-decoration:    null;
 
 // Fonts.
-@import url(//fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800);
+@import "//fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800";
 
 $font-family-sans-serif:   'Raleway', 'Helvetica', 'Arial', sans-serif !default;
 $font-family-base:         $font-family-sans-serif !default;
