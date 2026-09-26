@@ -118,7 +118,7 @@ class UserOneTimePassword extends Common_Object {
         $mailer->set_view('emails/one-time-password.twig');
         $mailer->set_message_context([
             'subject' => $mailer->get_subject(),
-            'pre_text' => 'Here’s your one-time passcode for Disney+',
+            'pre_text' => 'Here’s your one-time passcode for HuntRecipes',
             'code' => $this->code
         ]);
 
