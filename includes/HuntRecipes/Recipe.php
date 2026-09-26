@@ -831,10 +831,10 @@ class Recipe extends Common_Object {
         $client = OpenAI::client($api_key);
 
         $result = $client->images()->create([
-            'model' => "dall-e-2",
+            'model' => "gpt-image-2.5-sunburst",
             'prompt' => $image_prompt,
             'n' => 1,
-            'size' => "512x512"
+            'size' => "1024x1024"
         ]);
 
         $result = $result->data;
@@ -843,12 +843,15 @@ class Recipe extends Common_Object {
             return false;
         }
 
-        $image_url = $result[0]->url;
+        $encoded_image = $result[0]->b64_json;
+        if (empty($encoded_image)) {
+            trigger_error('OpenAI did not respond with image data');
+            return false;
+        }
 
-        preg_match('/img-[a-zA-Z0-9]+\.png/', $image_url, $matches);
-        $base = $matches[0] ?? null;
-        if (empty($base)) {
-            trigger_error('Unable to get filename from image generation response');
+        $image_data = base64_decode($encoded_image, true);
+        if ($image_data === false || $image_data === '') {
+            trigger_error('Unable to decode generated image');
             return false;
         }
 
@@ -857,10 +860,11 @@ class Recipe extends Common_Object {
             mkdir(RECIPES_ROOT . $dir, 0775);
         }
 
+        $base = 'img-' . bin2hex(random_bytes(16)) . '.png';
         $image_path = "$dir/$base";
-        $write_success = file_put_contents(RECIPES_ROOT . $image_path, file_get_contents($image_url));
+        $write_success = file_put_contents(RECIPES_ROOT . $image_path, $image_data);
 
-        if (!$write_success) {
+        if ($write_success === false) {
             trigger_error('Unable to write to generated image directory');
             return false;
         }
