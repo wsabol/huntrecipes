@@ -831,7 +831,7 @@ class Recipe extends Common_Object {
         $client = OpenAI::client($api_key);
 
         $result = $client->images()->create([
-            'model' => "gpt-image-2.5-sunburst",
+            'model' => "gpt-image-2",
             'prompt' => $image_prompt,
             'n' => 1,
             'size' => "1024x1024"
