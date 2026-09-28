@@ -1,0 +1,12 @@
+{% set show_footer = false %}
+{% set hide_call_to_action = true %}
+{% extends 'base.twig' %}
+
+{% block page_title %}{% endblock %}
+{% block main_content %}
+<div class="row"><div class="col-lg-4 offset-lg-4"><div class="content sign-in-box" data-email-link-finish>
+    <h5 class="mb-3">Finishing sign in…</h5>
+    <p class="text-muted">Please keep this page open while we verify your sign-in link.</p>
+    <div class="alert alert-danger" data-auth-error hidden></div>
+</div></div></div>
+{% endblock %}

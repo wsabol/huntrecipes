@@ -1,132 +1,92 @@
 # HuntRecipes
 
-HuntRecipes is a family recipe website that brings the *Summers with the Hunts* reunion cookbook online. Visitors can browse and search recipes; registered members can manage recipes and favorites. The application also includes user and chef administration, email-based account flows, and optional OpenAI-powered recipe image generation.
+HuntRecipes is a Laravel 12 family recipe application. It retains the existing Twig and Bootstrap presentation while using Laravel routing, middleware, Eloquent/query builder, API resources, policies, validation, storage, mail, scheduling, and Vite.
 
-## Stack
+Authentication is passwordless and owned by Firebase Authentication:
 
-- PHP 8.2 with a custom `HuntRecipes` autoloader and Composer
-- Twig 3 templates
-- MySQL through PHP's `mysqli` extension
-- JavaScript and Sass built with Webpack 5 and npm
-- Bootstrap 5, jQuery, and DataTables in the browser
-- PHPUnit 11 for the PHP test suite
-- Apache-compatible configuration in `.htaccess`
+- Google OAuth
+- Firebase email-link sign-in
+- Secure, HTTP-only Firebase session cookies
 
-The main web entry point is `index.php`. Page entry points live in directories such as `home/`, `recipes/`, and `account/`; JSON API endpoints live under `api/v1/`. The frontend bundle starts at `lib/js/app.js` and Webpack writes generated assets to `js/` and `css/`.
+The application never presents, accepts, imports, or resets passwords. MySQL remains authoritative for profiles, account state, roles, chef links, recipes, applications, and favorites.
 
 ## Requirements
 
-- PHP 8.2.x
-- PHP extensions: JSON and MySQLi
-- Composer
-- MySQL-compatible database server
-- Node.js and npm for rebuilding frontend assets
-- A web server whose document root is this repository
+- PHP 8.2 and Composer
+- MySQL 8-compatible database
+- Node.js 22 and npm
+- Separate Firebase projects for development and production
+- An Apache document root pointing to `public/`
 
-The repository does not currently declare a supported Node.js version. **TODO:** document and enforce one (for example with an `.nvmrc` or the `engines` field in `lib/package.json`). Production uses Apache-specific behavior from `.htaccess`, including custom error pages and maintenance mode.
+PHP 8.2 and Laravel 12 require a follow-up upgrade before December 2026.
 
-## Setup
-
-1. Install the PHP dependencies from the repository root:
-
-   ```bash
-   composer install
-   ```
-
-2. Create the local environment file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Replace the placeholder values and add the variables described in [Environment variables](#environment-variables). Do not commit `.env`.
-
-3. Prepare the database and grant the configured user access to it.
-
-   The application currently connects to a database named `saboldru_recipes`, which is hard-coded in `includes/HuntRecipes/Database/SqlController.php`. No schema or migration files are included. **TODO:** add a reproducible schema/migration workflow and make the database name configurable.
-
-4. Install and build the frontend dependencies:
-
-   ```bash
-   cd lib
-   npm ci
-   npm run build
-   cd ..
-   ```
-
-5. Point the web server's document root at the repository root. For basic local development, PHP's built-in server can serve the application:
-
-   ```bash
-   php -S 127.0.0.1:8000 -t .
-   ```
-
-   Then open <http://127.0.0.1:8000/>. The built-in server does not apply `.htaccess`, so Apache-specific error and maintenance behavior is not available with this command.
-
-The root route redirects signed-in users to `/home/` and other visitors to `/welcome/`. A database health endpoint is available at `/api/v1/system/ping/`.
-
-## Environment variables
-
-Environment variables are loaded from the root `.env` file by `vlucas/phpdotenv`.
-
-| Variable | Purpose | When needed |
-| --- | --- | --- |
-| `DB_HOST` | MySQL host | Required at application bootstrap |
-| `DB_USERNAME` | MySQL username | Required at application bootstrap |
-| `DB_PASSWORD` | MySQL password | Required at application bootstrap |
-| `PRODUCTION` | Boolean-like flag controlling error display and development-only behavior | Set for all environments (`0` locally, `1` in production) |
-| `MAIL_HOST` | SMTP server hostname | Email and account-recovery flows |
-| `MAIL_PORT` | SMTP server port; the mailer currently uses SSL | Email and account-recovery flows |
-| `MAIL_USERNAME` | SMTP username and From address | Email and account-recovery flows |
-| `MAIL_PASSWORD` | SMTP password | Email and account-recovery flows |
-| `EMAIL_CONTACT` | Recipient for contact-form submissions | Contact form |
-| `OPENAI_API_KEY` | OpenAI API key | AI recipe prompt and image generation |
-
-Only the three database variables are currently validated by the bootstrap code. Keep all credentials out of version control.
-
-## Scripts and commands
-
-PHP dependencies are managed at the repository root. `composer.json` does not currently define Composer scripts.
-
-Frontend commands run from `lib/`:
-
-| Command | Description |
-| --- | --- |
-| `npm run build` | Create minified production bundles in `js/app.min.js` and `css/style.css` with source maps |
-| `npm run watch` | Watch frontend sources and rebuild production bundles |
-| `npm run watch-dev` | Watch frontend sources and write the development JavaScript bundle to `js/app.dev.js` |
-
-The `js/` and `css/` outputs are generated artifacts. Edit sources in `lib/js/` and `lib/scss/` instead.
-
-## Tests
-
-Install development dependencies with `composer install`, configure the required database environment values, and run:
+## Local setup
 
 ```bash
-vendor/bin/phpunit tests --do-not-cache-result --colors
+composer install
+cp .env.example .env
+php artisan key:generate
+npm ci
+npm run build
+php artisan storage:link
+php artisan migrate
+php artisan serve --port=8001
 ```
 
-This is the command used by GitHub Actions with PHP 8.2. The suite contains unit tests as well as code paths that bootstrap the application; there is no separate test database configuration or checked-in PHPUnit configuration. **TODO:** document test database isolation and fixtures before running database-backed tests against shared data.
+Configure the database and Firebase browser settings in `.env`. Set `FIREBASE_CREDENTIALS` to an absolute service-account JSON path outside the repository. Enable Google and Email/Password in Firebase Authentication; Firebase requires the latter for email links, but HuntRecipes does not expose password authentication. Add the application host to Firebase authorized domains and use `/auth/email/finish` as the email-link callback.
 
-No frontend test script is currently defined.
+The Firebase Auth Emulator can be selected with `FIREBASE_AUTH_EMULATOR_HOST` for automated authentication tests.
 
-## Project structure
+## Existing account migration
+
+Back up the database and uploads first, then inspect the migration without writing:
+
+```bash
+php artisan huntrecipes:migrate-firebase-users --dry-run
+```
+
+Run the command without `--dry-run` to create deterministic `hr_<id>` Firebase identities and write their UIDs locally. Use `--from-id=<id>` to resume after an interruption. The command skips accounts already migrated and records structured progress in Laravel logs.
+
+After restoring the uploads backup, migrate legacy recipe and profile uploads onto Laravel's public disk:
+
+```bash
+php artisan huntrecipes:migrate-uploads --source=/absolute/path/to/legacy/assets --dry-run
+php artisan huntrecipes:migrate-uploads --source=/absolute/path/to/legacy/assets
+```
+
+Legacy password/session tables and password hashes should remain as inaccessible rollback data for 30 days after deployment, then be removed in a separately reviewed migration.
+
+## Scheduled work
+
+Configure the host cron once:
 
 ```text
-.
-├── account/, admin/       Account and administration page entry points
-├── api/v1/                Versioned JSON API endpoints
-├── assets/                Images, favicons, measurement data, and raw recipe data
-├── css/                   Generated CSS bundle
-├── includes/HuntRecipes/  PHP domain, database, endpoint, email, and user classes
-├── js/                    Generated JavaScript bundle and bundled assets
-├── lib/                   Frontend source, npm manifest, and Webpack configuration
-├── tests/Tests/           PHPUnit tests
-├── views/                 Twig layouts, pages, partials, emails, and recipe views
-├── composer.json          PHP dependencies and PHP version constraint
-├── index.php              Root web entry point and redirect
-└── .htaccess              Apache error-page and maintenance-mode behavior
+* * * * * cd /absolute/path/to/huntrecipes && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-## License
+Laravel schedules the daily featured recipe and chef command. There is no public operations endpoint.
 
-No repository-level license file is present. **TODO:** choose a license and add it as `LICENSE`. The frontend package metadata in `lib/package.json` currently declares ISC, but that does not by itself document licensing for the whole repository.
+## Verification
+
+```bash
+composer validate --strict
+vendor/bin/pint --test
+php artisan test
+npm run build
+```
+
+CI additionally runs the schema migration against MySQL 8.4. The legacy 61-test behavioral baseline remains in the suite while coverage expands around Laravel routes, Twig rendering, Firebase sessions, policies, validation, and adversarial ownership cases.
+
+## Deployment checklist
+
+1. Capture a schema-only production dump, a full database backup, and an uploads backup.
+2. Verify the production MySQL version and compare the dump to the guarded adoption migration.
+3. Put the existing application into maintenance mode and retain the prior release.
+4. Install production dependencies and build assets.
+5. Run migrations, `storage:link`, and the Firebase user migration.
+6. Run `config:cache`, `route:cache`, and `view:cache` where supported.
+7. Point Apache at `public/`, configure HTTPS, and start the scheduler cron.
+8. Smoke-test public pages, both sign-in methods, logout, account access, recipe ownership, developer review, uploads, mail, and `/up`.
+9. Preserve the Firebase migration audit for rollback.
+
+The production schema dump and real Firebase credentials are intentionally not committed.

@@ -1,9 +1,7 @@
 # environment file
 .env
-
-# maintenance
-site_maintenance_off
-site_maintenance_on
+.env.*
+!.env.example
 
 # os/plugin cache files
 .DS_Store
@@ -18,22 +16,57 @@ vendor/*
 /vendor
 /vendor/*
 
-# npm
-lib/node_modules
-lib/node_modules/*
-js/*
-/js/app.dev.js
-/js/*.js
-/js/*.txt
-/js/*.map
-css/*
-/css/*.css
+# agents
+.cursor/*
+!.cursor/commands
+!.cursor/commands/**
+!.cursor/rules
+!.cursor/rules/**
+
+# Laravel
+/.phpunit.cache
+/bootstrap/cache/*.php
+/bootstrap/ssr
+/bootstrap/build-manifest.json
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/database/snapshots/*
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/*.tar.gz
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
+!/storage/logs/.gitignore
+
+# npm / Vite
+node_modules/
+/public/build
 
 # assets
-/assets/images/recipes/*
-!/assets/images/recipes/index.php
-!/assets/images/recipes/generic_recipe.jpg
+/public/assets/images/recipes/*
+!/public/assets/images/recipes/generic_recipe.jpg
 
-/assets/images/users/*
-!/assets/images/users/index.php
-!/assets/images/users/generic_avatar.jpg
+/public/assets/images/users/*
+!/public/assets/images/users/generic_avatar.jpg
+
+# integrations
+firebase-sdk.json
