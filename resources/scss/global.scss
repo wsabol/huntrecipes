@@ -525,6 +525,10 @@ figure:has(> .blockquote) {
 
 // cropping
 
+.photo-dropzone {
+    border: 2px dashed var(--bs-border-color);
+}
+
 .cropping-container .img-container {
     max-height: 400px;
     background-color: $gray-50;

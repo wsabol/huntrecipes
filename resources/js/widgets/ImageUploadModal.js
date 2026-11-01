@@ -46,8 +46,12 @@ class ImageUploadModal {
             }
         });
 
-        $('#photoInput', $container).change(function(e) {
-            if (e.target.files && e.target.files[0]) {
+        const loadPhoto = function(file) {
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please choose an image file.');
+                    return;
+                }
                 const reader = new FileReader();
                 const $cropImage = $('.cropImage', $container);
 
@@ -80,8 +84,23 @@ class ImageUploadModal {
                     });
                 };
 
-                reader.readAsDataURL(e.target.files[0]);
+                reader.readAsDataURL(file);
             }
+        };
+
+        $('#photoInput', $container).change(function(e) {
+            loadPhoto(e.target.files?.[0]);
+        });
+
+        $('.photo-dropzone', $container).on('dragenter dragover', function(e) {
+            e.preventDefault();
+            e.originalEvent.dataTransfer.dropEffect = 'copy';
+            $(this).addClass('border-primary bg-light');
+        }).on('dragleave drop', function(e) {
+            e.preventDefault();
+            $(this).removeClass('border-primary bg-light');
+        }).on('drop', function(e) {
+            loadPhoto(e.originalEvent.dataTransfer.files[0]);
         });
 
         // Handle crop and upload
