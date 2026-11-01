@@ -1,54 +1,79 @@
-
 {% extends 'base.twig' %}
 
+{% block page_title %}{% endblock %}
+
 {% block main_content %}
+    <article class="about-family">
+        <header class="about-intro text-center">
+            <p class="about-eyebrow">The Hunt family cookbook</p>
+            <h1>A little taste of home.</h1>
+            <p>Favorite recipes. Familiar faces. A lifetime of gathering together.<br class="d-none d-md-block">
+                Welcome to our family’s table — there’s always room for you.</p>
+        </header>
 
-    <!--row-->
-    <div class="row">
-        <div class="content">
-
-            <div class="row justify-content-center mb-4">
-                <article class="mb-4">
-                    <img src="/assets/images/about/family-then.jpg" class="col-4 ms-4 mb-4 d-xl-block d-none" alt="Hunt Family Then" style="float:right">
-
-                    <h2>Hunt Recipes</h2>
-
-                    <p>The Hunt family's love for cooking and gathering around the table began with a special reunion in the
-                        summer of 1983, when Dad and Dotty Hunt brought the family together for what would become a cherished
-                        tradition. What started as a single summer gathering grew into over 14 years of annual reunions and counting, each one
-                        adding new recipes, new family members, and new memories to our collection.</p>
-
-                    <p>In 1997, Joan and Stuart Sabol celebrated these gatherings by creating a family cookbook, preserving
-                        the recipes that had become the heart of our reunions. Their dedication captured not just
-                        ingredients and instructions, but the spirit of love, laughter, and togetherness that made each dish special.</p>
-
-                    <p>Today, HuntRecipes continues this tradition in digital form. This website serves as our modern family
-                        cookbook - a place where Hunt family members can share their favorite recipes, preserve our food
-                        traditions, and keep our cooking heritage alive for future generations. From Dad and Dotty's
-                        original reunion recipes to new family favorites, each dish here tells a part of our story.</p>
-
-                    <p>Just as our family has grown through the years, so too has our collection of recipes. Whether you're
-                        a Hunt by birth, by marriage, or by choice, these recipes are part of your heritage. We invite you
-                        to explore, cook, and add your own recipes to our family's culinary legacy.</p>
-
-                    <p>Here's to many more years of cooking, sharing, and creating memories together!</p>
-                </article>
+        <section class="about-album" aria-labelledby="album-title">
+            <div class="about-album-heading">
+                <div>
+                    <p class="about-eyebrow">Our family album</p>
+                    <h2 id="album-title">Different years. The same love.</h2>
+                </div>
+                <span class="about-album-note">A few faces behind the recipes</span>
             </div>
-
-            <div class="row justify-content-center mb-4 d-xl-none">
-                <div class="col-lg-6 col-md-8 col-sm-12">
-                    <img src="/assets/images/about/family-then.jpg" class="img-fluid" alt="Hunt Family Then">
+            {% set photos = [
+                {file: 'family-then.jpg', width: 960, height: 720, title: 'Remember when?', caption: 'The faces, the matching shirts, the joy of being together.', alt: 'An earlier Hunt family gathering outdoors in matching reunion shirts.'},
+                {file: 'family-memories.jpg', width: 2048, height: 1536, title: 'Smiles from the family album.', caption: 'A little glimpse of the years before us.', alt: 'An old black-and-white family photograph of three men seated together, smiling.'},
+                {file: 'family-gathering.jpg', width: 2048, height: 1536, title: 'Together is a good place to be.', caption: 'Generations gathered close for a family photograph.', alt: 'Family members of several generations gathered.'},
+                {file: 'birthday-celebration.jpg', width: 1536, height: 2048, title: 'So much to celebrate.', caption: 'Cake, candles, and a smile to remember.', alt: 'An older family member smiling and raising his hand behind a birthday cake with lit candles.'},
+                {file: 'family-generations.jpg', width: 2048, height: 1366, title: 'Room for everyone.', caption: 'The family album keeps growing, one gathering at a time.', alt: 'A large family group with children seated in front and adults gathered behind them in a living room.'},
+                {file: 'family-smiles.jpg', width: 1536, height: 2048, title: 'The little moments stay with us.', caption: 'Leaning in close, sharing a smile, making a memory.', alt: 'Four family members leaning together and smiling for a candid photograph.'},
+                {file: 'family-now.jpg', width: 972, height: 648, title: 'More faces. More memories.', caption: 'A growing family, still making room for one another.', alt: 'Several generations of the Hunt family together in a living room wearing matching turquoise reunion shirts.'}
+            ] %}
+            <div id="family-album" class="carousel slide" role="region" aria-roledescription="carousel" aria-label="Hunt family photographs" tabindex="0">
+                <div class="carousel-inner" aria-live="polite">
+                    {% for photo in photos %}
+                        <div class="carousel-item{{ loop.first ? ' active' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ loop.index }} of {{ photos|length }}">
+                            <figure>
+                                <div class="about-photo"><img src="/assets/images/about/{{ photo.file }}" width="{{ photo.width }}" height="{{ photo.height }}" loading="{{ loop.first ? 'eager' : 'lazy' }}" alt="{{ photo.alt }}"></div>
+                                <figcaption><span class="about-photo-title">{{ photo.title }}</span> {{ photo.caption }}</figcaption>
+                            </figure>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="about-album-controls">
+                    <button type="button" class="btn btn-outline-primary" data-bs-target="#family-album" data-bs-slide="prev" aria-label="Previous family photograph"><span aria-hidden="true">&larr;</span> Previous</button>
+                    <div class="carousel-indicators">
+                        {% for photo in photos %}
+                            <button type="button" data-bs-target="#family-album" data-bs-slide-to="{{ loop.index0 }}"{{ loop.first ? ' class="active" aria-current="true"' : '' }} aria-label="Show photograph {{ loop.index }}: {{ photo.title }}"></button>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" data-bs-target="#family-album" data-bs-slide="next" aria-label="Next family photograph">Next <span aria-hidden="true">&rarr;</span></button>
                 </div>
             </div>
+        </section>
 
-            <div class="row justify-content-center mb-4">
-                <div class="col-lg-6 col-md-8 col-sm-12">
-                    <img src="/assets/images/about/family-now.jpg" class="img-fluid" alt="Hunt Family Now">
-                </div>
-            </div>
-
+        <div class="row g-4 g-lg-5 about-story">
+            <section class="col-lg-6" aria-labelledby="roots-title">
+                <p class="about-eyebrow">Deep roots, full hearts</p>
+                <h2 id="roots-title">A family worth coming home to.</h2>
+                <p>Our story reaches back to William and Elizabeth Hunt and the branches of the family that grew from them. Through the years, our reunions have given us a place to reconnect, celebrate milestones, and remember the people who brought us together.</p>
+                <p>In the summer of 1983, Dad and Dotty Hunt brought the family together for a reunion that became a cherished tradition. The recipes we shared became part of those memories — familiar dishes that could bring a little of that togetherness home with us.</p>
+                <p>We’re proud to be part of this family. Every gathering, every shared photograph, and every recipe passed along helps keep that connection alive.</p>
+            </section>
+            <section class="col-lg-6" aria-labelledby="thanks-title">
+                <p class="about-eyebrow">Made with love, passed along</p>
+                <h2 id="thanks-title">To the hands that fed us: thank you.</h2>
+                <p>To our parents and grandparents, and to every family cook who shared a favorite: thank you for the meals, the care, and the recipes we still reach for. Cooking something you passed down is one way we keep you close.</p>
+                <p>In 1997, Joan and Stuart Sabol gathered our reunion favorites into a family cookbook. Their work gave us something to treasure and pass on. HuntRecipes carries that gift forward, making room for the old favorites and the new ones we’ll love just as much.</p>
+                <p>These recipes belong to our shared story. When we make them, share them, or teach someone younger how they’re done, we give that story another chapter.</p>
+            </section>
         </div>
-    </div>
-    <!--//row-->
 
+        <footer class="about-invitation text-center">
+            <p class="about-eyebrow">Let’s keep the tradition going</p>
+            <h2>Pull up a chair.</h2>
+            <p>Find an old favorite. Share a recipe of your own.<br class="d-none d-md-block"> Make something that reminds you of someone you love.</p>
+            <a href="{{ route('recipes.index') }}" class="btn btn-primary">Explore our family recipes <span aria-hidden="true">&rarr;</span></a>
+            <p class="about-signoff">Here’s to the next meal, the next reunion, and the memories still to come.</p>
+        </footer>
+    </article>
 {% endblock %}
