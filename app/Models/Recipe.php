@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recipe extends Model {
     protected $table = 'Recipe';
-
     public $timestamps = false;
-
     protected $guarded = ['id'];
 
     protected function casts(): array {

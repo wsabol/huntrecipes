@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Measure extends Model {
     protected $table = 'Measure';
-
     public $timestamps = false;
-
     protected $guarded = ['id'];
 }

@@ -10,14 +10,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $table = 'User';
-
     public $timestamps = false;
-
     protected $fillable = ['firebase_uid', 'name', 'email', 'account_status_id', 'profile_picture', 'chef_application_id', 'chef_id', 'is_chef', 'is_developer', 'is_email_verified', 'date_created'];
-
     protected $hidden = ['password'];
 
     protected function casts(): array {

@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 final class ChefApplicationMailer {
-    public function __construct(private readonly TwigRenderer $twig) {}
+    public function __construct(private readonly TwigRenderer $twig) {
+    }
 
     public function sendDecision(ChefApplication $application, bool $approved): void {
         $application->loadMissing('user');

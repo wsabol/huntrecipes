@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 
 class LookupController extends Controller {
     public function chefs() {
-        return response()->json(['data' => Chef::withExists('user')->orderBy('name')->get()->map(fn($chef) => [...$chef->toArray(), 'is_linked_to_user' => $chef->user_exists])]);
+        return response()->json(['data' => Chef::withExists('user')->orderBy('name')->get()->map(fn ($chef) => [...$chef->toArray(), 'is_linked_to_user' => $chef->user_exists])]);
     }
 
     public function chefFavorites(Chef $chef) {
@@ -51,11 +51,11 @@ class LookupController extends Controller {
     }
 
     public function ingredientPreparations() {
-        return response()->json(['data' => RecipeIngredient::whereNotNull('ingredient_prep')->where('ingredient_prep', '<>', '')->distinct()->orderBy('ingredient_prep')->pluck('ingredient_prep')->map(fn($name) => ['name' => $name])]);
+        return response()->json(['data' => RecipeIngredient::whereNotNull('ingredient_prep')->where('ingredient_prep', '<>', '')->distinct()->orderBy('ingredient_prep')->pluck('ingredient_prep')->map(fn ($name) => ['name' => $name])]);
     }
 
     public function measures() {
-        return response()->json(['data' => Measure::query()->get()->map(fn($measure) => [...$measure->toArray(), 'measure_type' => $measure->measure_type_id, 'base_unit_conversion' => $measure->general_unit_conversion, 'fractions_allowed' => []])]);
+        return response()->json(['data' => Measure::query()->get()->map(fn ($measure) => [...$measure->toArray(), 'measure_type' => $measure->measure_type_id, 'base_unit_conversion' => $measure->general_unit_conversion, 'fractions_allowed' => []])]);
     }
 
     private function collection(string $model) {

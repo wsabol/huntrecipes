@@ -13,9 +13,7 @@ class ChefApplication extends Model {
     public const STATUS_DENIED = 3;
 
     protected $table = 'ChefApplication';
-
     public $timestamps = false;
-
     protected $guarded = ['id'];
 
     protected function casts(): array {

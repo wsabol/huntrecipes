@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Chef extends Model {
     protected $table = 'Chef';
-
     public $timestamps = false;
-
     protected $guarded = ['id'];
 
     protected function casts(): array {

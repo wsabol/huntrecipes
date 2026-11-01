@@ -12,7 +12,8 @@ final class TwigRenderer {
     public function __construct(
         private readonly Environment $twig,
         private readonly Navigation  $navigation,
-    ) {}
+    ) {
+    }
 
     public function render(string $template, array $context = [], int $status = 200): Response {
         return new Response($this->html($template, $context), $status);

@@ -12,7 +12,6 @@ use Throwable;
 
 class MigrateFirebaseUsers extends Command {
     protected $signature = 'huntrecipes:migrate-firebase-users {--dry-run} {--from-id=0} {--retries=3}';
-
     protected $description = 'Idempotently create passwordless Firebase identities for legacy users.';
 
     public function handle(): int {

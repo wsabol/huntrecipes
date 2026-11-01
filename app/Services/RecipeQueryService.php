@@ -14,10 +14,10 @@ final class RecipeQueryService {
             ->where('published_flag', true);
 
         if ($user) {
-            $query->withExists(['favoritedBy as is_liked' => fn($q) => $q->where('User.id', $user->id)]);
+            $query->withExists(['favoritedBy as is_liked' => fn ($q) => $q->where('User.id', $user->id)]);
         }
         if ($keyword = trim((string)($filters['keyword'] ?? ''))) {
-            $query->where(fn($q) => $q->where('title', 'like', "%{$keyword}%")->orWhere('instructions', 'like', "%{$keyword}%"));
+            $query->where(fn ($q) => $q->where('title', 'like', "%{$keyword}%")->orWhere('instructions', 'like', "%{$keyword}%"));
         }
         foreach (['course_id', 'cuisine_id', 'chef_id'] as $column) {
             if (!empty($filters[$column])) {
@@ -29,10 +29,10 @@ final class RecipeQueryService {
         }
         if (!empty($filters['ingredients'])) {
             $ingredients = array_filter((array)$filters['ingredients']);
-            $query->whereHas('ingredients.ingredient', fn($q) => $q->whereIn('name', $ingredients));
+            $query->whereHas('ingredients.ingredient', fn ($q) => $q->whereIn('name', $ingredients));
         }
 
-        $hasFilters = array_filter($filters, fn($value) => $value !== null && $value !== '' && $value !== [] && $value !== 0 && $value !== '0');
+        $hasFilters = array_filter($filters, fn ($value) => $value !== null && $value !== '' && $value !== [] && $value !== 0 && $value !== '0');
         $hasFilters ? $query->orderBy('title') : $query->inRandomOrder();
 
         return $query->paginate(min(max((int)($filters['per_page'] ?? 24), 1), 100));

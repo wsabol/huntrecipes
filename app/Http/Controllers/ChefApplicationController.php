@@ -13,11 +13,11 @@ class ChefApplicationController extends Controller {
     public function index(Request $request) {
         $this->authorize('viewAny', ChefApplication::class);
         $query = ChefApplication::with('user')->where('is_deleted', false);
-        $query->when($request->integer('chef_application_status_id'), fn($q, $value) => $q->where('chef_application_status_id', $value));
-        $query->when($request->integer('user_id'), fn($q, $value) => $q->where('user_id', $value));
-        $query->when($request->date('date_from'), fn($q, $value) => $q->whereDate('date_created', '>=', $value));
-        $query->when($request->date('date_to'), fn($q, $value) => $q->whereDate('date_created', '<=', $value));
-        $data = $query->orderBy('id')->get()->map(fn(ChefApplication $application) => [
+        $query->when($request->integer('chef_application_status_id'), fn ($q, $value) => $q->where('chef_application_status_id', $value));
+        $query->when($request->integer('user_id'), fn ($q, $value) => $q->where('user_id', $value));
+        $query->when($request->date('date_from'), fn ($q, $value) => $q->whereDate('date_created', '>=', $value));
+        $query->when($request->date('date_to'), fn ($q, $value) => $q->whereDate('date_created', '<=', $value));
+        $data = $query->orderBy('id')->get()->map(fn (ChefApplication $application) => [
             ...$application->toArray(),
             'name' => $application->user->name,
             'email' => $application->user->email,

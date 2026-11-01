@@ -9,12 +9,14 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 final class RenderedTwigMail extends Mailable {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(
         public readonly string $renderedHtml,
         public readonly string $mailSubject,
-    ) {}
+    ) {
+    }
 
     public function envelope(): Envelope {
         return new Envelope(subject: $this->mailSubject);

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class SetDailyFeatures extends Command {
     protected $signature = 'huntrecipes:set-daily-features';
-
     protected $description = 'Select the daily recipe and chef.';
 
     public function handle(): int {

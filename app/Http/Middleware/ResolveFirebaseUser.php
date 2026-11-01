@@ -23,7 +23,7 @@ final class ResolveFirebaseUser {
                     throw new RuntimeException('Account disabled.');
                 }
                 Auth::setUser($user);
-                $request->setUserResolver(fn() => $user);
+                $request->setUserResolver(fn () => $user);
             } catch (Throwable $exception) {
                 report($exception);
                 $invalidCookie = true;

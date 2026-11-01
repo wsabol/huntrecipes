@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 final class MigrateLegacyUploads extends Command {
     protected $signature = 'huntrecipes:migrate-uploads {--source=} {--dry-run}';
-
     protected $description = 'Copy legacy recipe and profile uploads to Laravel public storage and update their database paths.';
 
     public function handle(): int {
@@ -25,11 +24,17 @@ final class MigrateLegacyUploads extends Command {
         $failures = 0;
         $failures += $this->migrateModels(
             Recipe::where('image_filename', 'like', '/assets/images/recipes/%')->where('image_filename', '<>', '/assets/images/recipes/generic_recipe.jpg'),
-            'image_filename', $source . '/images/recipes', 'recipes/legacy', $dryRun,
+            'image_filename',
+            $source . '/images/recipes',
+            'recipes/legacy',
+            $dryRun,
         );
         $failures += $this->migrateModels(
             User::where('profile_picture', 'like', '/assets/images/users/%')->where('profile_picture', '<>', '/assets/images/users/generic_avatar.jpg'),
-            'profile_picture', $source . '/images/users', 'users/legacy', $dryRun,
+            'profile_picture',
+            $source . '/images/users',
+            'users/legacy',
+            $dryRun,
         );
 
         return $failures === 0 ? self::SUCCESS : self::FAILURE;

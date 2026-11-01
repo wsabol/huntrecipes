@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RecipeIngredient extends Model {
     protected $table = 'RecipeIngredient';
-
     public $timestamps = false;
-
     protected $guarded = ['id'];
 
     public function recipe(): BelongsTo {

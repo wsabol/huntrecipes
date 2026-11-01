@@ -8,12 +8,10 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-final class OwnershipBoundaryTest extends TestCase
-{
+final class OwnershipBoundaryTest extends TestCase {
     use RefreshDatabase;
 
-    public function test_profile_update_ignores_submitted_ownership_fields(): void
-    {
+    public function testProfileUpdateIgnoresSubmittedOwnershipFields(): void {
         $actor = User::factory()->create(['name' => 'Actor']);
         $victim = User::factory()->create(['name' => 'Victim']);
 
@@ -26,8 +24,7 @@ final class OwnershipBoundaryTest extends TestCase
         $this->assertSame('Victim', $victim->refresh()->name);
     }
 
-    public function test_favorite_is_always_written_for_the_acting_user(): void
-    {
+    public function testFavoriteIsAlwaysWrittenForTheActingUser(): void {
         $actor = User::factory()->create();
         $victim = User::factory()->create();
         $recipe = Recipe::create(['title' => 'Published', 'instructions' => 'Cook it', 'published_flag' => true]);
@@ -40,8 +37,7 @@ final class OwnershipBoundaryTest extends TestCase
         $this->assertFalse($victim->favoriteRecipes()->whereKey($recipe->id)->exists());
     }
 
-    public function test_user_cannot_change_another_chefs_recipe_or_application(): void
-    {
+    public function testUserCannotChangeAnotherChefsRecipeOrApplication(): void {
         $actor = User::factory()->create(['is_chef' => true, 'chef_id' => 8]);
         $victim = User::factory()->create(['is_chef' => true, 'chef_id' => 7]);
         $recipe = Recipe::create(['title' => 'Private', 'instructions' => 'Secret', 'chef_id' => 7, 'published_flag' => false]);
