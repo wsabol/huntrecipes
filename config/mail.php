@@ -2,7 +2,7 @@
 
 return [
 
-    'contact_address' => env('CONTACT_TO_ADDRESS', env('EMAIL_CONTACT')),
+    'contact_address' => env('CONTACT_TO_ADDRESS'),
 
     /*
     |--------------------------------------------------------------------------
