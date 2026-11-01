@@ -27,7 +27,6 @@ class ImageGenModalAdmin {
         this.regenerateButton = $('.regenerateButton', $container);
         this.usePhotoButton = $('.usePhotoButton', $container);
         this.alertDiv = $('.alert', $container);
-        this.chkPromptNew = $('.chk-prompt-new', $container);
 
         let self = this;
 
@@ -38,7 +37,7 @@ class ImageGenModalAdmin {
             self.regenerateButton.hide();
             self.usePhotoButton.hide();
             self.generatedImage.attr('src', '');
-            self.generatedBlurb.val('');
+            self.generatedBlurb.text('');
         });
 
         // Regenerate button handler
@@ -48,12 +47,6 @@ class ImageGenModalAdmin {
             }
             self.generatePhoto()
         });
-
-        // edit prompt event
-        this.chkPromptNew.change(() => {
-            const state = self.chkPromptNew.prop('checked')
-            self.generatedBlurb.prop('disabled', state)
-        })
 
         // Use photo button handler
         this.usePhotoButton.click(function() {
@@ -82,10 +75,6 @@ class ImageGenModalAdmin {
             payload = {...(this.postData || {})}
         }
 
-        if (!self.chkPromptNew.prop('checked')) {
-            payload.image_prompt = self.generatedBlurb.val();
-        }
-
         // Show loading state
         this.loadingState.show();
         this.resultsState.hide();
@@ -100,7 +89,7 @@ class ImageGenModalAdmin {
 
                 self.alertDiv.hide()
                 self.generatedImage.attr('src', response.data.generated_image);
-                self.generatedBlurb.val(response.data.image_prompt);
+                self.generatedBlurb.text(response.data.image_prompt);
 
                 // Show results
                 self.alertDiv.hide()
@@ -121,7 +110,6 @@ class ImageGenModalAdmin {
 
     show(title = '') {
         this.alertDiv.hide()
-        this.chkPromptNew.prop('checked', true).change()
         this.usePhotoButton.removeClass('disabled')
 
         let $title = $(this.mdl_image_gen._element).find('.modal-title')

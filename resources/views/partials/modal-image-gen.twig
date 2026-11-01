@@ -25,16 +25,8 @@
                     </div>
                 </div>
                 <div class="mb-3 blurbState" style="display:none">
-                    <div class="d-flex">
-                        <label for="{{ modal_image_gen_name }}-blurb" class="form-label">Photo Prompt</label>
-                        <div class="form-check ms-auto">
-                            <input class="form-check-input chk-prompt-new" type="checkbox" value="" id="{{ modal_image_gen_name }}-prompt-edit" checked>
-                            <label class="form-check-label" for="{{ modal_image_gen_name }}-prompt-edit" >
-                                Always Generate New Prompt from Recipe
-                            </label>
-                        </div>
-                    </div>
-                    <textarea id="{{ modal_image_gen_name }}-blurb" class="form-control generatedBlurb" rows="8" maxlength="1000" disabled ></textarea>
+                    <div class="mb-2">Photo description</div>
+                    <p id="{{ modal_image_gen_name }}-blurb" class="generatedBlurb"></p>
                 </div>
 
                 <div class="alert" style="display:none"></div>
