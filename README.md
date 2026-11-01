@@ -61,7 +61,7 @@ Legacy password/session tables and password hashes should remain as inaccessible
 Configure the host cron once:
 
 ```text
-* * * * * cd /absolute/path/to/huntrecipes && php artisan schedule:run >> /dev/null 2>&1
+* * * * * cd /absolute/path/to/huntrecipes/current && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 Laravel schedules the daily featured recipe and chef command. There is no public operations endpoint.
@@ -90,3 +90,12 @@ CI additionally runs the schema migration against MySQL 8.4. The legacy 61-test 
 9. Preserve the Firebase migration audit for rollback.
 
 The production schema dump and real Firebase credentials are intentionally not committed.
+
+## Production workflow configuration
+
+Production deployment runs from `main` through `deploy-production.yml`, after its reusable `run-tests.yml` quality gate passes. Configure a protected GitHub environment named `production` with:
+
+- Secrets: `HOST`, `USER`, `PRIVATE_KEY`, `PORT`, `PATH_TO_REPO`, and `PHP_BIN`.
+- Optional secret: `PASSPHRASE` when the deployment key is encrypted.
+
+On the host, create `PATH_TO_REPO/shared/.env` before the first deployment. It must use `APP_ENV=production`, `APP_DEBUG=false`, an HTTPS `APP_URL`, `SESSION_SECURE_COOKIE=true`, and an absolute `FIREBASE_CREDENTIALS` path outside the release tree. The workflow packages a clean release, activates it through `current`, checks `/up`, database connectivity, passwordless sign-in, compiled assets, and sensitive-path isolation, and automatically restores the previous release if the health check fails. Database migrations are intentionally not rolled back automatically.

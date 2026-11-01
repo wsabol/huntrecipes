@@ -44,11 +44,17 @@ tar -C "$root" \
   --exclude='./node_modules' \
   --exclude='./storage' \
   --exclude='./scripts' \
+  --exclude='./public/assets/images/recipes/*' \
+  --exclude='./public/assets/images/users/*' \
   -cf - . | tar -C "$stage" -xf -
+
+mkdir -p "$stage/public/assets/images/recipes" "$stage/public/assets/images/users"
+cp "$root/public/assets/images/recipes/generic_recipe.jpg" "$stage/public/assets/images/recipes/"
+cp "$root/public/assets/images/users/generic_avatar.jpg" "$stage/public/assets/images/users/"
 
 # Belt-and-suspenders: never ship credentials or VCS even if excludes drift.
 rm -rf "$stage/.git" "$stage/.github" "$stage/tests" "$stage/node_modules" "$stage/storage" "$stage/scripts"
-rm -f "$stage/.env" "$stage/.env.backup" "$stage/.env.production" "$stage/auth.json"
+rm -f "$stage/.env" "$stage/.env.backup" "$stage/.env.production" "$stage/firebase-sdk.json"
 
 if [[ ! -f "$stage/bootstrap/build-manifest.json" ]]; then
   echo "error: the release excludes dropped bootstrap/build-manifest.json" >&2

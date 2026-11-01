@@ -20,9 +20,11 @@ env:
 
 jobs:
   rollback:
+    if: github.ref == 'refs/heads/main'
     name: Restore previous release
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -31,7 +33,7 @@ jobs:
 
       - name: Switch current symlink
         id: rollback
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.5
         env:
           APP_ROOT: ${{ secrets.PATH_TO_REPO }}
           RELEASE_ID: ${{ inputs.release_id }}
@@ -48,7 +50,7 @@ jobs:
 
       - name: Read APP_URL from shared/.env
         id: app_url
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}

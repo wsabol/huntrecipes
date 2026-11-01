@@ -6,7 +6,7 @@
 #   $APP_ROOT/
 #   ├── current -> releases/<active>
 #   ├── releases/<id>/
-#   ├── shared/{.env,storage,reports}/
+#   ├── shared/{.env,storage}/
 #   └── public_html -> current/public     # production env document root
 #
 # Required environment:
@@ -31,7 +31,6 @@ need_cmd ln
 need_cmd mv
 need_cmd mkdir
 need_cmd readlink
-need_cmd grep
 
 APP_ROOT="${APP_ROOT:?APP_ROOT is required}"
 RELEASE_ID="${RELEASE_ID:?RELEASE_ID is required}"
@@ -220,25 +219,6 @@ bootstrap_shared() {
   fi
   ensure_shared_storage_tree
 
-  seed_dir_from_candidates "$SHARED_DIR/reports" \
-    "$APP_ROOT/reports" \
-    "$PUBLIC_HTML/shared/reports" \
-    "$PUBLIC_HTML/reports"
-  mkdir -p "$SHARED_DIR/reports"
-
-  mkdir -p "$SHARED_DIR/well-known"
-  local well_src
-  for well_src in \
-    "$APP_ROOT/public/.well-known" \
-    "$PUBLIC_HTML/.well-known" \
-    "$PUBLIC_HTML/public/.well-known" \
-    "$APP_ROOT/public_html.inplace.bak/.well-known"
-  do
-    if [[ -d "$well_src" && ! -L "$well_src" ]]; then
-      log "preserving .well-known from $well_src"
-      cp -a "$well_src/." "$SHARED_DIR/well-known/"
-    fi
-  done
 }
 
 link_shared_into_release() {
@@ -248,20 +228,11 @@ link_shared_into_release() {
   rm -rf "$RELEASE_DIR/storage"
   ln -s ../../shared/storage "$RELEASE_DIR/storage"
 
-  if [[ -e "$RELEASE_DIR/reports" || -L "$RELEASE_DIR/reports" ]]; then
-    rm -rf "$RELEASE_DIR/reports"
-  fi
-  ln -s ../../shared/reports "$RELEASE_DIR/reports"
-
   mkdir -p "$RELEASE_DIR/bootstrap/cache"
   chmod -R u+rwX,g+rwX \
     "$RELEASE_DIR/bootstrap/cache" \
     "$SHARED_DIR/storage" || true
 
-  if [[ -n "$(ls -A "$SHARED_DIR/well-known" 2>/dev/null)" ]]; then
-    mkdir -p "$RELEASE_DIR/public/.well-known"
-    cp -a "$SHARED_DIR/well-known/." "$RELEASE_DIR/public/.well-known/"
-  fi
 }
 
 run_artisan() {
@@ -269,6 +240,43 @@ run_artisan() {
   shift
   # /dev/null stdin: artisan must not consume the rest of a stdin-fed SSH script.
   (cd "$release" && "$PHP_BIN" artisan "$@" </dev/null)
+}
+
+validate_production_config() {
+  local release="$1"
+  (cd "$release" && "$PHP_BIN" -r '
+    require "vendor/autoload.php";
+    $app = require "bootstrap/app.php";
+    $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+    $errors = [];
+    if (!$app->environment("production")) $errors[] = "APP_ENV must be production";
+    if ((bool) config("app.debug")) $errors[] = "APP_DEBUG must be false";
+    if (!str_starts_with((string) config("app.url"), "https://")) $errors[] = "APP_URL must use HTTPS";
+    if (!(bool) config("session.secure")) $errors[] = "SESSION_SECURE_COOKIE must be true";
+    if ((string) config("app.key") === "") $errors[] = "APP_KEY is missing";
+    foreach (["project_id", "api_key", "auth_domain"] as $key) {
+        if ((string) config("services.firebase.$key") === "") $errors[] = "Firebase $key is missing";
+    }
+    $credentials = (string) config("services.firebase.credentials");
+    $real = realpath($credentials) ?: "";
+    if ($credentials === "" || !str_starts_with($credentials, "/") || !is_readable($credentials)) {
+        $errors[] = "FIREBASE_CREDENTIALS must be an absolute readable path";
+    } elseif (str_starts_with($real, base_path().DIRECTORY_SEPARATOR)) {
+        $errors[] = "FIREBASE_CREDENTIALS must be outside the release directory";
+    } else {
+        $serviceAccount = json_decode((string) file_get_contents($real), true);
+        if (!is_array($serviceAccount)
+            || ($serviceAccount["project_id"] ?? "") !== (string) config("services.firebase.project_id")
+            || ($serviceAccount["client_email"] ?? "") === ""
+            || ($serviceAccount["private_key"] ?? "") === "") {
+            $errors[] = "FIREBASE_CREDENTIALS is invalid or belongs to another project";
+        }
+    }
+    if ($errors !== []) {
+        fwrite(STDERR, implode(PHP_EOL, $errors).PHP_EOL);
+        exit(1);
+    }
+  ')
 }
 
 prepare_release() {
@@ -282,19 +290,13 @@ prepare_release() {
   [[ -f "$RELEASE_DIR/public/.htaccess" ]] || die "release is missing public/.htaccess"
 
   link_shared_into_release
-
-  log "laravel prepare: storage:link, migrate --force, Passport keys/client, optimize"
+  validate_production_config "$RELEASE_DIR"
+  log "laravel prepare: storage:link, migrate --force, optimize"
   run_artisan "$RELEASE_DIR" storage:link --force
   # Schema changes are not undone by application rollback. Keep migrations
   # backward-compatible. migrate:rollback is never run automatically.
   run_artisan "$RELEASE_DIR" migrate --force
-  if [[ ! -f "$RELEASE_DIR/storage/oauth-private.key" || ! -f "$RELEASE_DIR/storage/oauth-public.key" ]]; then
-    log "generating persistent Passport key pair"
-    run_artisan "$RELEASE_DIR" passport:keys --force
-  fi
-  run_artisan "$RELEASE_DIR" mcp:provision-cursor-client
   run_artisan "$RELEASE_DIR" optimize
-  run_artisan "$RELEASE_DIR" mcp:write-discovery
   # QUEUE_CONNECTION=sync and there is no Horizon/Octane/worker — no queue:restart.
 }
 
@@ -329,37 +331,6 @@ public_html_is_link_farm() {
   [[ "$target" == *current/public/index.php ]]
 }
 
-# `public/*` globs skip dot directories. A leftover ACME `.well-known` in a
-# public_html link farm would 404 OAuth discovery unless those documents are
-# published into it.
-publish_well_known_into_html() {
-  local html="$1"
-  local src="$APP_ROOT/current/public/.well-known"
-  local dest="$html/.well-known"
-  local name
-
-  [[ -d "$src" || -L "$src" ]] || return 0
-  [[ -L "$html" ]] && return 0
-
-  if [[ -L "$dest" || ! -e "$dest" ]]; then
-    ln -sfn "../current/public/.well-known" "$dest"
-    return 0
-  fi
-
-  mkdir -p "$dest"
-  if [[ -f "$src/oauth-authorization-server" ]]; then
-    rm -rf "$dest/oauth-authorization-server"
-    cp -a "$src/oauth-authorization-server" "$dest/oauth-authorization-server"
-  fi
-  # Nested /mcp must be a file inside a directory. A leftover flat file from
-  # older deploys would make that path a 404 on SiteGround's static nginx.
-  if [[ -d "$src/oauth-protected-resource" ]]; then
-    rm -rf "$dest/oauth-protected-resource"
-    mkdir -p "$dest/oauth-protected-resource"
-    cp -a "$src/oauth-protected-resource/." "$dest/oauth-protected-resource/"
-  fi
-}
-
 refresh_public_html_link_farm() {
   local html="$PUBLIC_HTML"
   local src name target
@@ -377,8 +348,6 @@ refresh_public_html_link_farm() {
   if [[ -e "$APP_ROOT/current/public/.htaccess" || -L "$APP_ROOT/current/public/.htaccess" ]]; then
     ln -sfn "../current/public/.htaccess" "$html/.htaccess"
   fi
-
-  publish_well_known_into_html "$html"
 
   for src in "$html"/*; do
     [[ -L "$src" ]] || continue
@@ -451,7 +420,6 @@ activate_release() {
   log "pointing current -> releases/$RELEASE_ID"
   swap_symlink "releases/$RELEASE_ID" "$CURRENT_LINK"
   ensure_public_html
-  publish_well_known_into_html "$PUBLIC_HTML"
   log "web root: current=$(readlink "$CURRENT_LINK") public_html=$(readlink "$PUBLIC_HTML" 2>/dev/null || echo not-a-symlink)"
 
   mkdir -p "$SHARED_DIR"
@@ -488,12 +456,9 @@ rollback_to() {
   log "rolling current back to releases/$target"
   swap_symlink "releases/$target" "$CURRENT_LINK"
   ensure_public_html
-  publish_well_known_into_html "$PUBLIC_HTML"
   printf '%s\n' "$target" > "$CURRENT_FILE"
   run_artisan "$RELEASES_DIR/$target" optimize:clear || true
   run_artisan "$RELEASES_DIR/$target" optimize || true
-  run_artisan "$RELEASES_DIR/$target" mcp:write-discovery || true
-  publish_well_known_into_html "$PUBLIC_HTML"
 }
 
 cleanup_old_releases() {

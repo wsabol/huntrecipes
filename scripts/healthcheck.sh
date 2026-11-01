@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
-# HTTP health check run from GitHub Actions against the public origin.
-# Usage: healthcheck.sh <origin>
+# Production HTTP smoke test. Usage: healthcheck.sh <https-origin>
 set -euo pipefail
 
-origin="${1:?usage: healthcheck.sh <origin>}"
+origin="${1:?usage: healthcheck.sh <https-origin>}"
 origin="${origin%/}"
 
-if [[ ! "$origin" =~ ^https?:// ]]; then
-  echo "error: origin must be an http(s) URL, got: $origin" >&2
+if [[ ! "$origin" =~ ^https:// ]]; then
+  echo "error: production origin must be an HTTPS URL, got: $origin" >&2
   exit 1
 fi
 
@@ -19,20 +18,18 @@ unclean_path() {
 curl_probe() {
   local url="$1"
   local body="$2"
-  local meta
+  local meta code effective
   meta="$(mktemp)"
-  # Follow host-level http→https (or www) redirects, but fail if routing
-  # exposes /public, /current, or /releases in the final URL.
+
   if ! curl -sS -L --retry 2 --retry-delay 2 --retry-all-errors \
     --max-redirs 5 --max-time 25 \
     -o "$body" -w '%{http_code} %{url_effective}' "$url" > "$meta"
   then
     echo "error: request failed: $url" >&2
-    cat "$meta" >&2 || true
     rm -f "$meta"
     return 1
   fi
-  local code effective
+
   code="$(cut -d' ' -f1 < "$meta")"
   effective="$(cut -d' ' -f2- < "$meta")"
   rm -f "$meta"
@@ -47,6 +44,7 @@ assert_ok_clean() {
   probe="$(curl_probe "$url" "$body")"
   code="${probe%% *}"
   effective="${probe#* }"
+
   if unclean_path "$effective"; then
     echo "error: $url resolved to unclean URL: $effective" >&2
     return 1
@@ -55,23 +53,6 @@ assert_ok_clean() {
     echo "error: $url returned HTTP $code (final URL $effective)" >&2
     return 1
   fi
-  return 0
-}
-
-mcp_http_registered() {
-  local url="$origin/mcp"
-  local body probe code
-  body="$(mktemp)"
-  echo "GET $url"
-  probe="$(curl -sS -L --max-redirs 5 --max-time 15 \
-    -o "$body" -w '%{http_code} %{url_effective}' "$url" || true)"
-  code="${probe%% *}"
-  rm -f "$body"
-  # Mcp::web registers GET /mcp as 405 Allow: POST. Auth is only on POST.
-  case "$code" in
-    200|401|403|405|406|415) return 0 ;;
-    *) return 1 ;;
-  esac
 }
 
 assert_not_exposed() {
@@ -79,8 +60,6 @@ assert_not_exposed() {
   local body probe code effective path
   body="$(mktemp)"
   echo "GET $url (must not be served)"
-  # Follow redirects. Laravel's public/.htaccess 301s /releases/ → /releases
-  # (trailing-slash strip) and the app then 404s — that is not exposure.
   probe="$(curl -sS -L --max-redirs 5 --max-time 15 \
     -o "$body" -w '%{http_code} %{url_effective}' "$url" || true)"
   code="${probe%% *}"
@@ -91,16 +70,10 @@ assert_not_exposed() {
     rm -f "$body"
     return 0
   fi
-
-  # /public/login 302 → /login (200) is the intended canonicalization.
-  case "$url" in
-    */public/*|*/public)
-      if [[ "$path" != /public && "$path" != /public/* ]]; then
-        rm -f "$body"
-        return 0
-      fi
-      ;;
-  esac
+  if [[ "$url" == *"/public/"* && "$path" != /public/* ]]; then
+    rm -f "$body"
+    return 0
+  fi
 
   echo "error: $url is web-accessible (HTTP $code, final URL $effective)" >&2
   rm -f "$body"
@@ -108,91 +81,61 @@ assert_not_exposed() {
 }
 
 run_checks() {
+  assert_ok_clean "$origin/up" "$status_body" || return 1
   assert_ok_clean "$origin/api/status" "$status_body" || return 1
-
   if ! grep -Eq '"is_db_connected"[[:space:]]*:[[:space:]]*true' "$status_body"; then
     echo "error: /api/status did not report is_db_connected=true" >&2
-    echo "payload: $(tr '\n' ' ' < "$status_body")" >&2
     return 1
   fi
 
-  assert_ok_clean "$origin/login" "$login_body" || return 1
-  if ! grep -Eqi 'login|password|sign in|jrspay' "$login_body"; then
-    echo "error: /login did not look like the login page" >&2
+  assert_ok_clean "$origin/sign-in" "$page_body" || return 1
+  if ! grep -q 'Continue with Google' "$page_body" || ! grep -q 'Email me a sign-in link' "$page_body"; then
+    echo "error: /sign-in did not contain the passwordless sign-in controls" >&2
+    return 1
+  fi
+  if ! grep -Eq 'name="firebase-project-id" content="[^"]+"' "$page_body"; then
+    echo "error: /sign-in did not contain Firebase client configuration" >&2
     return 1
   fi
 
-  if mcp_http_registered; then
-    assert_ok_clean "$origin/.well-known/oauth-protected-resource/mcp" "$oauth_body" || return 1
-    if ! grep -Eq '"resource": "https://[^"]+/mcp"' "$oauth_body"; then
-      echo "error: protected-resource metadata resource is not the /mcp URL" >&2
-      return 1
-    fi
-    assert_ok_clean "$origin/.well-known/oauth-authorization-server" "$oauth_body" || return 1
-    if grep -q '"registration_endpoint"' "$oauth_body"; then
-      echo "error: OAuth metadata advertises dynamic client registration" >&2
-      return 1
-    fi
-    if ! grep -q '"mcp:use"' "$oauth_body"; then
-      echo "error: production OAuth metadata does not advertise mcp:use" >&2
-      return 1
-    fi
-    if ! grep -q '"client_secret_post"' "$oauth_body"; then
-      echo "error: OAuth metadata does not advertise client_secret_post" >&2
-      return 1
-    fi
-  else
-    echo "skipping MCP OAuth discovery (GET /mcp is not registered)"
-  fi
-
-  # Vite content-hashes the bundle filenames, so discover them from the rendered
-  # login page instead of hardcoding them. Empty means the build manifest is missing
-  # or the templates failed to resolve it.
   local app_js app_css
-  app_js="$(grep -o '/build/[A-Za-z0-9._/-]*\.js' "$login_body" | head -n 1)"
-  app_css="$(grep -o '/build/[A-Za-z0-9._/-]*\.css' "$login_body" | head -n 1)"
-
+  app_js="$(grep -o '/build/[A-Za-z0-9._/-]*\.js' "$page_body" | head -n 1)"
+  app_css="$(grep -o '/build/[A-Za-z0-9._/-]*\.css' "$page_body" | head -n 1)"
   if [[ -z "$app_js" || -z "$app_css" ]]; then
-    echo "error: /login did not reference a /build/ JS and CSS bundle" >&2
-    echo "  js='$app_js' css='$app_css'" >&2
+    echo "error: /sign-in did not reference built JS and CSS assets" >&2
     return 1
   fi
 
   assert_ok_clean "$origin$app_js" "$asset_body" || return 1
-  if ! grep -q . "$asset_body"; then
-    echo "error: $app_js was empty" >&2
-    return 1
-  fi
-
   assert_ok_clean "$origin$app_css" "$asset_body" || return 1
-  assert_ok_clean "$origin/favicon.ico" "$asset_body" || return 1
+  assert_ok_clean "$origin/assets/favicon/favicon.ico" "$asset_body" || return 1
 
   assert_not_exposed "$origin/shared/.env" || return 1
   assert_not_exposed "$origin/releases" || return 1
   assert_not_exposed "$origin/current" || return 1
   assert_not_exposed "$origin/vendor/autoload.php" || return 1
   assert_not_exposed "$origin/.env" || return 1
-  assert_not_exposed "$origin/public/login" || return 1
+  assert_not_exposed "$origin/firebase-sdk.json" || return 1
+  assert_not_exposed "$origin/public/sign-in" || return 1
 }
 
 status_body="$(mktemp)"
-login_body="$(mktemp)"
+page_body="$(mktemp)"
 asset_body="$(mktemp)"
-oauth_body="$(mktemp)"
-trap 'rm -f "$status_body" "$login_body" "$asset_body" "$oauth_body"' EXIT
+trap 'rm -f "$status_body" "$page_body" "$asset_body"' EXIT
 
-# First cutover may need a Site Tools document-root change to public_html.
 attempts=6
 delay=10
-i=1
-until run_checks; do
-  if (( i >= attempts )); then
-    echo "health check failed after ${attempts} attempts" >&2
-    exit 1
+for ((attempt = 1; attempt <= attempts; attempt++)); do
+  if run_checks; then
+    echo "health check passed"
+    exit 0
   fi
-  echo "health check attempt $i/$attempts failed; retrying in ${delay}s..."
-  i=$((i + 1))
-  sleep "$delay"
+  if (( attempt < attempts )); then
+    echo "health check attempt $attempt/$attempts failed; retrying in ${delay}s..."
+    sleep "$delay"
+  fi
 done
 
-echo "health check passed"
+echo "health check failed after ${attempts} attempts" >&2
+exit 1

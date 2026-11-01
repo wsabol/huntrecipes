@@ -25,7 +25,7 @@ node_modules
 .gitattributes
 .gitignore
 .DS_Store
-auth.json
+firebase-sdk.json
 Homestead.json
 Homestead.yaml
 npm-debug.log
@@ -38,7 +38,7 @@ phpunit.xml
 pint.json
 README.md
 resources/js
-resources/css
+resources/scss
 database/factories
 database/seeders
 storage

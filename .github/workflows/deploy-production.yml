@@ -16,19 +16,22 @@ permissions:
 env:
   KEEP_RELEASES: "5"
   PHP_VERSION: "8.2"
-  NODE_VERSION: "24"
+  NODE_VERSION: "22"
   PHP_EXTENSIONS: mbstring, xml, ctype, json, gd, zip, pdo_mysql, tokenizer, fileinfo, bcmath, intl
   PRODUCTION_URL: "https://huntrecipes.willsabol.com"
 
 jobs:
   quality:
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/run-tests.yml
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: quality
     name: Build artifact and deploy
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -83,7 +86,7 @@ jobs:
           scripts/package-release.sh "${{ github.workspace }}/${{ steps.release.outputs.id }}.tar.gz"
 
       - name: Create incoming directory on host
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
@@ -93,7 +96,7 @@ jobs:
           script: mkdir -p "${{ secrets.PATH_TO_REPO }}/.incoming"
 
       - name: Upload release archive
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
@@ -108,7 +111,7 @@ jobs:
 
       - name: Activate release
         id: activate
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.5
         env:
           APP_ROOT: ${{ secrets.PATH_TO_REPO }}
           RELEASE_ID: ${{ steps.release.outputs.id }}
@@ -133,7 +136,7 @@ jobs:
 
       - name: Rollback on failed health check
         if: always() && steps.activate.outcome == 'success' && steps.health.outcome != 'success'
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.5
         env:
           APP_ROOT: ${{ secrets.PATH_TO_REPO }}
           PHP_BIN: ${{ secrets.PHP_BIN }}

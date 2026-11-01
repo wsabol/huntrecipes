@@ -136,35 +136,6 @@ public_html_is_link_farm() {
   [[ "$target" == *current/public/index.php ]]
 }
 
-# `public/*` globs skip dot directories. A leftover ACME `.well-known` in a
-# public_html link farm would 404 OAuth discovery unless those documents are
-# published into it.
-publish_well_known_into_html() {
-  local html="$1"
-  local src="$APP_ROOT/current/public/.well-known"
-  local dest="$html/.well-known"
-  local name
-
-  [[ -d "$src" || -L "$src" ]] || return 0
-  [[ -L "$html" ]] && return 0
-
-  if [[ -L "$dest" || ! -e "$dest" ]]; then
-    ln -sfn "../current/public/.well-known" "$dest"
-    return 0
-  fi
-
-  mkdir -p "$dest"
-  if [[ -f "$src/oauth-authorization-server" ]]; then
-    rm -rf "$dest/oauth-authorization-server"
-    cp -a "$src/oauth-authorization-server" "$dest/oauth-authorization-server"
-  fi
-  if [[ -d "$src/oauth-protected-resource" ]]; then
-    rm -rf "$dest/oauth-protected-resource"
-    mkdir -p "$dest/oauth-protected-resource"
-    cp -a "$src/oauth-protected-resource/." "$dest/oauth-protected-resource/"
-  fi
-}
-
 refresh_public_html_link_farm() {
   local html="$PUBLIC_HTML"
   local src name target
@@ -182,8 +153,6 @@ refresh_public_html_link_farm() {
   if [[ -e "$APP_ROOT/current/public/.htaccess" || -L "$APP_ROOT/current/public/.htaccess" ]]; then
     ln -sfn "../current/public/.htaccess" "$html/.htaccess"
   fi
-
-  publish_well_known_into_html "$html"
 
   for src in "$html"/*; do
     [[ -L "$src" ]] || continue
@@ -274,7 +243,6 @@ fi
 log "rolling back $active -> $target"
 swap_symlink "releases/$target" "$CURRENT_LINK"
 ensure_public_html
-publish_well_known_into_html "$PUBLIC_HTML"
 
 # The release we left becomes the new immediate rollback target.
 if [[ -n "$active" ]]; then
@@ -284,6 +252,4 @@ printf '%s\n' "$target" > "$CURRENT_FILE"
 
 run_artisan "$RELEASES_DIR/$target" optimize:clear || true
 run_artisan "$RELEASES_DIR/$target" optimize
-run_artisan "$RELEASES_DIR/$target" mcp:write-discovery || true
-publish_well_known_into_html "$PUBLIC_HTML"
 log "rolled back to $target"
