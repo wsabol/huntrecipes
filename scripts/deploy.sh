@@ -291,8 +291,10 @@ prepare_release() {
 
   link_shared_into_release
   validate_production_config "$RELEASE_DIR"
-  log "laravel prepare: storage:link, migrate --force, optimize"
-  run_artisan "$RELEASE_DIR" storage:link --force
+  # Link directly to shared uploads; SiteGround rejects Laravel's absolute,
+  # chained storage symlink when the /home/customer alias differs from Apache's path.
+  ln -sfn ../../../shared/storage/app/public "$RELEASE_DIR/public/storage"
+  log "laravel prepare: migrate --force, optimize"
   # Schema changes are not undone by application rollback. Keep migrations
   # backward-compatible. migrate:rollback is never run automatically.
   run_artisan "$RELEASE_DIR" migrate --force
