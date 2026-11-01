@@ -17,6 +17,18 @@ final class PageRoutesTest extends TestCase {
         }
     }
 
+    public function testContactPrefillsTheSignedInUsersDetailsAndLeavesGuestFieldsEmpty(): void {
+        $this->get('/contact')->assertOk()
+            ->assertSee('aria-label="Name" value=""', false)
+            ->assertSee('aria-label="Email" value=""', false);
+
+        $user = User::factory()->create(['name' => 'Recipe Fan', 'email' => 'fan@example.com']);
+
+        $this->actingAs($user)->get('/contact')->assertOk()
+            ->assertSee('aria-label="Name" value="Recipe Fan"', false)
+            ->assertSee('aria-label="Email" value="fan@example.com"', false);
+    }
+
     public function testHomeShowsTheTop24CategoriesWithCyclingColors(): void {
         foreach (['RecipeType', 'Cuisine', 'Course'] as $table) {
             DB::table($table)->insert(collect(range(1, 10))->map(fn (int $id) => [

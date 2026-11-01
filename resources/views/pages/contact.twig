@@ -32,17 +32,17 @@
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Your Name</label>
-                        <input required type="text" class="form-control" name="name" placeholder="Name" aria-label="Name" value="{{ form_fill.your_name }}" >
+                        <input required type="text" class="form-control" id="name" name="name" autocomplete="name" placeholder="Name" aria-label="Name" value="{{ current_user.name }}" >
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Your Email</label>
-                        <input required type="email" class="form-control" name="email" placeholder="Email" aria-label="Email" value="{{ form_fill.your_email }}" >
+                        <input required type="email" class="form-control" id="email" name="email" autocomplete="email" placeholder="Email" aria-label="Email" value="{{ current_user.email }}" >
                     </div>
 
                     <div class="mb-3">
                         <label for="message" class="form-label">Message</label>
-                        <textarea required rows=5 class="form-control" name="message" placeholder="Message" aria-label="Message"></textarea>
+                        <textarea required rows=5 class="form-control" id="message" name="message" placeholder="Message" aria-label="Message"></textarea>
                     </div>
 
                     <div style="display:flex;">

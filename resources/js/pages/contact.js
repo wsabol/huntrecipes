@@ -40,8 +40,8 @@ export default function() {
                     .removeClass('disabled')
                     .html('Send Message')
 
-                console.error(error.response.data.message);
-                showContactAlert(error.response.data.message)
+                console.error(error);
+                showContactAlert(error.response?.data?.message || 'Unable to send your message. Please check your connection and try again.')
             })
 
         return false
