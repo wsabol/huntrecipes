@@ -45,20 +45,26 @@ final class MigrateLegacyUploads extends Command {
         $query->orderBy('id')->chunkById(100, function ($models) use ($column, $sourceDirectory, $targetDirectory, $dryRun, &$failures): void {
             foreach ($models as $model) {
                 /** @var Model $model */
-                $basename = basename((string)$model->{$column});
-                $source = $sourceDirectory . '/' . $basename;
-                if ($basename === '' || !is_file($source)) {
-                    $this->warn("Missing upload for {$model->getTable()} #{$model->getKey()}: {$basename}");
+                $prefix = '/assets/images/' . basename($sourceDirectory) . '/';
+                $relativePath = substr((string)$model->{$column}, strlen($prefix));
+                $source = $sourceDirectory . '/' . $relativePath;
+                if ($relativePath === '' || in_array('..', explode('/', $relativePath), true) || !is_file($source)) {
+                    $this->warn("Missing upload for {$model->getTable()} #{$model->getKey()}: {$relativePath}");
                     $failures++;
 
                     continue;
                 }
-                $target = $targetDirectory . '/' . $basename;
+                $target = $targetDirectory . '/' . $relativePath;
                 $this->line(($dryRun ? '[dry-run] ' : '') . "{$source} => {$target}");
                 if ($dryRun) {
                     continue;
                 }
-                Storage::disk('public')->put($target, file_get_contents($source));
+                if (!Storage::disk('public')->put($target, file_get_contents($source))) {
+                    $this->warn("Unable to copy upload: {$source}");
+                    $failures++;
+
+                    continue;
+                }
                 $model->forceFill([$column => '/storage/' . $target])->save();
             }
         });
