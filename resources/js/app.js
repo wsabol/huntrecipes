@@ -1,4 +1,3 @@
-import $ from './jquery-global';
 import axios from 'axios';
 import 'bootstrap';
 import {
