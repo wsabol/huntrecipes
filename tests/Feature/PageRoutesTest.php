@@ -73,8 +73,7 @@ final class PageRoutesTest extends TestCase {
         $this->getJson('/api/status')
             ->assertOk()
             ->assertJson([
-                'code' => 200,
-                'message' => 'Got system status',
+                'message' => 'System status',
                 'data' => [
                     'php_version' => PHP_VERSION,
                     'is_production' => false,

@@ -5,9 +5,10 @@ import Modal from 'bootstrap/js/src/modal'
 export default (function() {
     const current_user_id = +$('body').data('current-user-id') || 0
 
-    let signUpModal = new Modal(document.getElementById('mdl-account-cta'), {
-        focus: false
-    })
+    const signUpModalElement = document.getElementById('mdl-account-cta')
+    const signUpModal = signUpModalElement
+        ? new Modal(signUpModalElement, { focus: false })
+        : null
 
     const setRecipeLiked = (recipe_id, liked) => {
         return liked
@@ -17,7 +18,7 @@ export default (function() {
 
     const toggleRecipeCardLiked = ($card) => {
         if (current_user_id === 0) {
-            signUpModal.show()
+            signUpModal?.show()
             return Promise.resolve(false);
         }
 
