@@ -46,7 +46,7 @@ final class Navigation {
             ['title' => 'Contact', 'a_href' => route('contact')],
             ['title' => 'Privacy', 'a_href' => route('privacy')],
         ];
-        $items[] = ['title' => $user ? 'My account' : 'Sign In', 'a_href' => $user ? route('account') : route('sign-in')];
+        $items[] = ['title' => $user ? 'Account' : 'Sign In', 'a_href' => $user ? route('account') : route('sign-in')];
 
         return $items;
     }

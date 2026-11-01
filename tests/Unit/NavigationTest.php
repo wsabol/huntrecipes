@@ -27,7 +27,7 @@ final class NavigationTest extends TestCase {
 
     public function testUserNavigationForMember(): void {
         $items = app(Navigation::class)->user(User::factory()->make());
-        $this->assertSame(['Favorites', 'My Account'], array_column($items, 'title'));
+        $this->assertSame(['Favorites', 'Account'], array_column($items, 'title'));
     }
 
     public function testUserNavigationForChef(): void {
