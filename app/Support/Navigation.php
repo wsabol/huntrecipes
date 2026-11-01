@@ -29,7 +29,7 @@ final class Navigation {
 
         $items = [
             ['title' => 'Favorites', 'a_href' => route('account', ['goto' => 'favorites']), 'icon' => 'fa fa-heart', 'li_class' => 'light'],
-            ['title' => 'My Account', 'a_href' => route('account'), 'icon' => 'fa fa-user', 'li_class' => 'medium'],
+            ['title' => 'Account', 'a_href' => route('account'), 'icon' => 'fa fa-user', 'li_class' => 'medium'],
         ];
         if ($user->is_chef) {
             $items[] = ['title' => 'Submit a recipe', 'a_href' => route('recipes.create'), 'icon' => 'icon-themeenergy_fork-spoon', 'li_class' => 'dark'];
