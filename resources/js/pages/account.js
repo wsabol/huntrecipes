@@ -29,8 +29,10 @@ export default function() {
         {
             data_label: 'profile_photo',
             file_name: 'profile_' + HuntRecipes.current_user_id() + '.jpg',
-            callback: function(data){
+            onclose: function(){
                 $('.btn-new-picture').removeClass('disabled')
+            },
+            callback: function(data){
                 const user = data?.data || data
                 $('#profile-picture').attr('src', user.profile_picture)
                 this.hide()
