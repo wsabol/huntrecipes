@@ -38,7 +38,11 @@ class ChefApplicationController extends Controller {
 
     public function destroy(Request $request, ChefApplication $chefApplication) {
         $this->authorize('delete', $chefApplication);
-        $chefApplication->update(['is_deleted' => true]);
+        DB::transaction(function () use ($chefApplication) {
+            $chefApplication = ChefApplication::whereKey($chefApplication->id)->lockForUpdate()->firstOrFail();
+            abort_if($chefApplication->is_deleted || (int)$chefApplication->chef_application_status_id !== ChefApplication::STATUS_PENDING, 409, 'This application is no longer pending.');
+            $chefApplication->update(['is_deleted' => true]);
+        });
 
         return response()->noContent();
     }
@@ -46,6 +50,8 @@ class ChefApplicationController extends Controller {
     public function review(ReviewChefApplicationRequest $request, ChefApplication $chefApplication, ChefApplicationMailer $mailer) {
         $this->authorize('review', $chefApplication);
         $application = DB::transaction(function () use ($request, $chefApplication) {
+            $chefApplication = ChefApplication::whereKey($chefApplication->id)->lockForUpdate()->firstOrFail();
+            abort_if($chefApplication->is_deleted || (int)$chefApplication->chef_application_status_id !== ChefApplication::STATUS_PENDING, 409, 'This application is no longer pending.');
             $chefApplication->load('user');
             if ($request->boolean('approved')) {
                 $chefId = $request->integer('chef_id');

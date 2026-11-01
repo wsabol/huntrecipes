@@ -259,15 +259,16 @@ export default function() {
                 })
                 .catch(error => {
 
-                    $('[type="submit"]', $frm)
-                        .removeClass('disabled')
-                        .html('Submit')
-
                     console.error(error.response.data.message);
                     $approval_alert.removeClass((i, c) => (c.match(/alert-/g) || []).join(' '))
                         .addClass('alert-error')
                         .text(error.response.data.message)
                         .enable()
+                })
+                .finally(() => {
+                    $('[type="submit"]', $frm)
+                        .removeClass('disabled')
+                        .html('Submit')
                 })
 
             return false

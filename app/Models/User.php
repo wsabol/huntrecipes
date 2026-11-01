@@ -27,7 +27,7 @@ class User extends Authenticatable {
     }
 
     public function chefApplication(): HasOne {
-        return $this->hasOne(ChefApplication::class, 'user_id');
+        return $this->hasOne(ChefApplication::class, 'user_id')->where('is_deleted', false);
     }
 
     public function favoriteRecipes(): BelongsToMany {
