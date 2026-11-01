@@ -1,0 +1,148 @@
+name: Deploy production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-sg
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  KEEP_RELEASES: "5"
+  PHP_VERSION: "8.2"
+  NODE_VERSION: "24"
+  PHP_EXTENSIONS: mbstring, xml, ctype, json, gd, zip, pdo_mysql, tokenizer, fileinfo, bcmath, intl
+  PRODUCTION_URL: "https://huntrecipes.willsabol.com"
+
+jobs:
+  quality:
+    uses: ./.github/workflows/run-tests.yml
+
+  deploy:
+    needs: quality
+    name: Build artifact and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+          coverage: none
+          extensions: ${{ env.PHP_EXTENSIONS }}
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Setup Application for Production
+        run: |
+          cp .env.example .env
+          composer run install:prod
+
+      - name: Generate application key
+        run: php artisan key:generate --force
+
+      - name: Install and build frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Compute release id
+        id: release
+        run: |
+          ts="$(date -u +'%Y%m%d%H%M%S')"
+          sha="$(git rev-parse --short=7 HEAD)"
+          echo "id=${ts}-${sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Validate deploy scripts
+        run: |
+          bash -n scripts/package-release.sh
+          bash -n scripts/deploy.sh
+          bash -n scripts/rollback.sh
+          bash -n scripts/healthcheck.sh
+
+      - name: Package release tarball
+        run: |
+          chmod +x scripts/package-release.sh
+          scripts/package-release.sh "${{ github.workspace }}/${{ steps.release.outputs.id }}.tar.gz"
+
+      - name: Create incoming directory on host
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          script: mkdir -p "${{ secrets.PATH_TO_REPO }}/.incoming"
+
+      - name: Upload release archive
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          source: ${{ steps.release.outputs.id }}.tar.gz
+          target: ${{ secrets.PATH_TO_REPO }}/.incoming
+          timeout: 120s
+          command_timeout: 20m
+          overwrite: true
+
+      - name: Activate release
+        id: activate
+        uses: appleboy/ssh-action@master
+        env:
+          APP_ROOT: ${{ secrets.PATH_TO_REPO }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+          TAR_PATH: ${{ secrets.PATH_TO_REPO }}/.incoming/${{ steps.release.outputs.id }}.tar.gz
+          KEEP_RELEASES: ${{ env.KEEP_RELEASES }}
+          PHP_BIN: ${{ secrets.PHP_BIN }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          command_timeout: 20m
+          envs: APP_ROOT,RELEASE_ID,TAR_PATH,KEEP_RELEASES,PHP_BIN
+          script_path: scripts/deploy.sh
+
+      - name: HTTP health check
+        id: health
+        run: |
+          chmod +x scripts/healthcheck.sh
+          scripts/healthcheck.sh "${{ env.PRODUCTION_URL }}"
+
+      - name: Rollback on failed health check
+        if: always() && steps.activate.outcome == 'success' && steps.health.outcome != 'success'
+        uses: appleboy/ssh-action@master
+        env:
+          APP_ROOT: ${{ secrets.PATH_TO_REPO }}
+          PHP_BIN: ${{ secrets.PHP_BIN }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          command_timeout: 10m
+          envs: APP_ROOT,PHP_BIN
+          script_path: scripts/rollback.sh

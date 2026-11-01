@@ -1,0 +1,83 @@
+name: Rollback production
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_id:
+        description: Release directory name to restore (leave empty for the previous release)
+        required: false
+        type: string
+
+concurrency:
+  group: production-sg
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PRODUCTION_URL: "https://huntrecipes.willsabol.com"
+
+jobs:
+  rollback:
+    name: Restore previous release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Switch current symlink
+        id: rollback
+        uses: appleboy/ssh-action@master
+        env:
+          APP_ROOT: ${{ secrets.PATH_TO_REPO }}
+          RELEASE_ID: ${{ inputs.release_id }}
+          PHP_BIN: ${{ secrets.PHP_BIN }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          command_timeout: 10m
+          envs: APP_ROOT,RELEASE_ID,PHP_BIN
+          script_path: scripts/rollback.sh
+
+      - name: Read APP_URL from shared/.env
+        id: app_url
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          capture_stdout: true
+          script: |
+            set -euo pipefail
+            value="$(grep -E '^APP_URL=' "${{ secrets.PATH_TO_REPO }}/shared/.env" | tail -n 1 | cut -d= -f2- | tr -d '"'\''\r')"
+            printf 'RECIPES_APP_URL=%s\n' "$value"
+
+      - name: Resolve healthcheck URL
+        id: health_url
+        env:
+          APP_URL_STDOUT: ${{ steps.app_url.outputs.stdout }}
+        run: |
+          url=""${{ env.PRODUCTION_URL }}""
+          if [ -z "$url" ]; then
+            url="$(printf '%s\n' "$APP_URL_STDOUT" | sed -n 's/^RECIPES_APP_URL=//p' | tail -n 1 | tr -d '[:space:]')"
+          fi
+          url="${url%/}"
+          if [ -z "$url" ]; then
+            echo "Set the PRODUCTION_URL secret or APP_URL in shared/.env" >&2
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: HTTP health check
+        run: |
+          chmod +x scripts/healthcheck.sh
+          scripts/healthcheck.sh "${{ steps.health_url.outputs.url }}"

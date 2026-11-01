@@ -1,0 +1,51 @@
+# Runs for all PRs, and when pushing directly to main
+
+name: Run Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  KEEP_RELEASES: "5"
+  PHP_VERSION: "8.2"
+  NODE_VERSION: "24"
+  PHP_EXTENSIONS: mbstring, xml, ctype, json, gd, zip, pdo_mysql, tokenizer, fileinfo, bcmath, intl
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+          coverage: none
+          extensions: ${{ env.PHP_EXTENSIONS }}
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Setup Application
+        run: composer run setup
+
+      - name: Run CI Checks
+        run: composer run ci:check

@@ -1,0 +1,58 @@
+# Monthly dependency updates.
+#
+# Minor/patch bumps are grouped into a single PR per manifest to keep the
+# review volume manageable; major bumps are deliberately left ungrouped so
+# each one gets its own PR and its own review.
+
+version: 2
+
+updates:
+  - package-ecosystem: composer
+    directory: "/"
+    target-branch: master
+    schedule:
+      interval: monthly
+      time: "06:00"
+      timezone: America/Chicago
+    versioning-strategy: increase-if-necessary
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "composer"
+    cooldown:
+      semver-patch-days: 7
+      semver-minor-days: 14
+      semver-major-days: 30
+    groups:
+      composer-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: master
+    schedule:
+      interval: monthly
+      time: "06:00"
+      timezone: America/Chicago
+    versioning-strategy: increase-if-necessary
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "npm"
+    cooldown:
+      semver-patch-days: 7
+      semver-minor-days: 14
+      semver-major-days: 30
+    groups:
+      npm-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
