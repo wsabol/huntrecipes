@@ -2,10 +2,15 @@
 
 namespace App\Services;
 
+use App\Exceptions\InactiveFirebaseIdentity;
 use App\Models\User;
+use DateTimeInterface;
 use Illuminate\Support\Facades\DB;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+use Kreait\Firebase\Exception\Auth\FailedToVerifySessionCookie;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
+use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Lcobucci\JWT\UnencryptedToken;
 use RuntimeException;
 
@@ -15,12 +20,18 @@ final class FirebaseIdentity {
     public function __construct(private readonly FirebaseAuth $auth) {
     }
 
-    public function verifyIdToken(string $idToken, bool $checkRevoked = true): UnencryptedToken {
-        return $this->auth->verifyIdToken($idToken, $checkRevoked);
+    /**
+     * @throws FailedToVerifyToken|InactiveFirebaseIdentity
+     */
+    public function verifyIdToken(string $idToken): UnencryptedToken {
+        return $this->assertActive($this->auth->verifyIdToken($idToken));
     }
 
-    public function verifySessionCookie(string $cookie, bool $checkRevoked = true): UnencryptedToken {
-        return $this->auth->verifySessionCookie($cookie, $checkRevoked);
+    /**
+     * @throws FailedToVerifySessionCookie|InactiveFirebaseIdentity
+     */
+    public function verifySessionCookie(string $cookie): UnencryptedToken {
+        return $this->assertActive($this->auth->verifySessionCookie($cookie));
     }
 
     public function createSessionCookie(string $idToken, bool $remember): string {
@@ -81,6 +92,32 @@ final class FirebaseIdentity {
                 'date_created' => now(),
             ]);
         });
+    }
+
+    /**
+     * The SDK's own revocation check does not reject disabled users, so a
+     * disabled account would keep a valid session cookie until it expires.
+     * One user lookup covers both revocation and the disabled flag.
+     */
+    private function assertActive(UnencryptedToken $token): UnencryptedToken {
+        $uid = (string)$token->claims()->get('sub');
+        try {
+            $record = $this->auth->getUser($uid);
+        } catch (UserNotFound $exception) {
+            throw new InactiveFirebaseIdentity('The Firebase user no longer exists.', previous: $exception);
+        }
+
+        if ($record->disabled) {
+            throw new InactiveFirebaseIdentity('The Firebase user is disabled.');
+        }
+
+        $authTime = $token->claims()->get('auth_time');
+        $authTimestamp = $authTime instanceof DateTimeInterface ? $authTime->getTimestamp() : (int)$authTime;
+        if ($record->tokensValidAfterTime && $authTimestamp < $record->tokensValidAfterTime->getTimestamp()) {
+            throw new InactiveFirebaseIdentity('The Firebase session has been revoked.');
+        }
+
+        return $token;
     }
 
     private function synchronize(User $user, UnencryptedToken $token): User {

@@ -75,6 +75,11 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "test:firebase-emulator": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan config:clear --ansi",
+            "npx --yes firebase-tools@15.34.2 emulators:exec --only auth --project demo-huntrecipes \"php artisan test --group=firebase-emulator\""
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

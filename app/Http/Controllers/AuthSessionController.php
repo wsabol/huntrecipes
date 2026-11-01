@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InactiveFirebaseIdentity;
 use App\Http\Requests\CreateFirebaseSessionRequest;
 use App\Http\Resources\UserResource;
 use App\Services\FirebaseIdentity;
@@ -9,11 +10,17 @@ use DateTimeInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class AuthSessionController extends Controller {
     public function store(CreateFirebaseSessionRequest $request, FirebaseIdentity $identity): JsonResponse {
-        $token = $identity->verifyIdToken($request->string('id_token')->toString());
+        try {
+            $token = $identity->verifyIdToken($request->string('id_token')->toString());
+        } catch (InactiveFirebaseIdentity|FailedToVerifyToken $exception) {
+            Log::notice('Firebase session exchange rejected.', ['reason' => $exception->getMessage()]);
+            abort(401, 'Sign-in could not be verified.');
+        }
         $authTime = $token->claims()->get('auth_time');
         $authTimestamp = $authTime instanceof DateTimeInterface ? $authTime->getTimestamp() : (int)$authTime;
         abort_if($authTimestamp < now()->subMinutes(5)->timestamp, 401, 'Recent authentication is required.');

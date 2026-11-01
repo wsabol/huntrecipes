@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InactiveFirebaseIdentity;
 use App\Services\FirebaseIdentity;
 use DateTimeInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 
 final class AuthProviderController extends Controller {
     public function index(Request $request, FirebaseIdentity $identity): JsonResponse {
@@ -18,7 +20,11 @@ final class AuthProviderController extends Controller {
 
     public function destroyGoogle(Request $request, FirebaseIdentity $identity): JsonResponse {
         $data = $request->validate(['id_token' => ['required', 'string', 'max:8192']]);
-        $token = $identity->verifyIdToken($data['id_token']);
+        try {
+            $token = $identity->verifyIdToken($data['id_token']);
+        } catch (InactiveFirebaseIdentity|FailedToVerifyToken) {
+            abort(401, 'Sign-in could not be verified.');
+        }
         $authTime = $token->claims()->get('auth_time');
         $authTimestamp = $authTime instanceof DateTimeInterface ? $authTime->getTimestamp() : (int)$authTime;
         abort_if($authTimestamp < now()->subMinutes(5)->timestamp, 401, 'Recent authentication is required.');

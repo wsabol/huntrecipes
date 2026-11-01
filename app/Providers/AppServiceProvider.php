@@ -10,6 +10,8 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Kreait\Firebase\Util;
+use RuntimeException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -38,8 +40,14 @@ class AppServiceProvider extends ServiceProvider {
      * Bootstrap any application services.
      */
     public function boot(): void {
+        // The Firebase SDK skips token signature verification whenever an
+        // emulator host is configured, which would let anyone forge a session.
+        if ($this->app->environment('production') && Util::authEmulatorHost() !== null) {
+            throw new RuntimeException('FIREBASE_AUTH_EMULATOR_HOST must not be set in production.');
+        }
+
         User::observe(UserObserver::class);
-        RateLimiter::for('api', fn(Request $request) => Limit::perMinute(60)->by(
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by(
             (string)($request->user()?->id ?? $request->ip())
         ));
     }

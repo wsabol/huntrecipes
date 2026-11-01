@@ -35,7 +35,7 @@ php artisan serve --port=8001
 
 Configure the database and Firebase browser settings in `.env`. Set `FIREBASE_CREDENTIALS` to an absolute service-account JSON path outside the repository. Enable Google and Email/Password in Firebase Authentication; Firebase requires the latter for email links, but HuntRecipes does not expose password authentication. Add the application host to Firebase authorized domains and use `/auth/email/finish` as the email-link callback.
 
-The Firebase Auth Emulator can be selected with `FIREBASE_AUTH_EMULATOR_HOST` for automated authentication tests.
+Run `composer test:firebase-emulator` to exercise sign-in, session cookies, provider linking and revocation against the Firebase Auth Emulator. It needs Node and no credentials, and CI runs it too. `FIREBASE_AUTH_EMULATOR_HOST` disables token signature checks, so the app refuses to boot in production when it is set. The manual checks against real Firebase projects (Google OAuth, email delivery, authorized domains, HTTPS cookies) are listed in [docs/firebase-verification.md](docs/firebase-verification.md).
 
 ## Existing account migration
 
@@ -86,7 +86,7 @@ CI additionally runs the schema migration against MySQL 8.4. The legacy 61-test 
 5. Run migrations, `storage:link`, and the Firebase user migration.
 6. Run `config:cache`, `route:cache`, and `view:cache` where supported.
 7. Point Apache at `public/`, configure HTTPS, and start the scheduler cron.
-8. Smoke-test public pages, both sign-in methods, logout, account access, recipe ownership, developer review, uploads, mail, and `/up`.
+8. Smoke-test public pages, logout, account access, recipe ownership, developer review, uploads, mail, and `/up`, and complete the production section of [docs/firebase-verification.md](docs/firebase-verification.md).
 9. Preserve the Firebase migration audit for rollback.
 
 The production schema dump and real Firebase credentials are intentionally not committed.
