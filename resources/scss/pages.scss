@@ -198,8 +198,8 @@
 
 // RECIPE SINGLE
 
-.recipe-ingredients dt.no-amount{
-    background:none;
+.recipe-ingredients dt.no-amount {
+    background: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -327,15 +327,10 @@
 
 // About: a family album with room for the whole photograph.
 .about-family {
-    color: #53483f;
-    font-size: 1rem;
-
-    h1, h2 { color: #513b32; font-family: Georgia, 'Times New Roman', serif; }
-    h2 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
-    p { line-height: 1.8; }
+    // h2 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
 
     .about-eyebrow {
-        color: #85443c;
+        color: $secondary;
         font-size: .75rem;
         font-weight: 700;
         letter-spacing: .14em;
@@ -345,13 +340,20 @@
 
     .about-intro {
         padding: 2rem 1rem 2.5rem;
-        h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin: 0 0 1rem; }
-        > p:last-child { font-size: 1.125rem; }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin: 0 0 1rem;
+        }
+
+        > p:last-child {
+            font-size: 1.125rem;
+        }
     }
 
     .about-album {
         padding: clamp(1rem, 3vw, 2rem);
-        background: #fffaf2;
+        background: $white;
         border: 1px solid #e5d8c7;
         border-radius: 12px;
         box-shadow: 0 12px 35px rgba(71, 48, 31, .08);
@@ -364,11 +366,21 @@
         justify-content: space-between;
         gap: .5rem 1rem;
         margin-bottom: 1.25rem;
-        h2 { margin: 0; }
+
+        h2 {
+            margin: 0;
+        }
     }
 
-    .about-album-note, .about-signoff { font-family: Georgia, 'Times New Roman', serif; font-style: italic; }
-    .about-album-note { font-size: .95rem; }
+    .about-album-note, .about-signoff {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-style: italic;
+    }
+
+    .about-album-note {
+        font-size: .95rem;
+    }
+
     .about-photo {
         height: clamp(230px, 48vw, 540px);
         display: flex;
@@ -376,33 +388,84 @@
         background: #eee5d8;
         border-radius: 5px;
         overflow: hidden;
-        img { width: 100%; height: 100%; object-fit: contain; }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
     }
 
-    figcaption { padding: 1.25rem .25rem .75rem; text-align: center; min-height: 6rem; }
-    .about-photo-title { display: block; font-family: Georgia, 'Times New Roman', serif; font-size: 1.4rem; color: #513b32; margin-bottom: .25rem; }
+    figcaption {
+        padding: 1rem .25rem .75rem;
+        text-align: center;
+        min-height: 5rem;
+    }
+
+    .about-photo-title {
+        display: block;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 1.4rem;
+        color: #513b32;
+        margin-bottom: .25rem;
+    }
+
     .about-album-controls {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: .5rem;
-        .btn { color: #85443c; border-color: #bd9487; }
-        .btn:hover { color: #fff; background: #85443c; }
+
+        .btn {
+            color: #85443c;
+            border-color: #bd9487;
+        }
+
+        .btn:hover {
+            color: #fff;
+            background: #85443c;
+        }
     }
+
     .carousel-indicators {
         flex-basis: 100%;
         order: 1;
         position: static;
         margin: 0;
-        button { width: 12px; height: 12px; border-radius: 50%; background-color: #85443c; border: 8px solid transparent; background-clip: padding-box; }
+
+        button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #85443c;
+            border: 8px solid transparent;
+            background-clip: padding-box;
+        }
     }
-    button:focus-visible, a:focus-visible { outline: 3px solid #85443c; outline-offset: 4px; }
-    .about-story { padding-top: clamp(2rem, 5vw, 4rem); padding-bottom: 2.5rem; }
+
+    button:focus-visible, a:focus-visible {
+        outline: 3px solid #85443c;
+        outline-offset: 4px;
+    }
+
+    .about-story {
+        padding-top: clamp(2rem, 5vw, 4rem);
+        padding-bottom: 2.5rem;
+    }
+
     .about-invitation {
         border-top: 1px solid #dfcfbd;
         padding: 2.5rem 1rem 0;
-        h2 { font-size: 2.5rem; margin-top: 0; }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-top: 0;
+        }
     }
-    .about-signoff { margin-top: 1.5rem; font-size: .95rem; }
+
+    .about-signoff {
+        margin-top: 1.5rem;
+        font-size: .95rem;
+    }
 }

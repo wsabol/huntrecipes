@@ -29,7 +29,7 @@
                 {file: 'family-now.jpg', width: 972, height: 648, title: 'More faces. More memories.', caption: 'A growing family, still making room for one another.', alt: 'Several generations of the Hunt family together in a living room wearing matching turquoise reunion shirts.'}
             ] %}
             <div id="family-album" class="carousel slide" role="region" aria-roledescription="carousel" aria-label="Hunt family photographs" tabindex="0">
-                <div class="carousel-inner" aria-live="polite">
+                <div class="carousel-inner" aria-live="off">
                     {% for photo in photos %}
                         <div class="carousel-item{{ loop.first ? ' active' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ loop.index }} of {{ photos|length }}">
                             <figure>
@@ -40,40 +40,39 @@
                     {% endfor %}
                 </div>
                 <div class="about-album-controls">
-                    <button type="button" class="btn btn-outline-primary" data-bs-target="#family-album" data-bs-slide="prev" aria-label="Previous family photograph"><span aria-hidden="true">&larr;</span> Previous</button>
                     <div class="carousel-indicators">
                         {% for photo in photos %}
                             <button type="button" data-bs-target="#family-album" data-bs-slide-to="{{ loop.index0 }}"{{ loop.first ? ' class="active" aria-current="true"' : '' }} aria-label="Show photograph {{ loop.index }}: {{ photo.title }}"></button>
                         {% endfor %}
                     </div>
-                    <button type="button" class="btn btn-outline-primary" data-bs-target="#family-album" data-bs-slide="next" aria-label="Next family photograph">Next <span aria-hidden="true">&rarr;</span></button>
                 </div>
             </div>
+
+            <div class="row g-4 g-lg-5 about-story">
+                <section class="col-lg-6" aria-labelledby="roots-title">
+                    <p class="about-eyebrow">Deep roots, full hearts</p>
+                    <h2 id="roots-title">A family worth coming home to.</h2>
+                    <p>Our story reaches back to William and Elizabeth Hunt and the branches of the family that grew from them. Through the years, our reunions have given us a place to reconnect, celebrate milestones, and remember the people who brought us together.</p>
+                    <p>In the summer of 1983, Dad and Dotty Hunt brought the family together for a reunion that became a cherished tradition. The recipes we shared became part of those memories — familiar dishes that could bring a little of that togetherness home with us.</p>
+                    <p>We’re proud to be part of this family. Every gathering, every shared photograph, and every recipe passed along helps keep that connection alive.</p>
+                </section>
+                <section class="col-lg-6" aria-labelledby="thanks-title">
+                    <p class="about-eyebrow">Made with love, passed along</p>
+                    <h2 id="thanks-title">To the hands that fed us: thank you.</h2>
+                    <p>To our parents and grandparents, and to every family cook who shared a favorite: thank you for the meals, the care, and the recipes we still reach for. Cooking something you passed down is one way we keep you close.</p>
+                    <p>In 1997, Joan and Stuart Sabol gathered our reunion favorites into a family cookbook. Their work gave us something to treasure and pass on. HuntRecipes carries that gift forward, making room for the old favorites and the new ones we’ll love just as much.</p>
+                    <p>These recipes belong to our shared story. When we make them, share them, or teach someone younger how they’re done, we give that story another chapter.</p>
+                </section>
+            </div>
+
+            <footer class="about-invitation text-center">
+                <p class="about-eyebrow">Let’s keep the tradition going</p>
+                <h2>Pull up a chair.</h2>
+                <p>Find an old favorite. Share a recipe of your own.<br class="d-none d-md-block"> Make something that reminds you of someone you love.</p>
+                <a href="{{ route('recipes.index') }}" class="btn btn-primary">Explore our family recipes <span aria-hidden="true">&rarr;</span></a>
+                <p class="about-signoff">Here’s to the next meal, the next reunion, and the memories still to come.</p>
+            </footer>
         </section>
 
-        <div class="row g-4 g-lg-5 about-story">
-            <section class="col-lg-6" aria-labelledby="roots-title">
-                <p class="about-eyebrow">Deep roots, full hearts</p>
-                <h2 id="roots-title">A family worth coming home to.</h2>
-                <p>Our story reaches back to William and Elizabeth Hunt and the branches of the family that grew from them. Through the years, our reunions have given us a place to reconnect, celebrate milestones, and remember the people who brought us together.</p>
-                <p>In the summer of 1983, Dad and Dotty Hunt brought the family together for a reunion that became a cherished tradition. The recipes we shared became part of those memories — familiar dishes that could bring a little of that togetherness home with us.</p>
-                <p>We’re proud to be part of this family. Every gathering, every shared photograph, and every recipe passed along helps keep that connection alive.</p>
-            </section>
-            <section class="col-lg-6" aria-labelledby="thanks-title">
-                <p class="about-eyebrow">Made with love, passed along</p>
-                <h2 id="thanks-title">To the hands that fed us: thank you.</h2>
-                <p>To our parents and grandparents, and to every family cook who shared a favorite: thank you for the meals, the care, and the recipes we still reach for. Cooking something you passed down is one way we keep you close.</p>
-                <p>In 1997, Joan and Stuart Sabol gathered our reunion favorites into a family cookbook. Their work gave us something to treasure and pass on. HuntRecipes carries that gift forward, making room for the old favorites and the new ones we’ll love just as much.</p>
-                <p>These recipes belong to our shared story. When we make them, share them, or teach someone younger how they’re done, we give that story another chapter.</p>
-            </section>
-        </div>
-
-        <footer class="about-invitation text-center">
-            <p class="about-eyebrow">Let’s keep the tradition going</p>
-            <h2>Pull up a chair.</h2>
-            <p>Find an old favorite. Share a recipe of your own.<br class="d-none d-md-block"> Make something that reminds you of someone you love.</p>
-            <a href="{{ route('recipes.index') }}" class="btn btn-primary">Explore our family recipes <span aria-hidden="true">&rarr;</span></a>
-            <p class="about-signoff">Here’s to the next meal, the next reunion, and the memories still to come.</p>
-        </footer>
     </article>
 {% endblock %}

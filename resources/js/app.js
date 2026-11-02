@@ -1,5 +1,5 @@
 import axios from 'axios';
-import 'bootstrap';
+
 import {
     GoogleAuthProvider,
     connectAuthEmulator,
@@ -17,6 +17,7 @@ import { initializeApp } from 'firebase/app';
 import './_common';
 import HuntRecipes from './HuntRecipes';
 import Account from './pages/account';
+import About from './pages/about';
 import AdminChefApproval from './pages/admin-chef-approval';
 import Chef from './pages/chef';
 import Contact from './pages/contact';
@@ -180,10 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSignIn();
     initializeEmailFinish();
     initializeProviderManagement();
+
     const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
     if (path === '/welcome') Welcome();
     else if (path === '/account') Account();
+    else if (path === '/about') About();
     else if (path === '/admin/chef-applications') AdminChefApproval();
     else if (path === '/home') Home();
     else if (path === '/recipes') Recipes();
