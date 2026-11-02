@@ -22,7 +22,8 @@
 
             <div class="content sign-in-box" id="div-contact-wrapper">
 
-                <h4 class="mb-4">Contact Us</h4>
+                <h4 class="mb-3">Contact Us</h4>
+                <p class="mb-4">Have a question, an idea, or a problem with HuntRecipes? Send us a message—we’d love to hear from you.</p>
 
                 <div class="alert alert-error" id="alert-contact" style="display:none">
 
@@ -38,6 +39,17 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Your Email</label>
                         <input required type="email" class="form-control" id="email" name="email" autocomplete="email" placeholder="Email" aria-label="Email" value="{{ current_user.email }}" >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Reason</label>
+                        <select required class="form-select" id="reason" name="reason">
+                            <option value="" disabled selected>Choose a reason</option>
+                            <option>Report a problem</option>
+                            <option>Request a feature</option>
+                            <option>Ask a question</option>
+                            <option>Something else</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
