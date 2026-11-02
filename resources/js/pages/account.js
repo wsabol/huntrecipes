@@ -1,6 +1,7 @@
 import $ from "jquery";
 import axios from 'axios'
 import Modal from 'bootstrap/js/src/modal'
+import 'bootstrap/js/src/tab'
 import HuntRecipes from '../HuntRecipes';
 import ImageUploadModal from '../widgets/ImageUploadModal'
 
