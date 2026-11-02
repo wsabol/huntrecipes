@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chef;
 use App\Models\ChefApplication;
+use App\Models\Measure;
 use App\Models\Recipe;
 use App\Support\Twig\TwigRenderer;
 use Illuminate\Http\Request;
@@ -123,9 +124,9 @@ final class PageController extends Controller {
         $data['serving_measure_name'] = $recipe->servingMeasure?->name_plural ?? '';
         $data['ingredient_columns'] = [['items' => $recipe->ingredients->map(fn ($item) => [
             ...$item->toArray(),
-            'general_measure_amount' => $item->amount,
+            'general_measure_amount' => $item->amount * ($item->measure?->measure_type_id ? $item->measure->general_unit_conversion : 1),
             'measure_type_id' => $item->measure?->measure_type_id ?? 0,
-            'value_formatted' => rtrim(rtrim(number_format((float)$item->amount, 3, '.', ''), '0'), '.') . ' ' . ($item->measure?->abbr ?? ''),
+            'value_formatted' => ($item->measure ?? new Measure())->formatAmount((float) $item->amount) . ' ' . ($item->measure?->abbr ?? ''),
             'raw_ingredient_name' => $item->ingredient?->name ?? '',
             'raw_ingredient_name_plural' => $item->ingredient?->name_plural ?? '',
             'name_formatted' => ($item->ingredient?->name ?? '') . ($item->ingredient_prep ? '; ' . $item->ingredient_prep : '') . ($item->optional_flag ? ' (optional)' : ''),

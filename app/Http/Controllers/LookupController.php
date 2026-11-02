@@ -65,7 +65,7 @@ class LookupController extends Controller {
     }
 
     public function measures() {
-        return response()->json(['data' => Measure::query()->get()->map(fn ($measure) => [...$measure->toArray(), 'measure_type' => $measure->measure_type_id, 'base_unit_conversion' => $measure->general_unit_conversion, 'fractions_allowed' => []])]);
+        return response()->json(['data' => Measure::query()->get()->map(fn ($measure) => [...$measure->toArray(), 'measure_type' => $measure->measure_type_id, 'base_unit_conversion' => $measure->general_unit_conversion, 'fractions_allowed' => $measure->fractionsAllowed(), 'is_metric' => in_array((int) $measure->id, config('measures.metric_ids'), true)])]);
     }
 
     private function collection(string $model) {

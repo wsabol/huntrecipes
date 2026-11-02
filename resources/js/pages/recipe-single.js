@@ -61,7 +61,7 @@ export default function() {
             return value;
         }
 
-        let Measures = MasterMeasure.filter(m => +m.measure_type === +measure_type)
+        let Measures = MasterMeasure.filter(m => +m.measure_type === +measure_type && !m.is_metric && +m.base_unit_conversion > 0)
         Measures.sort((a, b) => b.base_unit_conversion - a.base_unit_conversion);
 
         const EPSILON = 0.0001;
@@ -81,7 +81,14 @@ export default function() {
                     continue;
                 }
 
-                let f1 = new Fraction(current_amount);
+                // Stored quantities have three decimal places (for example, 0.333 cups).
+                const fraction = measure.fractions_allowed.find(part => {
+                    const [top, bottom] = part.split('/').map(Number);
+                    return Math.abs(current_amount % 1 - top / bottom) < 0.001;
+                });
+                let f1 = fraction
+                    ? new Fraction(Math.floor(current_amount)).add(new Fraction(fraction))
+                    : new Fraction(current_amount);
                 if (!f1.is_partial_allowed(measure.fractions_allowed)) {
                     current_amount = Math.floor(current_amount);
                     f1 = new Fraction(current_amount);
