@@ -60,7 +60,7 @@ export default (function() {
                 ]),
             ])
 
-            let $title = $('<h5 class="card-title">').append(recipe.title);
+            let $title = $('<h5 class="card-title">').text(recipe.title);
             if (!recipe.published_flag) {
                 $title.append([
                     '&nbsp;',
