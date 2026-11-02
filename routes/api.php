@@ -18,6 +18,7 @@ Route::middleware('web')->group(function (): void {
         Route::get('/recipes/{recipe}', [RecipeApiController::class, 'show'])->whereNumber('recipe');
         Route::get('/chefs', [LookupController::class, 'chefs']);
         Route::get('/chefs/{chef}/favorites', [LookupController::class, 'chefFavorites'])->whereNumber('chef');
+        Route::get('/chefs/{chef}/recipes', [LookupController::class, 'chefRecipes'])->whereNumber('chef');
         Route::get('/courses', [LookupController::class, 'courses']);
         Route::get('/cuisines', [LookupController::class, 'cuisines']);
         Route::get('/recipe-types', [LookupController::class, 'recipeTypes']);

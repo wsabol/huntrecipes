@@ -155,14 +155,14 @@ final class PageController extends Controller {
     }
 
     public function chef(Chef $chef) {
-        $chef->load(['user', 'recipes' => fn ($q) => $q->where('published_flag', true)]);
+        $chef->load('user');
         $data = $chef->toArray() + [
             'user_id' => $chef->user?->id ?? 0,
             'profile_picture' => $chef->user?->profile_picture ?? '/assets/images/users/generic_avatar.jpg',
             'date_created' => $chef->user?->date_created,
         ];
 
-        return $this->page('pages/chef.twig', $chef->name, ['chef' => $data, 'recipes' => $chef->recipes]);
+        return $this->page('pages/chef.twig', $chef->name, ['chef' => $data]);
     }
 
     public function account(Request $request) {

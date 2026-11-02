@@ -4,51 +4,46 @@ import HuntRecipes from '../HuntRecipes';
 
 export default function() {
 
-    const $favorites_container = $('#favorites-container')
-    const user_id = +$favorites_container.attr('data-user-id') || 0;
+    const chefId = $('#chef-profile').data('chef-id')
+    if (!chefId) return
 
-    const $no_favorites = $('<div class="alert alert-info col-sm-12 col-md-12 col-lg-12">').append("This chef does not have any favorites at the time")
+    function loadRecipes(container, collection, emptyMessage) {
+        const $container = $(container).addClass('loading')
 
-    function loadFavorites() {
-        $favorites_container.empty()
+        axios.get('/api/v1/chefs/' + chefId + '/' + collection)
+            .then(({ data: response }) => {
+                $container.empty()
 
-        if (user_id <= 0) {
-            $favorites_container.append($no_favorites)
-            return
-        }
-
-        $favorites_container.addClass('loading')
-
-        const chefId = +document.querySelector('[data-chef-id]')?.dataset.chefId || 0
-        axios.get('/api/v1/chefs/' + chefId + '/favorites')
-            .then(response => {
-                response = response.data;
-                console.log(response);
-
-                $favorites_container.removeClass('loading').empty()
-
-                for (let recipe of response.data) {
-                    $favorites_container.append(
-                        $('<div class="col">').append(HuntRecipes.buildRecipeCard(recipe, response => {
-                            if (!response) {
-                                return
-                            }
-                            if (user_id > 0 && user_id === HuntRecipes.current_user_id()) {
-                                loadFavorites()
-                            }
+                for (const recipe of response.data) {
+                    $container.append(
+                        $('<div class="col">').append(HuntRecipes.buildRecipeCard(recipe, result => {
+                            if (result) loadCollections()
                         }))
                     )
                 }
 
                 if (response.data.length === 0) {
-                    $favorites_container.append($no_favorites)
+                    $container.append($('<p class="col-12 text-muted">').text(emptyMessage))
                 }
             })
+            .catch(() => {
+                $container.empty().append(
+                    $('<div class="col-12">').append(
+                        $('<div class="alert alert-warning" role="alert">').append(
+                            $('<p>').text('We couldn’t load these recipes. Please try again.'),
+                            $('<button type="button" class="btn btn-outline-secondary">')
+                                .text('Try again').on('click', () => loadRecipes(container, collection, emptyMessage))
+                        )
+                    )
+                )
+            })
+            .finally(() => $container.removeClass('loading'))
     }
 
-    function init() {
-        loadFavorites()
+    function loadCollections() {
+        loadRecipes('#chef-recipes-container', 'recipes', 'This chef hasn’t shared any recipes yet.')
+        loadRecipes('#favorites-container', 'favorites', 'This chef hasn’t added any favorites yet.')
     }
 
-    init()
+    loadCollections()
 }

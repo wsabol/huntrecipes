@@ -19,13 +19,23 @@ class LookupController extends Controller {
         return response()->json(['data' => Chef::withExists('user')->orderBy('name')->get()->map(fn ($chef) => [...$chef->toArray(), 'is_linked_to_user' => $chef->user_exists])]);
     }
 
-    public function chefFavorites(Chef $chef) {
+    public function chefRecipes(Request $request, Chef $chef) {
+        return RecipeResource::collection($chef->recipes()->where('published_flag', true)
+            ->with(['chef', 'course', 'cuisine', 'type'])->withCount('favoritedBy')
+            ->withExists(['favoritedBy as is_liked' => fn ($q) => $q->where('User.id', $request->user()?->id ?? 0)])
+            ->orderByDesc('favorited_by_count')->orderBy('Recipe.id')->limit(6)->get());
+    }
+
+    public function chefFavorites(Request $request, Chef $chef) {
         $user = $chef->user;
         if (!$user) {
             return RecipeResource::collection(collect());
         }
 
-        return RecipeResource::collection($user->favoriteRecipes()->where('published_flag', true)->with(['chef', 'course', 'cuisine', 'type'])->withCount('favoritedBy')->get());
+        return RecipeResource::collection($user->favoriteRecipes()->where('published_flag', true)
+            ->with(['chef', 'course', 'cuisine', 'type'])->withCount('favoritedBy')
+            ->withExists(['favoritedBy as is_liked' => fn ($q) => $q->where('User.id', $request->user()?->id ?? 0)])
+            ->orderByDesc('favorited_by_count')->orderBy('Recipe.id')->limit(6)->get());
     }
 
     public function users(Request $request) {

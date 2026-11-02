@@ -1,24 +1,31 @@
 
 {% extends 'base.twig' %}
 
+{% block page_title %}{% endblock %}
+
 {% block main_content %}
 
-    <div class="row">
+    <div class="row g-4" id="chef-profile" data-chef-id="{{ chef.id }}">
 
         <!--profile left part-->
         <div class="col-lg-4">
 
-            <div class="card" >
+            <div class="card mb-4">
                 <img src="{{ chef.profile_picture }}" class="card-img-top" alt="{{ chef.name }}">
                 <div class="card-body">
-                    <h2 class="card-title mb-3">{{ chef.name }}</h2>
-                    {% if chef.date_created %}<p class="card-text mb-4">User since: {{ chef.date_created|date("d M, Y") }}</p>{% endif %}
+                    <h1 class="card-title h3 mb-3">{{ chef.name }}</h1>
+                    {% if chef.date_created %}<p class="card-text text-muted mb-4">Member since {{ chef.date_created|date("F Y") }}</p>{% endif %}
+
+                    {% if chef.favorite_foods %}
+                        <h2 class="h5">Favorite Foods</h2>
+                        <p class="mb-4">{{ chef.favorite_foods|nl2br }}</p>
+                    {% endif %}
 
                     <div class="d-grid gap-2">
-                        <a href="{{ route('recipes.index', {chef_id: chef.id}) }}" class="btn btn-primary">See {{ chef.is_male ? 'His' : 'Her' }} Recipes</a>
+                        <a href="{{ route('recipes.index', {chef_id: chef.id}) }}" class="btn btn-primary">See all {{ chef.is_male ? 'His' : 'Her' }} Recipes</a>
                     </div>
 
-                    {% if chef.user_id == current_user_id %}
+                    {% if current_user_id and chef.user_id == current_user_id %}
                         <hr>
                         <div class="d-grid gap-2">
                             <a href="{{ route('account', {goto: 'chef'}) }}" class="btn btn-outline-secondary">Edit Chef Profile</a>
@@ -31,13 +38,14 @@
 
         <div class="col-lg-8">
 
-            {% if chef.story or chef.favorite_foods or chef.favorite_cuisine %}
+            {% if chef.wisdom or chef.story %}
                 <div class="content">
 
                     {% if chef.wisdom %}
                         <figure class="mb-4 mt-3">
+                            <h2 class="h5">Words of Wisdom</h2>
                             <blockquote class="blockquote">
-                                {{ chef.wisdom }}
+                                {{ chef.wisdom|nl2br }}
                             </blockquote>
                             <figcaption class="blockquote-footer">
                                 {{ chef.name }}
@@ -46,31 +54,28 @@
                     {% endif %}
 
                     {% if chef.story %}
-                        <h4>{{ chef.is_male ? 'His' : 'Her' }} Story</h4>
-                        <p>{{ chef.story }}</p>
-                    {% endif %}
-
-                    {% if chef.favorite_foods %}
-                        <h4>Favorite Foods</h4>
-                        <p>{{ chef.favorite_foods }}</p>
-                    {% endif %}
-
-                    {% if chef.favorite_cuisine %}
-                        <h4>Favorite Cuisine</h4>
-                        <p>{{ chef.favorite_cuisine }}</p>
+                        <h2 class="h4">{{ chef.is_male ? 'His' : 'Her' }} Story</h2>
+                        <p>{{ chef.story|nl2br }}</p>
                     {% endif %}
 
                 </div>
             {% endif %}
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 class="ribbon bright">{{ chef.name }}'s Favorites</h2>
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container" data-user-id="{{ chef.user_id }}" data-chef-id="{{ chef.id }}">
-
-                    </div>
+            <section class="mb-4" aria-labelledby="chef-recipes-heading">
+                <h2 class="h3 mb-2" id="chef-recipes-heading">From {{ chef.name }}'s Kitchen</h2>
+                <p class="text-muted">Their most loved contributions</p>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 loading" id="chef-recipes-container" aria-live="polite">
+                    <p class="col-12">Loading recipes...</p>
                 </div>
-            </div>
+            </section>
+
+            <section aria-labelledby="chef-favorites-heading">
+                <h2 class="h3 mb-2" id="chef-favorites-heading">{{ chef.name }}'s Favorites</h2>
+                <p class="text-muted">A selection from {{ chef.is_male ? 'his' : 'her' }} favorites</p>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 loading" id="favorites-container" aria-live="polite">
+                    <p class="col-12">Loading favorites...</p>
+                </div>
+            </section>
 
         </div>
     </div>

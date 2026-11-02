@@ -21,7 +21,7 @@
                         <dt class="col-3 ingredient-amount{{ item.amount == 0 ? ' no-amount' : '' }}"
                             data-org-amount="{{ item.general_measure_amount }}"
                             data-measure-type-id="{{ item.measure_type_id }}" >
-                            {{ item.value_formatted }}
+                            {{ item.amount == 0 ? '' : item.value_formatted }}
                         </dt>
                         <dd class="col-9 ingredient-name"
                             data-name="{{ item.raw_ingredient_name }}"
