@@ -12,7 +12,8 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10",
         "openai-php/client": "^0.10.3",
-        "twig/twig": "^3.20"
+        "twig/twig": "^3.20",
+        "ext-gd": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

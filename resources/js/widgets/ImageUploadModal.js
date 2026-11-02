@@ -108,8 +108,8 @@ class ImageUploadModal {
             if (self.cropper) {
                 // Get cropped canvas
                 const canvas = self.cropper.getCroppedCanvas({
-                    width: 400,    // Final image width
-                    height: 400,   // Final image height
+                    width: self.options.image_size ?? 400,
+                    height: self.options.image_size ?? 400,
                 });
 
                 // Convert to blob

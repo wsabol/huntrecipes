@@ -29,13 +29,14 @@ export default function() {
         '/api/v1/me/photo',
         {
             data_label: 'profile_photo',
+            image_size: 608,
             file_name: 'profile_' + HuntRecipes.current_user_id() + '.jpg',
             onclose: function(){
                 $('.btn-new-picture').removeClass('disabled')
             },
             callback: function(data){
                 const user = data?.data || data
-                $('#profile-picture').attr('src', user.profile_picture)
+                $('#profile-picture').attr('src', user.profile_picture_lg)
                 this.hide()
             }
         }

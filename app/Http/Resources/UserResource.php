@@ -10,6 +10,7 @@ class UserResource extends JsonResource {
         return [
             'id' => $this->id, 'name' => $this->name, 'email' => $this->email,
             'profile_picture' => $this->profile_picture, 'is_chef' => (bool)$this->is_chef,
+            'profile_picture_lg' => $this->profile_picture_lg,
             'is_developer' => (bool)$this->is_developer, 'is_email_verified' => (bool)$this->is_email_verified,
             'date_created' => $this->date_created,
         ];

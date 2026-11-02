@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\UserResource;
 use App\Models\Recipe;
+use App\Services\ProfilePhotoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,14 +41,21 @@ class ProfileApiController extends Controller {
         return response()->json(['data' => $request->user()->chef->refresh()]);
     }
 
-    public function photo(Request $request): UserResource {
+    public function photo(Request $request, ProfilePhotoService $photos): UserResource {
         $this->authorize('uploadPhoto', $request->user());
         $request->validate(['profile_photo' => ['required', 'image', 'max:4096']]);
-        $path = $request->file('profile_photo')->store('users', 'public');
+        [$path, $largePath] = $photos->store($request->file('profile_photo'));
         $old = $request->user()->profile_picture;
-        $request->user()->update(['profile_picture' => '/storage/' . $path]);
+        $oldLarge = $request->user()->profile_picture_lg;
+        try {
+            $request->user()->update(['profile_picture' => '/storage/' . $path]);
+        } catch (\Throwable $exception) {
+            Storage::disk('public')->delete([$path, $largePath]);
+            throw $exception;
+        }
         if (str_starts_with((string)$old, '/storage/users/')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $old));
+            Storage::disk('public')->delete(str_replace('/storage/', '', $oldLarge));
         }
 
         return new UserResource($request->user()->refresh());
