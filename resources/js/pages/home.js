@@ -18,7 +18,7 @@ export default function() {
                 $('.recipe-title', $RecipeOfTheDay).text(recipe.title)
                 $('.card-text', $RecipeOfTheDay).text([recipe.recipe_type, recipe.cuisine, recipe.course].filter(x => !!x).join(' | '));
                 $('.btn-link-to-recipes', $RecipeOfTheDay)
-                    .attr('href', '/recipes/' + recipe.id)
+                    .attr('href', recipe.link)
                     .removeClass('disabled')
             })
     }

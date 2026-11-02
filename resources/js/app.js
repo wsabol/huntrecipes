@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     else if (path === '/home') page = import('./pages/home');
     else if (path === '/recipes') page = import('./pages/recipes');
     else if (path === '/recipes/create' || /^\/recipes\/\d+\/edit$/.test(path)) page = import('./pages/recipe-edit');
-    else if (/^\/recipes\/\d+$/.test(path)) page = import('./pages/recipe-single');
+    else if (/^\/recipes\/[a-z0-9-]+$/.test(path)) page = import('./pages/recipe-single');
     else if (/^\/chefs\/\d+$/.test(path)) page = import('./pages/chef');
     else if (path === '/contact') page = import('./pages/contact');
 

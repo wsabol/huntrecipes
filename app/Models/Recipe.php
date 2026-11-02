@@ -6,11 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Recipe extends Model {
     protected $table = 'Recipe';
     public $timestamps = false;
     protected $guarded = ['id'];
+
+    protected static function booted(): void {
+        static::creating(function (Recipe $recipe): void {
+            $recipe->slug = static::slugForTitle($recipe->title);
+        });
+    }
+
+    public static function slugForTitle(string $title): string {
+        $base = substr(Str::slug($title), 0, 240) ?: 'recipe';
+        if (ctype_digit($base) || $base === 'create') {
+            $base = 'recipe-' . $base;
+        }
+        $slug = $base;
+        for ($suffix = 2; static::where('slug', $slug)->exists(); $suffix++) {
+            $slug = $base . '-' . $suffix;
+        }
+
+        return $slug;
+    }
 
     protected function casts(): array {
         return ['published_flag' => 'boolean', 'serving_count' => 'float'];

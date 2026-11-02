@@ -95,6 +95,12 @@ final class PageController extends Controller {
         return $this->page('recipes/recipes.twig', 'Recipes', ['search' => ['keyword' => $request->query('q', '')]]);
     }
 
+    public function legacyRecipe(Recipe $legacyRecipe) {
+        $this->authorize('view', $legacyRecipe);
+
+        return redirect()->route('recipes.show', $legacyRecipe->slug, 301);
+    }
+
     public function recipe(Recipe $recipe) {
         $this->authorize('view', $recipe);
         $data = $this->recipeData($recipe);
@@ -125,7 +131,7 @@ final class PageController extends Controller {
             'name_formatted' => ($item->ingredient?->name ?? '') . ($item->ingredient_prep ? '; ' . $item->ingredient_prep : '') . ($item->optional_flag ? ' (optional)' : ''),
         ])->all()]];
         $data['ingredient_col_num'] = 12;
-        $data['link'] = route('recipes.show', $recipe);
+        $data['link'] = route('recipes.show', $recipe->slug);
         $data['children'] = $recipe->children->map(function (Recipe $child) {
             $values = $child->toArray();
             $values['instructions'] = array_values(array_filter(preg_split('/\R/', (string)$child->instructions)));

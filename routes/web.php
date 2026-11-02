@@ -12,7 +12,8 @@ Route::middleware('firebase')->group(function (): void {
     Route::get('/contact', [PageController::class, 'contact'])->name('contact');
     Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
     Route::get('/recipes', [PageController::class, 'recipes'])->name('recipes.index');
-    Route::get('/recipes/{recipe}', [PageController::class, 'recipe'])->whereNumber('recipe')->name('recipes.show');
+    Route::get('/recipes/{legacyRecipe}', [PageController::class, 'legacyRecipe'])->whereNumber('legacyRecipe');
+    Route::get('/recipes/{recipe:slug}', [PageController::class, 'recipe'])->where('recipe', '(?!create$)[a-z0-9-]+')->name('recipes.show');
     Route::get('/recipes/{recipe}/print', [PageController::class, 'printRecipe'])->whereNumber('recipe')->name('recipes.print');
     Route::get('/chefs/{chef}', [PageController::class, 'chef'])->whereNumber('chef')->name('chefs.show');
     Route::get('/sign-in', [PageController::class, 'signIn'])->name('sign-in');
