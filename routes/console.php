@@ -8,4 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('huntrecipes:set-daily-features')->dailyAt('02:00')->withoutOverlapping();
+Schedule::command('huntrecipes:set-daily-features')->dailyAt('02:00')->timezone('America/Chicago')->withoutOverlapping();
