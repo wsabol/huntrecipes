@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SaveRecipeRequest extends FormRequest {
     public function authorize(): bool {
@@ -37,7 +38,7 @@ class SaveRecipeRequest extends FormRequest {
             'ingredients' => ['array'], 'ingredients.*.raw_ingredient_name' => ['required', 'string', 'max:255'],
             'ingredients.*.ingredient_prep' => ['nullable', 'string', 'max:255'], 'ingredients.*.measure_id' => ['required', 'integer'],
             'ingredients.*.amount' => ['nullable'], 'ingredients.*.optional' => ['sometimes', 'boolean'],
-            'recipe_image' => ['nullable', 'image', 'max:8192'], 'image_filename' => ['nullable', 'string', 'max:500', 'regex:#^/(?:storage/recipes|assets/images/recipes)/#'],
+            'recipe_image' => ['nullable', 'image', 'max:8192'], 'image_filename' => ['nullable', 'string', 'max:500', 'regex:#^/(?:storage/recipes|assets/images/recipes)/#', Rule::in(['/assets/images/recipes/generic_recipe.jpg', $this->route('recipe')?->image_filename])],
         ];
     }
 }
