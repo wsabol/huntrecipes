@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AddSecurityHeaders;
+use App\Http\Middleware\ContentSecurityPolicy;
 use App\Http\Middleware\ResolveFirebaseUser;
 use App\Support\Twig\TwigRenderer;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // CSP is centralized, restrictive, and applied globally.
+        $middleware->append(ContentSecurityPolicy::class);
+
         $middleware->append(AddSecurityHeaders::class);
         $middleware->alias([
             'firebase' => ResolveFirebaseUser::class,
