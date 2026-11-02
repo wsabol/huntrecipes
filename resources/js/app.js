@@ -66,7 +66,7 @@ const initializeSignIn = () => {
     const screen = document.querySelector('[data-auth-screen]');
     if (!screen) return;
     if (!auth) {
-        showAuthMessage('[data-auth-error]', 'Sign-in is not configured for this environment.');
+        showAuthMessage('[data-auth-error]', 'Identity provider is not configured for this environment.');
         return;
     }
     const returnUrl = screen.dataset.returnUrl || '/home';
