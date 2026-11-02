@@ -8,12 +8,12 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
+        "ext-gd": "*",
         "kreait/laravel-firebase": "^6.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10",
         "openai-php/client": "^0.10.3",
-        "twig/twig": "^3.20",
-        "ext-gd": "*"
+        "twig/twig": "^3.20"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
