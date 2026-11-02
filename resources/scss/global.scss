@@ -210,7 +210,7 @@ figure:has(> .blockquote) {
     padding: 30px 12px;
     border-bottom: $border-width solid $gray-200;
     min-height: 142px;
-    display: none;
+    display: block;
 }
 
 .foot h5 {
@@ -251,16 +251,21 @@ figure:has(> .blockquote) {
     color: $gray-500;
 }
 
+.foot .bmc-btn {
+    height: 45px;
+    font-size: 25px;
+}
+
+.foot .bmc-btn svg {
+    height: 26px !important;
+}
+
 @include media-breakpoint-up(lg) {
     .foot .foot-nav {
         display: block;
     }
 
-    .foot .footer-about {
-        display: block;
-    }
-
-    .foot .footer-about article {
+    .foot .footer-about article:first-child {
         padding-right: 60px;
     }
 }
