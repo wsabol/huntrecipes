@@ -154,6 +154,17 @@ export default function() {
     function init() {
         loadMeasures()
 
+        $('.btn-copy-recipe-link').click(async function() {
+            const url = this.dataset.url;
+            try {
+                await navigator.clipboard.writeText(url);
+                $('#recipe-share-status').text('Link copied!');
+            } catch {
+                window.prompt('Copy this recipe link:', url);
+                $('#recipe-share-status').text('Select and copy the recipe link.');
+            }
+        });
+
         $('#input-serving').blur(function() {
             const org = +$(this).data('org-serving');
             let test = new Fraction(this.value);

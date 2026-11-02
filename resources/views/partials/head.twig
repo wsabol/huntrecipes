@@ -3,7 +3,17 @@
 	<title>{{ page_title }} | HuntRecipes</title>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Will Sabol" name="author" />
-    <meta name="description" content="Hunt Recipes - a family reunion cookbook.">
+    <meta name="description" content="{{ share_description|default('Hunt Recipes - a family reunion cookbook.') }}">
+    {% if share_url is defined %}
+        <link rel="canonical" href="{{ share_url }}">
+        <meta property="og:type" content="article">
+        <meta property="og:site_name" content="HuntRecipes">
+        <meta property="og:title" content="{{ recipe.title }}">
+        <meta property="og:description" content="{{ share_description }}">
+        <meta property="og:url" content="{{ share_url }}">
+        <meta property="og:image" content="{{ share_image }}">
+        <meta property="og:image:alt" content="{{ recipe.title }}">
+    {% endif %}
     <meta name="keywords" content="recipes,cooking" />
     <meta property="locale" content="en-US">
     <meta content="#fff" name="theme-color"/>
