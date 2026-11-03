@@ -157,6 +157,13 @@ export default function() {
             })
 
         $('#search-btn').click(() => runSearch())
+
+        $('#keyword').on('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                runSearch();
+            }
+        })
     }
 
     init()
