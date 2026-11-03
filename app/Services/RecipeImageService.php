@@ -16,7 +16,7 @@ final class RecipeImageService {
 
         $recipe->loadMissing('ingredients.ingredient');
         $prompt = trim((string)$requestedPrompt) ?: sprintf(
-            'A realistic, appetizing editorial food photograph of %s. Ingredients: %s. Natural light, clean plating, no text or people.',
+            'A realistic, appetizing editorial food photograph of "%s". Ingredients: %s. Natural light, clean plating, no text or people.',
             $recipe->title,
             $recipe->ingredients->pluck('ingredient.name')->filter()->join(', '),
         );

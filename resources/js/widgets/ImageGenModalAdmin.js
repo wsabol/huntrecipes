@@ -23,7 +23,6 @@ class ImageGenModalAdmin {
         this.resultsState = $('.resultsState', $container);
         this.blurbState = $('.blurbState', $container);
         this.generatedImage = $('.generatedImage', $container);
-        this.generatedBlurb = $('.generatedBlurb', $container);
         this.regenerateButton = $('.regenerateButton', $container);
         this.usePhotoButton = $('.usePhotoButton', $container);
         this.alertDiv = $('.alert', $container);
@@ -37,7 +36,6 @@ class ImageGenModalAdmin {
             self.regenerateButton.hide();
             self.usePhotoButton.hide();
             self.generatedImage.attr('src', '');
-            self.generatedBlurb.text('');
         });
 
         // Regenerate button handler
@@ -89,7 +87,6 @@ class ImageGenModalAdmin {
 
                 self.alertDiv.hide()
                 self.generatedImage.attr('src', response.data.generated_image);
-                self.generatedBlurb.text(response.data.image_prompt);
 
                 // Show results
                 self.alertDiv.hide()
