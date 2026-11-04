@@ -176,7 +176,7 @@ final class PageController extends Controller {
         return $this->page('pages/account.twig', 'My Account', [
             'user' => $user->toArray(),
             'chef' => $user->chef?->toArray(), 'chef_app' => $application,
-            'goto' => $request->query('goto', ''), 'relations' => $this->relationships(),
+            'goto' => $request->query('goto', ''), 'relationships' => $this->relationships(),
         ]);
     }
 

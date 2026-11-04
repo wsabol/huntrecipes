@@ -119,6 +119,8 @@ final class PageRoutesTest extends TestCase {
             ->assertOk()
             ->assertSee('Become a Chef')
             ->assertSee('btn-start-application', false)
+            ->assertSee('<option value="birth">Hunt by Birth</option>', false)
+            ->assertSee('<option value="other">Other Connection</option>', false)
             ->assertDontSee('You must verify your account before becoming a chef');
 
         $this->actingAs($user)
