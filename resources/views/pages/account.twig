@@ -102,6 +102,11 @@
                          aria-labelledby="favorites-tab"
                          tabindex="0">
 
+                        <div class="alert alert-info" id="no-favorites" style="display:none">
+                            <p>You haven't saved any favorite recipes yet. Tap the heart on any recipe to save it here.</p>
+                            <a class="btn btn-primary" href="{{ route('recipes.index') }}">Browse Recipes</a>
+                        </div>
+
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 loading" id="favorites-container">
                         </div>
 
@@ -265,6 +270,13 @@
                                 </div>
 
                             {% endif %}
+
+                        {% else %}
+
+                            <div class="alert alert-info" id="no-recipes" style="display:none">
+                                <p>You haven't added any recipes yet. Share a family favorite to get started.</p>
+                                <a class="btn btn-primary" href="{{ route('recipes.create') }}">Add a Recipe</a>
+                            </div>
 
                         {% endif %}
 

@@ -52,6 +52,7 @@ export default function() {
                 console.log(response);
 
                 $favorites_container.removeClass('loading').empty()
+                $('#no-favorites').toggle(response.data.length === 0)
 
                 for (let recipe of response.data) {
                     let $card = HuntRecipes.buildRecipeCard(recipe, response => {
@@ -76,6 +77,7 @@ export default function() {
                 console.log(response);
 
                 $recipes_container.removeClass('loading').empty()
+                $('#no-recipes').toggle(response.data.length === 0)
 
                 for (let recipe of response.data) {
                     let $card = HuntRecipes.buildRecipeCard(recipe, response => {
@@ -92,7 +94,8 @@ export default function() {
 
     function init() {
         loadFavorites()
-        if ($recipes_container.length && !$('#recipes-tab-pane .alert-info, #recipes-tab-pane .alert-error').length) {
+        // #no-recipes is only rendered for approved chefs
+        if ($recipes_container.length && $('#no-recipes').length) {
             loadChefRecipes()
         }
 

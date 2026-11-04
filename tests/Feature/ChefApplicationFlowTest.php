@@ -170,4 +170,54 @@ final class ChefApplicationFlowTest extends TestCase {
         $this->assertDatabaseCount('Chef', 0);
         Mail::assertSentCount(1);
     }
+
+    public function testDeniedApplicationCanBeReopenedWithoutNotifyingAnyone(): void {
+        $application = $this->application();
+        $this->actingAs($this->admin());
+        $this->patchJson("/api/v1/chef-applications/{$application->id}", ['approved' => false])->assertOk();
+
+        $this->patchJson("/api/v1/chef-applications/{$application->id}/reopen")
+            ->assertOk()->assertJsonPath('data.chef_application_status_id', ChefApplication::STATUS_PENDING);
+
+        $this->patchJson("/api/v1/chef-applications/{$application->id}", ['approved' => true])->assertOk();
+        $this->assertTrue($application->user->refresh()->is_chef);
+        Mail::assertSentCount(2); // the denial and the later approval only
+    }
+
+    public function testReopeningAnApprovedApplicationUnlinksTheUserButKeepsTheChef(): void {
+        $application = $this->application();
+        $this->actingAs($this->admin());
+        $this->patchJson("/api/v1/chef-applications/{$application->id}", ['approved' => true])->assertOk();
+        $chefId = $application->user->refresh()->chef_id;
+
+        $this->patchJson("/api/v1/chef-applications/{$application->id}/reopen")->assertOk();
+
+        $user = $application->user->refresh();
+        $this->assertFalse($user->is_chef);
+        $this->assertSame(0, (int)$user->chef_id);
+        $this->assertDatabaseHas('Chef', ['id' => $chefId]);
+        $this->assertSame(ChefApplication::STATUS_PENDING, $application->refresh()->chef_application_status_id);
+        Mail::assertSentCount(1);
+
+        $this->patchJson("/api/v1/chef-applications/{$application->id}", ['approved' => true, 'chef_id' => $chefId])->assertOk();
+        $this->assertSame($chefId, $application->user->refresh()->chef_id);
+        $this->assertDatabaseCount('Chef', 1);
+    }
+
+    public function testPendingAndWithdrawnApplicationsCannotBeReopened(): void {
+        $pending = $this->application();
+        $this->actingAs($this->admin())->patchJson("/api/v1/chef-applications/{$pending->id}/reopen")->assertConflict();
+
+        $withdrawn = $this->application();
+        $this->actingAs($withdrawn->user)->deleteJson("/api/v1/chef-applications/{$withdrawn->id}")->assertNoContent();
+        $this->actingAs($this->admin())->patchJson("/api/v1/chef-applications/{$withdrawn->id}/reopen")->assertConflict();
+    }
+
+    public function testOnlyAdminsCanReopenApplications(): void {
+        $application = $this->application();
+        $this->actingAs($this->admin())->patchJson("/api/v1/chef-applications/{$application->id}", ['approved' => false])->assertOk();
+
+        $this->actingAs($application->user)->patchJson("/api/v1/chef-applications/{$application->id}/reopen")->assertForbidden();
+        $this->assertSame(ChefApplication::STATUS_DENIED, $application->refresh()->chef_application_status_id);
+    }
 }

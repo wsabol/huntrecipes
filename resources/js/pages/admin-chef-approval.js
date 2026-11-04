@@ -189,6 +189,11 @@ export default function() {
             $('[type=submit]', $frm).hide()
         }
 
+        const status_id = +app.chef_application_status_id
+        $('#btn-app-reopen')
+            .data('app', app)
+            .toggle(status_id === 2 || status_id === 3)
+
         $approval_alert.hide()
         $mdl_view.show()
     }
@@ -259,6 +264,7 @@ export default function() {
                     console.log(response);
                     $mdl_view.hide();
                     loadPending();
+                    loadSearch();
 
                 })
                 .catch(error => {
@@ -276,6 +282,42 @@ export default function() {
                 })
 
             return false
+        })
+
+        $('#btn-app-reopen').click(function(){
+            const $btn = $(this)
+            const app = $btn.data('app')
+            if (!app || $btn.hasClass('disabled')) {
+                return
+            }
+
+            const unlink_note = +app.chef_application_status_id === 2
+                ? `\n\n${app.name} will lose chef access until the application is approved again. Their chef profile and recipes will be kept.`
+                : ''
+
+            if (!confirm(`Reopen ${app.name.trim()}'s ${app.chef_application_status.toLowerCase()} application and set it back to Pending?${unlink_note}`)) {
+                return
+            }
+
+            $btn.addClass('disabled').html('<i class="fa-solid fa-circle-notch fa-spin"></i>')
+
+            axios.patch(`/api/v1/chef-applications/${app.id}/reopen`)
+                .then(() => {
+                    $mdl_view.hide()
+                    loadPending()
+                    loadSearch()
+                })
+                .catch(error => {
+                    const message = error.response?.data?.message || 'Unable to reopen this application.'
+                    console.error(message)
+                    $approval_alert.removeClass((i, c) => (c.match(/alert-/g) || []).join(' '))
+                        .addClass('alert-error')
+                        .text(message)
+                        .enable()
+                })
+                .finally(() => {
+                    $btn.removeClass('disabled').html('Reopen')
+                })
         })
 
         $('#btn-app-search').click(function(){

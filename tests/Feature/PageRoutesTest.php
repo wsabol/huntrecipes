@@ -138,4 +138,15 @@ final class PageRoutesTest extends TestCase {
             'is_deleted' => false,
         ]);
     }
+
+    public function testMyRecipesEmptyStateIsOnlyRenderedForChefs(): void {
+        $chef = \App\Models\Chef::create(['name' => 'Family Chef']);
+        $chefUser = User::factory()->create(['is_chef' => true, 'chef_id' => $chef->id]);
+
+        $this->actingAs($chefUser)->get('/account?goto=recipes')
+            ->assertOk()->assertSee('id="no-recipes"', false)->assertSee('id="no-favorites"', false);
+
+        $this->actingAs(User::factory()->create())->get('/account?goto=recipes')
+            ->assertOk()->assertDontSee('id="no-recipes"', false)->assertSee('id="no-favorites"', false);
+    }
 }
