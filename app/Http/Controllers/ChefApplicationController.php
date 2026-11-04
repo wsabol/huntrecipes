@@ -28,10 +28,11 @@ class ChefApplicationController extends Controller {
         return response()->json(['data' => $data]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request, ChefApplicationMailer $mailer) {
         $this->authorize('create', ChefApplication::class);
         $data = $request->validate(['already_exists' => ['required', 'boolean'], 'relationship' => ['required', 'string', 'max:50'], 'story' => ['required', 'string', 'max:2000']]);
         $app = ChefApplication::updateOrCreate(['user_id' => $request->user()->id, 'is_deleted' => false], $data + ['chef_application_status_id' => 1, 'date_created' => now()]);
+        $mailer->sendSubmittedNotice($app);
 
         return response()->json(['data' => $app], 201);
     }

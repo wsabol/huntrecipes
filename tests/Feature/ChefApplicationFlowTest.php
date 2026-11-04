@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Mail\RenderedTwigMail;
 use App\Models\Chef;
 use App\Models\ChefApplication;
 use App\Models\User;
@@ -92,6 +93,32 @@ final class ChefApplicationFlowTest extends TestCase {
 
         $this->assertNotSame($application->id, $response->json('data.id'));
         $this->get('/account?goto=chef')->assertOk()->assertSee('My replacement application.')->assertDontSee('My family story.');
+    }
+
+    public function testSubmittingAnApplicationNotifiesTheAdmin(): void {
+        config(['mail.contact_address' => 'owner@example.com']);
+        $user = User::factory()->create(['name' => 'Aunt Sally']);
+
+        $this->actingAs($user)->postJson('/api/v1/chef-applications', [
+            'already_exists' => true, 'relationship' => 'marriage', 'story' => 'Grandma taught me her pie.',
+        ])->assertCreated();
+
+        Mail::assertSent(RenderedTwigMail::class, fn (RenderedTwigMail $mail) => $mail->hasTo('owner@example.com')
+            && $mail->mailSubject === 'New chef application from Aunt Sally'
+            && str_contains($mail->renderedHtml, 'Hunt by Marriage')
+            && str_contains($mail->renderedHtml, 'Grandma taught me her pie.')
+            && str_contains($mail->renderedHtml, '/admin/chef-applications'));
+        Mail::assertSentCount(1);
+    }
+
+    public function testSubmittingWithoutAnAdminAddressStillSucceeds(): void {
+        config(['mail.contact_address' => null]);
+
+        $this->actingAs(User::factory()->create())->postJson('/api/v1/chef-applications', [
+            'already_exists' => false, 'relationship' => 'family', 'story' => 'My story.',
+        ])->assertCreated();
+
+        Mail::assertNothingSent();
     }
 
     public function testWithdrawnApplicationsCannotBeReviewed(): void {

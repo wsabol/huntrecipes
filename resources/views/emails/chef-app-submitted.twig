@@ -1,0 +1,19 @@
+{% extends 'emails/email-base.twig' %}
+
+{% block content %}
+    <div class="spacer-md">&nbsp;</div>
+    <div class="h1">New chef application</div>
+    <div class="spacer-sm">&nbsp;</div>
+
+    <div class="p">{{ user.name }} has applied to become a HuntRecipes chef.</div>
+    <div class="spacer-sm">&nbsp;</div>
+
+    <div class="p">Name: {{ user.name }}</div>
+    <div class="p">Email: {{ user.email }}</div>
+    <div class="p">Relationship: {{ relationship_name }}</div>
+    <div class="p">Already has recipes on the site: {{ chef_app.already_exists ? 'Yes' : 'No' }}</div>
+    <div class="p">Story: {{ chef_app.story }}</div>
+    <div class="spacer-md">&nbsp;</div>
+
+    <div class="p"><a href="{{ route('admin.chef-applications') }}">Review chef applications</a></div>
+{% endblock %}
