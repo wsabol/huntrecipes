@@ -196,7 +196,11 @@ export default function() {
     function init() {
         loadFormInputs()
         loadPending()
-        loadSearch(true)
+
+        const today = DateTime.now()
+        $('#date_from').val(today.minus({ days: 30 }).toISODate())
+        $('#date_to').val(today.toISODate())
+        loadSearch()
 
         $(document).on('click', '.btn-approve-app', function(e){
             const $btn = $(e.currentTarget)
