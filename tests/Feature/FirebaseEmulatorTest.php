@@ -63,7 +63,6 @@ final class FirebaseEmulatorTest extends TestCase {
         $this->asBrowser($session)->getJson('/api/v1/me')->assertOk()->assertJsonPath('data.email', 'cook@example.com');
 
         $user = User::where('email', 'cook@example.com')->sole();
-        $this->assertTrue((bool)$user->is_email_verified);
         $this->assertNotEmpty($user->firebase_uid);
     }
 

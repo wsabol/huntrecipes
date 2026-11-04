@@ -49,6 +49,7 @@ Route::middleware('web')->group(function (): void {
         Route::post('/recipes/{recipe}/generated-photo', [RecipeApiController::class, 'generatedPhoto'])->whereNumber('recipe');
         Route::get('/chef-applications', [ChefApplicationController::class, 'index']);
         Route::patch('/chef-applications/{chefApplication}', [ChefApplicationController::class, 'review'])->whereNumber('chefApplication');
+        Route::patch('/chef-applications/{chefApplication}/reopen', [ChefApplicationController::class, 'reopen'])->whereNumber('chefApplication');
         Route::post('/chef-applications', [ChefApplicationController::class, 'store']);
         Route::delete('/chef-applications/{chefApplication}', [ChefApplicationController::class, 'destroy'])->whereNumber('chefApplication');
         Route::get('/users', [LookupController::class, 'users']);

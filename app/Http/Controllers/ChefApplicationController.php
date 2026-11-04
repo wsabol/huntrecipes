@@ -70,4 +70,23 @@ class ChefApplicationController extends Controller {
 
         return response()->json(['data' => $application]);
     }
+
+    public function reopen(ChefApplication $chefApplication) {
+        $this->authorize('review', $chefApplication);
+        $application = DB::transaction(function () use ($chefApplication) {
+            $chefApplication = ChefApplication::whereKey($chefApplication->id)->lockForUpdate()->firstOrFail();
+            abort_if($chefApplication->is_deleted, 409, 'This application was withdrawn and cannot be reopened.');
+            abort_unless(in_array((int)$chefApplication->chef_application_status_id, [ChefApplication::STATUS_APPROVED, ChefApplication::STATUS_DENIED], true), 409, 'Only approved or denied applications can be reopened.');
+
+            if ((int)$chefApplication->chef_application_status_id === ChefApplication::STATUS_APPROVED) {
+                // Unlink the user from the chef profile but keep the profile and its recipes.
+                $chefApplication->user()->update(['is_chef' => false, 'chef_id' => 0]);
+            }
+            $chefApplication->update(['chef_application_status_id' => ChefApplication::STATUS_PENDING]);
+
+            return $chefApplication->refresh();
+        });
+
+        return response()->json(['data' => $application]);
+    }
 }

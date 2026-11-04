@@ -88,7 +88,6 @@ final class FirebaseIdentity {
                 'chef_id' => 0,
                 'is_chef' => false,
                 'is_developer' => false,
-                'is_email_verified' => (bool)$token->claims()->get('email_verified', false),
                 'date_created' => now(),
             ]);
         });
@@ -126,10 +125,7 @@ final class FirebaseIdentity {
         if ($conflict) {
             throw new RuntimeException('The verified email is already used by another HuntRecipes account.');
         }
-        $attributes = [
-            'email' => $email,
-            'is_email_verified' => (bool)$token->claims()->get('email_verified', false),
-        ];
+        $attributes = ['email' => $email];
         $profilePicture = $this->googleProfilePicture($token);
         if ($user->profile_picture === self::GENERIC_PROFILE_PICTURE && $profilePicture) {
             $attributes['profile_picture'] = $profilePicture;

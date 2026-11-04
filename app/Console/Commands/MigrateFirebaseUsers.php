@@ -49,10 +49,10 @@ class MigrateFirebaseUsers extends Command {
                             try {
                                 $record = $auth->getUserByEmail(strtolower($user->email));
                             } catch (UserNotFound) {
-                                $record = $auth->createUser(['uid' => $uid, 'email' => strtolower($user->email), 'displayName' => $user->name, 'emailVerified' => (bool)$user->is_email_verified, 'disabled' => !$user->isEnabled()]);
+                                $record = $auth->createUser(['uid' => $uid, 'email' => strtolower($user->email), 'displayName' => $user->name, 'disabled' => !$user->isEnabled()]);
                             }
                         }
-                        $record = $auth->updateUser($record->uid, ['displayName' => $user->name, 'emailVerified' => (bool)$user->is_email_verified, 'disabled' => !$user->isEnabled()]);
+                        $record = $auth->updateUser($record->uid, ['displayName' => $user->name, 'disabled' => !$user->isEnabled()]);
                         $user->forceFill(['firebase_uid' => $record->uid])->save();
                         Log::info('Firebase user migration succeeded.', ['user_id' => $user->id, 'firebase_uid' => $record->uid]);
 

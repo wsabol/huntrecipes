@@ -29,17 +29,7 @@ class UserFactory extends Factory {
             'chef_id' => 0,
             'is_chef' => false,
             'is_developer' => false,
-            'is_email_verified' => true,
             'date_created' => now(),
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static {
-        return $this->state(fn (array $attributes) => [
-            'is_email_verified' => false,
-        ]);
     }
 }

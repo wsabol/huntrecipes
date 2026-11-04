@@ -16,7 +16,7 @@ class User extends Authenticatable {
 
     protected $table = 'User';
     public $timestamps = false;
-    protected $fillable = ['firebase_uid', 'name', 'email', 'account_status_id', 'profile_picture', 'chef_application_id', 'chef_id', 'is_chef', 'is_developer', 'is_email_verified', 'date_created'];
+    protected $fillable = ['firebase_uid', 'name', 'email', 'account_status_id', 'profile_picture', 'chef_application_id', 'chef_id', 'is_chef', 'is_developer', 'date_created'];
     protected $hidden = ['password'];
     protected $appends = ['profile_picture_lg'];
 
@@ -45,7 +45,7 @@ class User extends Authenticatable {
     }
 
     protected function casts(): array {
-        return ['is_chef' => 'boolean', 'is_developer' => 'boolean', 'is_email_verified' => 'boolean', 'date_created' => 'immutable_datetime'];
+        return ['is_chef' => 'boolean', 'is_developer' => 'boolean', 'date_created' => 'immutable_datetime'];
     }
 
     public function chef(): BelongsTo {
