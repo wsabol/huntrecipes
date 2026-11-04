@@ -8,10 +8,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource {
     public function toArray(Request $request): array {
         return [
-            'id' => $this->id, 'name' => $this->name, 'email' => $this->email,
-            'profile_picture' => $this->profile_picture, 'is_chef' => (bool)$this->is_chef,
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'profile_picture' => $this->profile_picture,
+            'is_chef' => (bool)$this->is_chef,
             'profile_picture_lg' => $this->profile_picture_lg,
-            'is_developer' => (bool)$this->is_developer, 'is_email_verified' => (bool)$this->is_email_verified,
+            'is_developer' => (bool)$this->is_developer,
+            'is_email_verified' => (bool)$this->is_email_verified,
             'date_created' => $this->date_created,
         ];
     }
