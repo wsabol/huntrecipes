@@ -31,11 +31,46 @@ window.clearHuntRecipesFirebaseAuth = async () => {
     await signOut(auth);
 };
 
-const showAuthMessage = (selector, message) => {
+const showAuthMessage = (selector, message, variant = null) => {
     const element = document.querySelector(selector);
     if (!element) return;
+    if (variant) {
+        element.classList.remove('alert-danger', 'alert-success', 'alert-info', 'alert-warning');
+        element.classList.add(`alert-${variant}`);
+    }
     element.textContent = message;
     element.hidden = false;
+};
+
+const hideAuthMessages = () => {
+    document.querySelectorAll('[data-auth-error], [data-auth-success]').forEach(element => {
+        element.hidden = true;
+    });
+};
+
+const AUTH_ERROR_MESSAGES = {
+    'auth/popup-closed-by-user': ['The Google sign-in window was closed before sign-in finished. Please try again when you\'re ready.', 'info'],
+    'auth/cancelled-popup-request': ['The Google sign-in window was closed before sign-in finished. Please try again when you\'re ready.', 'info'],
+    'auth/user-cancelled': ['Sign-in was cancelled.', 'info'],
+    'auth/popup-blocked': ['Your browser blocked the Google sign-in window. Allow pop-ups for this site and try again.', 'warning'],
+    'auth/network-request-failed': ['We couldn\'t reach the sign-in service. Check your internet connection and try again.'],
+    'auth/too-many-requests': ['Too many sign-in attempts. Please wait a few minutes and try again.'],
+    'auth/user-disabled': ['This account has been disabled. Contact us if you think this is a mistake.'],
+    'auth/invalid-email': ['That email address doesn\'t look right. Check it and try again.'],
+    'auth/invalid-action-code': ['This sign-in link is invalid or has already been used. Request a new one from the sign-in page.'],
+    'auth/expired-action-code': ['This sign-in link has expired. Request a new one from the sign-in page.'],
+    'auth/account-exists-with-different-credential': ['That email already has a HuntRecipes identity. Use the email link once, then link Google from your account.'],
+    'auth/credential-already-in-use': ['That Google account is already linked to a different HuntRecipes account.'],
+    'auth/provider-already-linked': ['Google is already linked to this account.', 'info'],
+    'auth/unauthorized-domain': ['Sign-in isn\'t available from this web address.'],
+    'auth/operation-not-allowed': ['This sign-in method isn\'t enabled right now.'],
+};
+
+const showAuthError = (error, fallback) => {
+    console.error(error);
+    const [message, variant] = AUTH_ERROR_MESSAGES[error?.code]
+        || [error?.response?.data?.message || fallback];
+    showAuthMessage('[data-auth-error]', message, variant || 'danger');
 };
 
 const establishSession = async (user, remember, returnUrl) => {
@@ -70,15 +105,13 @@ const initializeSignIn = () => {
         }
     });
     screen.querySelector('[data-google-sign-in]').addEventListener('click', async () => {
+        hideAuthMessages();
         try {
             await authReady;
             const result = await signInWithPopup(auth, new GoogleAuthProvider());
             await establishSession(result.user, form.remember.checked, returnUrl);
         } catch (error) {
-            const message = error.code === 'auth/account-exists-with-different-credential'
-                ? 'That email already has a HuntRecipes identity. Use the email link once, then link Google from your account.'
-                : (error.message || 'Google sign-in failed.');
-            showAuthMessage('[data-auth-error]', message);
+            showAuthError(error, 'Google sign-in didn\'t work. Please try again.');
         }
     });
 };
@@ -122,7 +155,7 @@ const initializeEmailFinish = async () => {
         localStorage.removeItem('huntrecipes.providerAction');
         await establishSession(result.user, remember, returnUrl);
     } catch (error) {
-        showAuthMessage('[data-auth-error]', error.message || 'Unable to complete sign-in.');
+        showAuthError(error, 'We couldn\'t finish signing you in. Please try again.');
     }
 };
 
