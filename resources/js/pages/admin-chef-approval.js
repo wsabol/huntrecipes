@@ -34,7 +34,7 @@ export default function() {
     const build_app_row = function(app, from_search = false){
         let $tr = $('<tr class="chef-app-row align-middle">').data('app', app)
 
-        let created = DateTime.fromSQL(app.date_created)
+        let created = DateTime.fromISO(app.date_created)
         let diff = DateTime.now().diff(created, 'days').toObject()
 
         let status_color = get_status_color(app.chef_application_status_id)
@@ -48,7 +48,7 @@ export default function() {
             $('<td>').append(
                 $('<button>').attr({
                     class: 'btn btn-sm ' + (from_search ? 'btn-outline-secondary btn-view-app' : 'btn-outline-primary btn-approve-app')
-                }).html('View &nbsp;<i class="fa fa-external-link-square"></i>')
+                }).html('Review &nbsp;<i class="fa fa-external-link-square"></i>')
             )
         ])
 
@@ -157,7 +157,7 @@ export default function() {
     }
 
     const load_app_modal = function(app, with_approval = true) {
-        let created = DateTime.fromSQL(app.date_created)
+        let created = DateTime.fromISO(app.date_created)
 
         $('.modal .submitted-by').text(app.name)
         $('.modal .submitted-on').text(created.toLocaleString(DateTime.DATETIME_SHORT))
