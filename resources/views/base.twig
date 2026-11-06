@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" translate="no">
+<head>
 {% include 'partials/head.twig' %}
+{% block share_meta %}
+    {% include 'partials/share-meta.twig' %}
+{% endblock %}
+</head>
 
 <body class="{{ body_class }}" data-current-user-id={{ current_user_id }}>
 
