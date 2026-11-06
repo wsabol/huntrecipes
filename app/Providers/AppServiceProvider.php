@@ -9,6 +9,7 @@ use App\Support\Twig\TwigRenderer;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Kreait\Firebase\Util;
 use RuntimeException;
@@ -44,6 +45,15 @@ class AppServiceProvider extends ServiceProvider {
         // emulator host is configured, which would let anyone forge a session.
         if ($this->app->environment('production') && Util::authEmulatorHost() !== null) {
             throw new RuntimeException('FIREBASE_AUTH_EMULATOR_HOST must not be set in production.');
+        }
+
+        // Build absolute URLs (share meta, canonical links, emails) from APP_URL
+        // rather than the request, which may arrive as plain http behind a proxy.
+        if ($this->app->environment('production')) {
+            URL::forceRootUrl(config('app.url'));
+            if (str_starts_with(config('app.url'), 'https://')) {
+                URL::forceScheme('https');
+            }
         }
 
         User::observe(UserObserver::class);
