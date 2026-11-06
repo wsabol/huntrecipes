@@ -28,7 +28,7 @@ jobs:
           --health-timeout=5s
           --health-retries=5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: shivammathur/setup-php@v2
@@ -36,7 +36,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, pdo_mysql, pdo_sqlite, gd
           coverage: none
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -62,7 +62,7 @@ jobs:
     name: Firebase Auth Emulator
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: shivammathur/setup-php@v2
@@ -70,7 +70,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, pdo_sqlite, openssl
           coverage: none
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: composer install --no-interaction --prefer-dist

@@ -35,7 +35,7 @@ jobs:
       PRODUCTION_URL: ${{ vars.PRODUCTION_URL || 'https://huntrecipes.app' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -48,7 +48,7 @@ jobs:
           extensions: ${{ env.PHP_EXTENSIONS }}
 
       - name: Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
