@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Kreait\Firebase\Util;
 use RuntimeException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -43,14 +42,14 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
         // The Firebase SDK skips token signature verification whenever an
         // emulator host is configured, which would let anyone forge a session.
-        if ($this->app->environment('production') && Util::authEmulatorHost() !== null) {
+        if ($this->app->environment('production') && $this->firebaseAuthEmulatorHost() !== null) {
             throw new RuntimeException('FIREBASE_AUTH_EMULATOR_HOST must not be set in production.');
         }
 
         // Build absolute URLs (share meta, canonical links, emails) from APP_URL
         // rather than the request, which may arrive as plain http behind a proxy.
         if ($this->app->environment('production')) {
-            URL::forceRootUrl(config('app.url'));
+            URL::useOrigin(config('app.url'));
             if (str_starts_with(config('app.url'), 'https://')) {
                 URL::forceScheme('https');
             }
@@ -60,5 +59,16 @@ class AppServiceProvider extends ServiceProvider {
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by(
             (string)($request->user()?->id ?? $request->ip())
         ));
+    }
+
+    /**
+     * Mirrors how the Firebase SDK detects the auth emulator, which reads the
+     * raw process environment rather than Laravel's config.
+     */
+    private function firebaseAuthEmulatorHost(): ?string {
+        $name = 'FIREBASE_AUTH_EMULATOR_HOST';
+        $value = trim((string)($_SERVER[$name] ?? $_ENV[$name] ?? getenv($name)));
+
+        return $value !== '' ? $value : null;
     }
 }
