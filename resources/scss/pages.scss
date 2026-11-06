@@ -7,7 +7,7 @@
     background-image: url('/assets/images/intro.jpg');
     background-position: bottom;
     background-size: cover;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .welcome {
@@ -16,8 +16,10 @@
         top: 0;
         left: 0;
         width: 100%;
-        min-height: max(100vh, 740px);
+        height: 100vh;
         /* margin: 0 0 30px; */
+        overflow: hidden;
+        min-height: 740px;
     }
 
     .main {
