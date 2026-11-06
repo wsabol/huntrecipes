@@ -95,7 +95,9 @@ The production schema dump and real Firebase credentials are intentionally not c
 
 Production deployment runs from `main` through `deploy-production.yml`, after its reusable `run-tests.yml` quality gate passes. Configure a protected GitHub environment named `production` with:
 
-- Secrets: `HOST`, `USER`, `PRIVATE_KEY`, `PORT`, `PATH_TO_REPO`, and `PHP_BIN`.
+- Variables: `HOST`, `USER`, `PORT`, `PATH_TO_REPO`, and `PHP_BIN` (existing secrets with these names remain supported; variables take precedence).
+- Optional variable: `PRODUCTION_URL` (defaults to `https://huntrecipes.app`).
+- Secret: `PRIVATE_KEY`.
 - Optional secret: `PASSPHRASE` when the deployment key is encrypted.
 
-On the host, create `PATH_TO_REPO/shared/.env` before the first deployment. It must use `APP_ENV=production`, `APP_DEBUG=false`, an HTTPS `APP_URL`, `SESSION_SECURE_COOKIE=true`, and an absolute `FIREBASE_CREDENTIALS` path outside the release tree. The workflow packages a clean release, activates it through `current`, checks `/up`, database connectivity, passwordless sign-in, compiled assets, and sensitive-path isolation, and automatically restores the previous release if the health check fails. Database migrations are intentionally not rolled back automatically.
+On the host, create `PATH_TO_REPO/shared/.env` before the first deployment. It must use `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://huntrecipes.app`, `SESSION_SECURE_COOKIE=true`, and an absolute `FIREBASE_CREDENTIALS` path outside the release tree. The workflow packages a clean release, activates it through `current`, checks `/up`, database connectivity, passwordless sign-in, compiled assets, and sensitive-path isolation, and automatically restores the previous release if the health check fails. Database migrations are intentionally not rolled back automatically.

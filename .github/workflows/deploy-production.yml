@@ -18,7 +18,6 @@ env:
   PHP_VERSION: "8.2"
   NODE_VERSION: "22"
   PHP_EXTENSIONS: mbstring, xml, ctype, json, gd, zip, pdo_mysql, tokenizer, fileinfo, bcmath, intl
-  PRODUCTION_URL: "https://huntrecipes.willsabol.com"
 
 jobs:
   quality:
@@ -32,6 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: production
+    env:
+      PRODUCTION_URL: ${{ vars.PRODUCTION_URL || 'https://huntrecipes.app' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -88,23 +89,23 @@ jobs:
       - name: Create incoming directory on host
         uses: appleboy/ssh-action@v1.2.5
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          host: ${{ vars.HOST || secrets.HOST }}
+          username: ${{ vars.USER || secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
-          script: mkdir -p "${{ secrets.PATH_TO_REPO }}/.incoming"
+          port: ${{ vars.PORT || secrets.PORT }}
+          script: mkdir -p "${{ vars.PATH_TO_REPO || secrets.PATH_TO_REPO }}/.incoming"
 
       - name: Upload release archive
         uses: appleboy/scp-action@v1.0.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          host: ${{ vars.HOST || secrets.HOST }}
+          username: ${{ vars.USER || secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
+          port: ${{ vars.PORT || secrets.PORT }}
           source: ${{ steps.release.outputs.id }}.tar.gz
-          target: ${{ secrets.PATH_TO_REPO }}/.incoming
+          target: ${{ vars.PATH_TO_REPO || secrets.PATH_TO_REPO }}/.incoming
           timeout: 120s
           command_timeout: 20m
           overwrite: true
@@ -113,17 +114,17 @@ jobs:
         id: activate
         uses: appleboy/ssh-action@v1.2.5
         env:
-          APP_ROOT: ${{ secrets.PATH_TO_REPO }}
+          APP_ROOT: ${{ vars.PATH_TO_REPO || secrets.PATH_TO_REPO }}
           RELEASE_ID: ${{ steps.release.outputs.id }}
-          TAR_PATH: ${{ secrets.PATH_TO_REPO }}/.incoming/${{ steps.release.outputs.id }}.tar.gz
+          TAR_PATH: ${{ vars.PATH_TO_REPO || secrets.PATH_TO_REPO }}/.incoming/${{ steps.release.outputs.id }}.tar.gz
           KEEP_RELEASES: ${{ env.KEEP_RELEASES }}
-          PHP_BIN: ${{ secrets.PHP_BIN }}
+          PHP_BIN: ${{ vars.PHP_BIN || secrets.PHP_BIN }}
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          host: ${{ vars.HOST || secrets.HOST }}
+          username: ${{ vars.USER || secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
+          port: ${{ vars.PORT || secrets.PORT }}
           command_timeout: 20m
           envs: APP_ROOT,RELEASE_ID,TAR_PATH,KEEP_RELEASES,PHP_BIN
           script_path: scripts/deploy.sh
@@ -138,14 +139,14 @@ jobs:
         if: always() && steps.activate.outcome == 'success' && steps.health.outcome != 'success'
         uses: appleboy/ssh-action@v1.2.5
         env:
-          APP_ROOT: ${{ secrets.PATH_TO_REPO }}
-          PHP_BIN: ${{ secrets.PHP_BIN }}
+          APP_ROOT: ${{ vars.PATH_TO_REPO || secrets.PATH_TO_REPO }}
+          PHP_BIN: ${{ vars.PHP_BIN || secrets.PHP_BIN }}
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          host: ${{ vars.HOST || secrets.HOST }}
+          username: ${{ vars.USER || secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
+          port: ${{ vars.PORT || secrets.PORT }}
           command_timeout: 10m
           envs: APP_ROOT,PHP_BIN
           script_path: scripts/rollback.sh
