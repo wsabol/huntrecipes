@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RecipeResource;
 use App\Models\Chef;
 use App\Models\Recipe;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FeaturedController extends Controller {
@@ -22,7 +23,9 @@ class FeaturedController extends Controller {
         return response()->json(['data' => Chef::findOrFail($id)]);
     }
 
-    public function top() {
-        return RecipeResource::collection(Recipe::with(['chef', 'course', 'cuisine', 'type'])->withCount('favoritedBy')->where('published_flag', true)->orderByDesc('favorited_by_count')->limit(6)->get());
+    public function top(Request $request) {
+        return RecipeResource::collection(Recipe::with(['chef', 'course', 'cuisine', 'type'])->withCount('favoritedBy')
+            ->withExists(['favoritedBy as is_liked' => fn ($q) => $q->where('User.id', $request->user()?->id ?? 0)])
+            ->where('published_flag', true)->orderByDesc('favorited_by_count')->limit(6)->get());
     }
 }
