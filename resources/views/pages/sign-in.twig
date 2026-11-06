@@ -12,7 +12,9 @@
             <h5 class="text-center mb-4">Sign in to HuntRecipes</h5>
             <div class="alert alert-danger" data-auth-error hidden></div>
             <div class="alert alert-success" data-auth-success hidden></div>
+            <div class="alert alert-info text-center" data-auth-progress hidden>Signing you in...</div>
 
+            <div data-auth-options>
             <button type="button" class="btn btn-outline-primary w-100 mb-4" data-google-sign-in>
                 <i class="fa-brands fa-google me-2"></i> Continue with Google
             </button>
@@ -32,6 +34,7 @@
             </form>
             <p class="small text-muted mt-4 mb-0">No password is required. The email link verifies your address and signs you in.</p>
             <p class="mt-3"><a href="{{ route('home') }}">Browse without an account</a></p>
+            </div>
         </div>
     </div>
 </div>

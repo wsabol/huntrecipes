@@ -61,6 +61,7 @@ final class PageRoutesTest extends TestCase {
         $this->get('/sign-in')
             ->assertOk()
             ->assertSee('Continue with Google')
+            ->assertSee('Signing you in...')
             ->assertSee('Email me a sign-in link')
             ->assertDontSee('type="password"', false)
             ->assertSee('name="_token"', false);

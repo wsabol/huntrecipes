@@ -89,6 +89,8 @@ const initializeSignIn = () => {
     }
     const returnUrl = screen.dataset.returnUrl || '/home';
     const form = screen.querySelector('[data-email-link-form]');
+    const options = screen.querySelector('[data-auth-options]');
+    const progress = screen.querySelector('[data-auth-progress]');
     form.addEventListener('submit', async event => {
         event.preventDefault();
         const email = form.email.value.trim().toLowerCase();
@@ -109,8 +111,12 @@ const initializeSignIn = () => {
         try {
             await authReady;
             const result = await signInWithPopup(auth, new GoogleAuthProvider());
+            options.hidden = true;
+            progress.hidden = false;
             await establishSession(result.user, form.remember.checked, returnUrl);
         } catch (error) {
+            options.hidden = false;
+            progress.hidden = true;
             showAuthError(error, 'Google sign-in didn\'t work. Please try again.');
         }
     });
